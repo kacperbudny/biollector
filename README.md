@@ -46,11 +46,14 @@ pnpm dev
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## TODO: ENV
+
 ## Tech stack
 
 - **Language**: TypeScript
 - **Framework**: Next.js (App Router)
 - **UI Library**: React
-- **Styling**: Tailwind
+- **Styling**: HeroUI + Tailwind
 - **Linter/Formatter**: Biome
 - **Package Manager**: pnpm
+- **Auth solution**: Stack Auth
