@@ -1,5 +1,5 @@
 import { StackHandler } from "@stackframe/stack";
 
-export default function Handler(props: unknown) {
+export default function Handler() {
   return <StackHandler fullPage />;
 }
