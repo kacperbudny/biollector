@@ -4,7 +4,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 
 ## Features
 
-- [ ] Auth
+- [x] Auth
 - [ ] List of sets
 - [ ] Set details
 - [ ] Managing your collection
@@ -17,7 +17,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 
 ## Live Preview
 
-🔗 [View live site](https://biollector-lzmwxqnzl-kacpers-projects-ffedb489.vercel.app/)
+🔗 [View live site](https://biollector.vercel.app/)
 
 ## Setup
 
@@ -39,18 +39,21 @@ cd biollector
 pnpm install
 ```
 
-3. Run the development server:
+3. Copy `.env.example`, rename it to `.env.local` and fill it with proper environment variables.
+
+4. Run the development server:
 ```bash
 pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## Tech stack
 
 - **Language**: TypeScript
 - **Framework**: Next.js (App Router)
 - **UI Library**: React
-- **Styling**: Tailwind
+- **Styling**: HeroUI + Tailwind
 - **Linter/Formatter**: Biome
 - **Package Manager**: pnpm
+- **Auth solution**: Stack Auth
