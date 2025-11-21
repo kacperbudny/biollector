@@ -17,7 +17,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 
 ## Live Preview
 
-🔗 [View live site](https://biollector-lzmwxqnzl-kacpers-projects-ffedb489.vercel.app/)
+🔗 [View live site](https://biollector.vercel.app/)
 
 ## Setup
 
