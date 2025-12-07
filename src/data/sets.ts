@@ -12,6 +12,8 @@ export enum Wave {
   TOA_INIKA = "Toa Inika",
 }
 
+export const WAVE_ORDER: Wave[] = [Wave.TOHUNGA, Wave.TOA_MATA, Wave.TOA_INIKA];
+
 export type BionicleSet = {
   catalogNumber: string;
   name: string;
