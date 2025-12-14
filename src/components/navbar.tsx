@@ -24,6 +24,11 @@ export function Navbar() {
       </NavbarBrand>
       <NavbarContent justify="end">
         <NavbarItem>
+          <Link href="/sets" className="text-foreground hover:text-primary transition-colors">
+            Sets
+          </Link>
+        </NavbarItem>
+        <NavbarItem>
           <UserButton />
         </NavbarItem>
       </NavbarContent>

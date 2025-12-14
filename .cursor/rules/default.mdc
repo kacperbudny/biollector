@@ -1,0 +1,7 @@
+---
+alwaysApply: true
+---
+# Styling
+
+ - Use HeroUI (previously NextUI) components whenever possible.
+ - Use Tailwind for styling.
