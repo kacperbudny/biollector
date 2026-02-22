@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
+import { createSetsRepository } from "@/data/repositories/sets.repository";
 import { type BionicleSet, SetType, Wave } from "@/data/sets";
-import { getSetsListViewModel } from "@/services/sets.service";
+import { createSetsService } from "@/services/sets.service";
 
 const createMockSet = (
   overrides: Partial<BionicleSet> &
@@ -11,7 +12,7 @@ const createMockSet = (
   ...overrides,
 });
 
-describe("getSetsListViewModel", () => {
+describe("createSetsService", () => {
   it("returns years in ascending order", () => {
     const sets: BionicleSet[] = [
       createMockSet({
@@ -27,8 +28,9 @@ describe("getSetsListViewModel", () => {
         wave: Wave.TOA_MATA,
       }),
     ];
+    const service = createSetsService(createSetsRepository(sets));
 
-    const result = getSetsListViewModel(sets);
+    const result = service.getSetsListViewModel();
 
     expect(result.map((r) => r.year)).toEqual(["2001", "2006"]);
   });
@@ -48,8 +50,9 @@ describe("getSetsListViewModel", () => {
         wave: Wave.TOHUNGA,
       }),
     ];
+    const service = createSetsService(createSetsRepository(sets));
 
-    const result = getSetsListViewModel(sets);
+    const result = service.getSetsListViewModel();
 
     expect(result).toHaveLength(1);
     expect(result[0].year).toBe("2001");
@@ -63,8 +66,11 @@ describe("getSetsListViewModel", () => {
     expect(result[0].waves[1].sets[0].name).toBe("Toa");
   });
 
-  it("returns empty array for empty input", () => {
-    const result = getSetsListViewModel([]);
+  it("returns empty array when repository returns no sets", () => {
+    const service = createSetsService(createSetsRepository([]));
+
+    const result = service.getSetsListViewModel();
+
     expect(result).toEqual([]);
   });
 });

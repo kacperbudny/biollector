@@ -1,12 +1,10 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import Image from "next/image";
-import { setsRepository } from "@/data/repositories/sets.repository";
 import type { BionicleSet, Wave } from "@/data/sets";
-import { getSetsListViewModel } from "@/services/sets.service";
+import { setsService } from "@/services/sets.service";
 
 export function SetsList() {
-  const sets = setsRepository.getAll();
-  const data = getSetsListViewModel(sets);
+  const data = setsService.getSetsListViewModel();
 
   return (
     <div className="py-8">

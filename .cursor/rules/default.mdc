@@ -24,6 +24,14 @@ alwaysApply: true
 - Data retrieval lives in the repository; data manipulation and domain logic live in the service.
 - Focus on testability: inject data sources so tests can use dummy data without complex mocking.
 
+# Dependency injection
+
+- Services receive their dependencies (e.g. repository) at creation time via a factory: `createSetsService(repository)`.
+- The service calls the repository internally; the caller (e.g. component) only calls the service.
+- Define a port/interface in the service for the repository shape it needs; the concrete repository satisfies it structurally.
+- Export a default instance for production: `setsService = createSetsService(setsRepository)`.
+- Tests inject a mock: `createSetsService(createSetsRepository(mockData))` — no mocking framework needed.
+
 # Components
 
 - Colocate components that are only used together in the same file. Only export the top-level component that is used externally.

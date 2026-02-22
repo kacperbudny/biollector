@@ -1,6 +1,25 @@
+import {
+  type SetsRepository,
+  setsRepository,
+} from "@/data/repositories/sets.repository";
 import { type BionicleSet, WAVE_ORDER, type Wave } from "@/data/sets";
 
-export function getSetsListViewModel(sets: BionicleSet[]) {
+export type SetsService = {
+  getSetsListViewModel: () => ReturnType<typeof buildSetsListViewModel>;
+};
+
+export function createSetsService(repository: SetsRepository): SetsService {
+  return {
+    getSetsListViewModel() {
+      const sets = repository.getAll();
+      return buildSetsListViewModel(sets);
+    },
+  };
+}
+
+export const setsService = createSetsService(setsRepository);
+
+function buildSetsListViewModel(sets: BionicleSet[]) {
   const grouped = groupSetsByYearAndWave(sets);
   const years = getYearsAscending(grouped);
 
