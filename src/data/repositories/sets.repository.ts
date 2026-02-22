@@ -1,15 +1,11 @@
 import { type BionicleSet, bionicleSets } from "@/data/sets";
 
-export type SetsRepository = {
-  getAll: () => BionicleSet[];
-};
+export class SetsRepository {
+  constructor(private readonly dataSource: BionicleSet[]) {}
 
-export function createSetsRepository(
-  dataSource: BionicleSet[],
-): SetsRepository {
-  return {
-    getAll: () => [...dataSource],
-  };
+  getAll(): BionicleSet[] {
+    return [...this.dataSource];
+  }
 }
 
-export const setsRepository = createSetsRepository(bionicleSets);
+export const setsRepository = new SetsRepository(bionicleSets);

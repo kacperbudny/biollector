@@ -20,17 +20,17 @@ alwaysApply: true
 
 # Repository pattern
 
-- Repositories accept their data source explicitly. Don't use default parameters for the data source; pass it explicitly when creating the instance (e.g. `createSetsRepository(bionicleSets)`).
+- Repositories accept their data source explicitly in the constructor (e.g. `new SetsRepository(bionicleSets)`).
 - Data retrieval lives in the repository; data manipulation and domain logic live in the service.
 - Focus on testability: inject data sources so tests can use dummy data without complex mocking.
 
 # Dependency injection
 
-- Services receive their dependencies (e.g. repository) at creation time via a factory: `createSetsService(repository)`.
-- The service calls the repository internally; the caller (e.g. component) only calls the service.
+- Use class-based services and repositories with constructor injection.
+- Services receive their dependencies (e.g. repository) in the constructor; the service calls the repository internally.
 - Define a port/interface in the service for the repository shape it needs; the concrete repository satisfies it structurally.
-- Export a default instance for production: `setsService = createSetsService(setsRepository)`.
-- Tests inject a mock: `createSetsService(createSetsRepository(mockData))` — no mocking framework needed.
+- Export a default instance for production: `setsService = new SetsService(setsRepository)`.
+- Tests inject a mock: `new SetsService(new SetsRepository(mockData))` — no mocking framework needed.
 
 # Components
 

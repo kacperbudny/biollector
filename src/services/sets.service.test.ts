@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createSetsRepository } from "@/data/repositories/sets.repository";
+import { SetsRepository } from "@/data/repositories/sets.repository";
 import { type BionicleSet, SetType, Wave } from "@/data/sets";
-import { createSetsService } from "@/services/sets.service";
+import { SetsService } from "@/services/sets.service";
 
 const createMockSet = (
   overrides: Partial<BionicleSet> &
@@ -28,7 +28,7 @@ describe("createSetsService", () => {
         wave: Wave.TOA_MATA,
       }),
     ];
-    const service = createSetsService(createSetsRepository(sets));
+    const service = new SetsService(new SetsRepository(sets));
 
     const result = service.getSetsListViewModel();
 
@@ -50,7 +50,7 @@ describe("createSetsService", () => {
         wave: Wave.TOHUNGA,
       }),
     ];
-    const service = createSetsService(createSetsRepository(sets));
+    const service = new SetsService(new SetsRepository(sets));
 
     const result = service.getSetsListViewModel();
 
@@ -67,7 +67,7 @@ describe("createSetsService", () => {
   });
 
   it("returns empty array when repository returns no sets", () => {
-    const service = createSetsService(createSetsRepository([]));
+    const service = new SetsService(new SetsRepository([]));
 
     const result = service.getSetsListViewModel();
 
