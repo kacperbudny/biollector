@@ -5,7 +5,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 ## Features
 
 - [x] Auth
-- [ ] List of sets
+- [x] List of sets
 - [ ] Set details
 - [ ] Managing your collection
 - [ ] Set rating

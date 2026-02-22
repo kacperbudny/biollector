@@ -1,0 +1,42 @@
+---
+alwaysApply: true
+---
+# Styling
+
+- Use HeroUI (previously NextUI) components whenever possible.
+- Use Tailwind for styling.
+
+# Project structure
+
+- Put repositories in `data/repositories`. Use naming like `sets.repository.ts` (dot notation).
+- Put services in `services`. Use naming like `sets.service.ts` (dot notation).
+- Don't use barrel files (index.ts re-exports). Import from direct file paths.
+- Always use absolute imports (`@/...`).
+
+# Types
+
+- Colocate types with where they originate. Don't use separate `types.ts` files.
+- Rely on TypeScript inference when possible. Don't export helper-like types unnecessarily.
+
+# Repository pattern
+
+- Repositories accept their data source explicitly in the constructor (e.g. `new SetsRepository(bionicleSets)`).
+- Data retrieval lives in the repository; data manipulation and domain logic live in the service.
+- Focus on testability: inject data sources so tests can use dummy data without complex mocking.
+
+# Dependency injection
+
+- Use class-based services and repositories with constructor injection.
+- Services receive their dependencies (e.g. repository) in the constructor; the service calls the repository internally.
+- Define a port/interface in the service for the repository shape it needs; the concrete repository satisfies it structurally.
+- Export a default instance for production: `setsService = new SetsService(setsRepository)`.
+- Tests inject a mock: `new SetsService(new SetsRepository(mockData))` — no mocking framework needed.
+
+# Components
+
+- Colocate components that are only used together in the same file. Only export the top-level component that is used externally.
+- Data fetching can happen inside the component that needs the data; the page renders the component and doesn't need to wire data.
+
+# Code organization
+
+- Order functions from general to specific: broader context first, then details. Main/exported function at the top, helpers below in the order they are used.
