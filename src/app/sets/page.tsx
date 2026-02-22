@@ -1,7 +1,12 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
-import Image from "next/image";
 import type { Metadata } from "next";
-import { bionicleSets, WAVE_ORDER, type BionicleSet, type Wave } from "@/data/sets";
+import Image from "next/image";
+import {
+  type BionicleSet,
+  bionicleSets,
+  WAVE_ORDER,
+  type Wave,
+} from "@/data/sets";
 
 export const metadata: Metadata = {
   title: "Sets",
@@ -21,10 +26,9 @@ function groupSetsByYearAndWave(sets: BionicleSet[]): GroupedSets {
     if (!grouped[set.releaseYear]) {
       grouped[set.releaseYear] = {};
     }
-    if (!grouped[set.releaseYear][set.wave]) {
-      grouped[set.releaseYear][set.wave] = [];
-    }
-    grouped[set.releaseYear][set.wave]!.push(set);
+    const waveSets = grouped[set.releaseYear][set.wave] ?? [];
+    waveSets.push(set);
+    grouped[set.releaseYear][set.wave] = waveSets;
   }
 
   return grouped;
@@ -34,9 +38,7 @@ function getYearsAscending(grouped: GroupedSets): string[] {
   return Object.keys(grouped).sort((a, b) => Number(a) - Number(b));
 }
 
-function getWavesForYear(
-  yearSets: { [wave in Wave]?: BionicleSet[] },
-): Wave[] {
+function getWavesForYear(yearSets: { [wave in Wave]?: BionicleSet[] }): Wave[] {
   const wavesInYear = Object.keys(yearSets) as Wave[];
   return WAVE_ORDER.filter((wave) => wavesInYear.includes(wave));
 }
@@ -66,15 +68,15 @@ export default function SetsPage() {
                       <Card
                         key={set.catalogNumber}
                         isPressable
-                        className="hover:scale-105 transition-transform"
+                        className="hover:scale-105 transition-transform overflow-hidden"
                       >
                         <CardHeader className="p-0">
-                          <div className="relative w-full aspect-square">
+                          <div className="relative w-full aspect-square min-h-[120px] bg-default-100">
                             <Image
                               src={`/sets/${set.imageName}`}
                               alt={set.name}
                               fill
-                              className="object-contain"
+                              className="object-cover"
                               sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
                             />
                           </div>
@@ -99,4 +101,3 @@ export default function SetsPage() {
     </div>
   );
 }
-
