@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
-import { SetCard } from "@/components/sets/set-card";
+import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { userCollectionService } from "@/services/user-collection.service";
 
@@ -17,20 +17,12 @@ export default async function CollectionPage() {
     redirect("/auth");
   }
 
-  const sets = await userCollectionService.getSetsForUser(user.id);
+  const data = await userCollectionService.getCollectionListViewModel(user.id);
 
   return (
     <>
       <PageTitle>My collection</PageTitle>
-      {sets.length > 0 ? (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-6">
-          {sets.map((set) => (
-            <SetCard key={set.catalogNumber} set={set} wave={set.wave} />
-          ))}
-        </div>
-      ) : (
-        <CollectionEmpty />
-      )}
+      {data.length > 0 ? <SetsList data={data} /> : <CollectionEmpty />}
     </>
   );
 }

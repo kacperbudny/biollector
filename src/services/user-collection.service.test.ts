@@ -32,8 +32,8 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
     });
   });
 
-  describe(`${UserCollectionService.prototype.getSetsForUser.name}`, () => {
-    it("returns only sets from user collection", async () => {
+  describe(`${UserCollectionService.prototype.getCollectionListViewModel.name}`, () => {
+    it("returns sets grouped by year and wave", async () => {
       const sets: BionicleSet[] = [
         setFixture({
           catalogNumber: "1",
@@ -61,13 +61,17 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         new SetsRepository(sets),
       );
 
-      const result = await service.getSetsForUser("user-123");
+      const result = await service.getCollectionListViewModel("user-123");
 
-      expect(result).toHaveLength(2);
-      expect(result.map((s) => s.catalogNumber)).toEqual(["1", "3"]);
-      expect(result.every((s) => s.isInCollection)).toBe(true);
-      expect(result[0].name).toBe("Tahu");
-      expect(result[1].name).toBe("Lewa");
+      expect(result).toHaveLength(1);
+      expect(result[0].year).toBe("2001");
+      expect(result[0].waves).toHaveLength(1);
+      expect(result[0].waves[0].sets).toHaveLength(2);
+      expect(result[0].waves[0].sets.map((s) => s.catalogNumber)).toEqual([
+        "1",
+        "3",
+      ]);
+      expect(result[0].waves[0].sets.every((s) => s.isInCollection)).toBe(true);
     });
 
     it("returns empty array when user has no sets in collection", async () => {
@@ -86,7 +90,7 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         new SetsRepository(sets),
       );
 
-      const result = await service.getSetsForUser("user-123");
+      const result = await service.getCollectionListViewModel("user-123");
 
       expect(result).toEqual([]);
     });
@@ -107,10 +111,11 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         new SetsRepository(sets),
       );
 
-      const result = await service.getSetsForUser("user-123");
+      const result = await service.getCollectionListViewModel("user-123");
 
       expect(result).toHaveLength(1);
-      expect(result[0].catalogNumber).toBe("1");
+      expect(result[0].waves[0].sets).toHaveLength(1);
+      expect(result[0].waves[0].sets[0].catalogNumber).toBe("1");
     });
   });
 });

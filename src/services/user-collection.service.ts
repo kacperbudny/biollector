@@ -6,7 +6,10 @@ import {
   type UserCollectionRepositoryPort,
   userCollectionRepository,
 } from "@/data/repositories/user-collection.repository";
-import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import {
+  SetsListViewModel,
+  type SetViewModel,
+} from "@/domain/view-models/set.view-model";
 
 export class UserCollectionService {
   constructor(
@@ -30,22 +33,22 @@ export class UserCollectionService {
     await this.collectionRepository.insert(userId, setNumber);
   }
 
-  async getSetsForUser(userId: string): Promise<SetViewModel[]> {
+  async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
     const userSetsNumbers =
       await this.collectionRepository.getUserCollection(userId);
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
-    const result: SetViewModel[] = [];
+    const sets: SetViewModel[] = [];
 
     for (const num of userSetsNumbers) {
       const set = byNumber.get(num);
       if (set) {
-        result.push({ ...set, isInCollection: true });
+        sets.push({ ...set, isInCollection: true });
       }
     }
 
-    return result;
+    return SetsListViewModel.fromSetViewModels(sets);
   }
 }
 
