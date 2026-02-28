@@ -17,6 +17,7 @@ alwaysApply: true
 
 - Colocate types with where they originate. Don't use separate `types.ts` files.
 - Rely on TypeScript inference when possible. Don't export helper-like types unnecessarily.
+- For view models with conversion logic, use a namespace merge: export the type and a namespace with the same name containing a static factory (e.g. `SetsListViewModel.fromSetViewModels(sets)`). Keep conversion out of services.
 
 # Repository pattern
 
@@ -32,10 +33,24 @@ alwaysApply: true
 - Export a default instance for production: `setsService = new SetsService(setsRepository)`.
 - Tests inject a mock: `new SetsService(new SetsRepository(mockData))` — no mocking framework needed.
 
+# Server actions
+
+- Use next-safe-action's `useAction` hook with callbacks (`onError`, `onSuccess`) instead of manual `useTransition` + result handling.
+- For action error toasts, use `getActionErrorMessage` from utils (uses `flattenValidationErrors` from next-safe-action)
+
+# Services
+
+- Services should return the view model shape the UI needs. Avoid calling multiple services in a page when one can return the full view model (e.g. `getCollectionListViewModel` instead of flat list + separate grouping).
+
 # Components
 
 - Colocate components that are only used together in the same file. Only export the top-level component that is used externally.
 - Data fetching can happen inside the component that needs the data; the page renders the component and doesn't need to wire data.
+- Extract shared typography (PageTitle, SectionHeading, SubsectionHeading) to reusable components in `components/typography`.
+
+# Testing
+
+- Mock repositories accept `Partial<RepositoryPort>` as overrides. Use plain `vi.fn()` by default; no default resolved values. Tests pass mock implementations explicitly (e.g. `getUserCollection: vi.fn().mockResolvedValue(["1"])`).
 
 # Code organization
 

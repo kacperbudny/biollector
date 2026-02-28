@@ -7,7 +7,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 - [x] Auth
 - [x] List of sets
 - [ ] Set details
-- [ ] Managing your collection
+- [x] Managing your collection
 - [ ] Set rating
 - [ ] Wishlist
 - [ ] Recommendations
@@ -47,6 +47,14 @@ pnpm dev
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Project structure
+
+- **Repositories** (`src/data/repositories`) – data access; inject data sources for testability.
+- **Services** (`src/domain/services`) – domain logic; orchestrate repositories and return view models.
+- **View models** (`src/domain/view-models`) – UI-ready shapes; use static factories (e.g. `SetsListViewModel.fromSetViewModels`) for conversion.
+- **Actions** (`src/actions`) – server actions (next-safe-action).
+- **Components** (`src/components`) – UI; typography and shared components in subfolders.
 
 ## Tech stack
 
