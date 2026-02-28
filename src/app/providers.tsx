@@ -1,6 +1,7 @@
 "use client";
 
 import { HeroUIProvider } from "@heroui/system";
+import { ToastProvider } from "@heroui/toast";
 import { StackProvider, StackTheme } from "@stackframe/stack";
 import { useRouter } from "next/navigation";
 import { stackClientApp } from "@/auth/client";
@@ -19,7 +20,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <StackProvider app={stackClientApp}>
       <StackTheme>
-        <HeroUIProvider navigate={router.push}>{children}</HeroUIProvider>
+        <HeroUIProvider navigate={router.push}>
+          <ToastProvider />
+          {children}
+        </HeroUIProvider>
       </StackTheme>
     </StackProvider>
   );

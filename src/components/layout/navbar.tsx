@@ -8,8 +8,12 @@ import { UserButton } from "@stackframe/stack";
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
+import { stackServerApp } from "@/auth/server";
 
-export function Navbar() {
+export async function Navbar() {
+  const user = await stackServerApp.getUser();
+  const isSignedIn = !!user;
+
   return (
     <HeroUINavbar isBordered>
       <NavbarBrand className="h-full">
@@ -31,6 +35,16 @@ export function Navbar() {
             Sets
           </Link>
         </NavbarItem>
+        {isSignedIn && (
+          <NavbarItem>
+            <Link
+              href="/collection"
+              className="text-foreground hover:text-primary transition-colors"
+            >
+              Collection
+            </Link>
+          </NavbarItem>
+        )}
       </NavbarContent>
       <NavbarContent justify="end">
         <NavbarItem>

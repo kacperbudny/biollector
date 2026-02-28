@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={font.className}>
         <Providers>
           <Navbar />
-          <main className="container mx-auto max-w-7xl px-6 flex-grow">
+          <main className="container mx-auto max-w-7xl grow px-6 py-8">
             {children}
           </main>
         </Providers>

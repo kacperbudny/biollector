@@ -12,32 +12,48 @@
     "format": "biome format --write",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "migrate": "kysely migrate:latest",
+    "migrate:make": "kysely migrate:make",
+    "migrate:generate": "kysely-codegen --config-file kysely-codegen.config.ts"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@heroui/button": "^2.2.31",
     "@heroui/card": "^2.2.27",
     "@heroui/navbar": "^2.2.29",
     "@heroui/spacer": "^2.2.24",
     "@heroui/system": "2.4.27",
     "@heroui/theme": "2.4.26",
+    "@heroui/toast": "^2.0.21",
+    "@neondatabase/serverless": "^1.0.2",
     "@stackframe/stack": "^2.8.70",
+    "@t3-oss/env-nextjs": "^0.13.10",
+    "dotenv": "^17.3.1",
     "framer-motion": "12.34.3",
+    "kysely": "^0.28.11",
+    "kysely-neon": "^2.0.2",
     "next": "16.1.6",
+    "next-safe-action": "^8.1.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.4",
     "@react-types/shared": "^3.33.0",
     "@tailwindcss/postcss": "^4.2.0",
     "@types/node": "^25.3.0",
+    "@types/pg": "^8.16.0",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
+    "kysely-codegen": "^0.20.0",
+    "kysely-ctl": "^0.20.0",
+    "pg": "^8.19.0",
     "tailwindcss": "^4.2.0",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"
   },
-  "packageManager": "pnpm@10.23.0+sha512.21c4e5698002ade97e4efe8b8b4a89a8de3c85a37919f957e7a0f30f38fbc5bbdd05980ffe29179b2fb6e6e691242e098d945d1601772cad0fef5fb6411e2a4b"
+  "packageManager": "pnpm@10.30.3+sha512.c961d1e0a2d8e354ecaa5166b822516668b7f44cb5bd95122d590dd81922f606f5473b6d23ec4a5be05e7fcd18e8488d47d978bbe981872f1145d06e9a740017"
 }

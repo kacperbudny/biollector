@@ -1,0 +1,67 @@
+"use client";
+
+import { PlusIcon } from "@heroicons/react/24/outline";
+import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
+import { Button } from "@heroui/button";
+import { addToast } from "@heroui/toast";
+import { useUser } from "@stackframe/stack";
+import { useAction } from "next-safe-action/hooks";
+import { toggleCollection } from "@/actions/user-collection.actions";
+import { getActionErrorMessage } from "@/actions/utils";
+
+type ToggleCollectionButtonProps = {
+  setNumber: string;
+  isInCollection: boolean;
+};
+
+export function ToggleCollectionButton({
+  setNumber,
+  isInCollection,
+}: ToggleCollectionButtonProps) {
+  const user = useUser();
+  const { execute, isPending } = useAction(toggleCollection, {
+    onError: ({ error }) => {
+      addToast({
+        title: "Error",
+        description: getActionErrorMessage(error),
+        color: "danger",
+      });
+    },
+  });
+  const isSignedIn = !!user;
+  const label = getLabel(isInCollection, isSignedIn);
+
+  function handleClick() {
+    if (!isSignedIn) {
+      return;
+    }
+    execute({ setNumber });
+  }
+
+  return (
+    <Button
+      isIconOnly
+      size="sm"
+      variant="flat"
+      className="absolute right-2 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
+      aria-label={label}
+      title={label}
+      isDisabled={!isSignedIn || isPending}
+      onPress={handleClick}
+    >
+      {isInCollection ? (
+        <BookmarkIconSolid className="h-5 w-5" />
+      ) : (
+        <PlusIcon className="h-5 w-5" />
+      )}
+    </Button>
+  );
+}
+
+function getLabel(isInCollection: boolean, isSignedIn: boolean) {
+  if (!isSignedIn) {
+    return "Sign in to add to collection";
+  }
+
+  return isInCollection ? "Remove from collection" : "Add to collection";
+}
