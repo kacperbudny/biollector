@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
+import { PageTitle } from "@/components/typography/headings";
 import { setsService } from "@/services/sets.service";
 
 export const metadata: Metadata = {
@@ -12,5 +13,10 @@ export default async function SetsPage() {
   const user = await stackServerApp.getUser();
   const data = await setsService.getSetsListViewModel(user?.id);
 
-  return <SetsList data={data} />;
+  return (
+    <>
+      <PageTitle>Sets</PageTitle>
+      <SetsList data={data} />
+    </>
+  );
 }

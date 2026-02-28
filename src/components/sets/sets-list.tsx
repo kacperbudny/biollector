@@ -1,4 +1,8 @@
 import { SetCard } from "@/components/sets/set-card";
+import {
+  SectionHeading,
+  SubsectionHeading,
+} from "@/components/typography/headings";
 import type { Wave } from "@/data/sets";
 import type {
   SetsListViewModel,
@@ -10,17 +14,13 @@ type SetsListProps = {
 };
 
 export function SetsList({ data }: SetsListProps) {
-  return (
-    <div className="py-8">
-      {data.map((yearSection) => (
-        <YearSection
-          key={yearSection.year}
-          year={yearSection.year}
-          waves={yearSection.waves}
-        />
-      ))}
-    </div>
-  );
+  return data.map((yearSection) => (
+    <YearSection
+      key={yearSection.year}
+      year={yearSection.year}
+      waves={yearSection.waves}
+    />
+  ));
 }
 
 type YearSectionProps = {
@@ -34,7 +34,7 @@ type YearSectionProps = {
 function YearSection({ year, waves }: YearSectionProps) {
   return (
     <div className="mb-12">
-      <h1 className="mb-6 text-4xl font-bold">{year}</h1>
+      <SectionHeading>{year}</SectionHeading>
       {waves.map((waveSection) => (
         <WaveSection
           key={waveSection.wave}
@@ -54,7 +54,7 @@ type WaveSectionProps = {
 function WaveSection({ wave, sets }: WaveSectionProps) {
   return (
     <div className="mb-8">
-      <h2 className="mb-4 text-2xl font-semibold">{wave}</h2>
+      <SubsectionHeading>{wave}</SubsectionHeading>
       <SetGrid sets={sets} wave={wave} />
     </div>
   );
