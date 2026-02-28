@@ -29,9 +29,9 @@ export function ToggleCollectionButton({
     }
     startTransition(async () => {
       const result = isInCollection
-        ? await removeFromCollection(setNumber)
-        : await addToCollection(setNumber);
-      if (!result.success && result.error) {
+        ? await removeFromCollection({ setNumber })
+        : await addToCollection({ setNumber });
+      if (result?.serverError ?? result?.validationErrors) {
         // Could show toast; for now rely on revalidation
       }
     });
