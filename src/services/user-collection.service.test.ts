@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { type BionicleSet, Wave } from "@/data/sets";
 import { UserCollectionService } from "@/services/user-collection.service";
@@ -6,6 +6,32 @@ import { setFixture } from "@/tests/fixtures";
 import { userCollectionRepositoryMock } from "@/tests/repositories";
 
 describe(`@Unit ${UserCollectionService.name}`, () => {
+  describe(`${UserCollectionService.prototype.toggleSet.name}`, () => {
+    it("removes set from collection when already in collection", async () => {
+      const mock = userCollectionRepositoryMock({
+        isInCollection: vi.fn().mockResolvedValue(true),
+      });
+      const service = new UserCollectionService(mock, new SetsRepository([]));
+
+      await service.toggleSet("user-123", "1");
+
+      expect(mock.deleteFromCollection).toHaveBeenCalledWith("user-123", "1");
+      expect(mock.insert).not.toHaveBeenCalled();
+    });
+
+    it("adds set to collection when not in collection", async () => {
+      const mock = userCollectionRepositoryMock({
+        isInCollection: vi.fn().mockResolvedValue(false),
+      });
+      const service = new UserCollectionService(mock, new SetsRepository([]));
+
+      await service.toggleSet("user-123", "1");
+
+      expect(mock.insert).toHaveBeenCalledWith("user-123", "1");
+      expect(mock.deleteFromCollection).not.toHaveBeenCalled();
+    });
+  });
+
   describe(`${UserCollectionService.prototype.getSetsForUser.name}`, () => {
     it("returns only sets from user collection", async () => {
       const sets: BionicleSet[] = [
@@ -29,7 +55,9 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         }),
       ];
       const service = new UserCollectionService(
-        userCollectionRepositoryMock({ setNumbers: ["1", "3"] }),
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["1", "3"]),
+        }),
         new SetsRepository(sets),
       );
 
@@ -52,7 +80,9 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         }),
       ];
       const service = new UserCollectionService(
-        userCollectionRepositoryMock(),
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue([]),
+        }),
         new SetsRepository(sets),
       );
 
@@ -71,7 +101,9 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
         }),
       ];
       const service = new UserCollectionService(
-        userCollectionRepositoryMock({ setNumbers: ["1", "999"] }),
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["1", "999"]),
+        }),
         new SetsRepository(sets),
       );
 

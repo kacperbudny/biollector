@@ -3,12 +3,11 @@
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
 import { Button } from "@heroui/button";
+import { addToast } from "@heroui/toast";
 import { useUser } from "@stackframe/stack";
-import { useTransition } from "react";
-import {
-  addToCollection,
-  removeFromCollection,
-} from "@/actions/user-collection.actions";
+import { useAction } from "next-safe-action/hooks";
+import { toggleCollection } from "@/actions/user-collection.actions";
+import { getActionErrorMessage } from "@/utils/actions";
 
 type ToggleCollectionButtonProps = {
   setNumber: string;
@@ -20,28 +19,24 @@ export function ToggleCollectionButton({
   isInCollection,
 }: ToggleCollectionButtonProps) {
   const user = useUser();
-  const [isPending, startTransition] = useTransition();
+  const { execute, isPending } = useAction(toggleCollection, {
+    onError: ({ error }) => {
+      addToast({
+        title: "Error",
+        description: getActionErrorMessage(error),
+        color: "danger",
+      });
+    },
+  });
   const isSignedIn = !!user;
+  const label = getLabel(isInCollection, isSignedIn);
 
   function handleClick() {
     if (!isSignedIn) {
       return;
     }
-    startTransition(async () => {
-      const result = isInCollection
-        ? await removeFromCollection({ setNumber })
-        : await addToCollection({ setNumber });
-      if (result?.serverError ?? result?.validationErrors) {
-        // Could show toast; for now rely on revalidation
-      }
-    });
+    execute({ setNumber });
   }
-
-  const label = isSignedIn
-    ? isInCollection
-      ? "Remove from collection"
-      : "Add to collection"
-    : "Sign in to add to collection";
 
   return (
     <Button
@@ -61,4 +56,12 @@ export function ToggleCollectionButton({
       )}
     </Button>
   );
+}
+
+function getLabel(isInCollection: boolean, isSignedIn: boolean) {
+  if (!isSignedIn) {
+    return "Sign in to add to collection";
+  }
+
+  return isInCollection ? "Remove from collection" : "Add to collection";
 }

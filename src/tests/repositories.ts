@@ -1,14 +1,14 @@
 import { vi } from "vitest";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 
-export function userCollectionRepositoryMock(overrides?: {
-  setNumbers?: string[];
-}): UserCollectionRepositoryPort {
+export function userCollectionRepositoryMock(
+  overrides?: Partial<UserCollectionRepositoryPort>,
+): UserCollectionRepositoryPort {
   return {
-    insert: vi.fn().mockResolvedValue(undefined),
-    deleteByUserAndSet: vi.fn().mockResolvedValue(undefined),
-    getSetNumbersByUserId: vi
-      .fn()
-      .mockResolvedValue(overrides?.setNumbers ?? []),
+    insert: vi.fn(),
+    deleteFromCollection: vi.fn(),
+    getUserCollection: vi.fn(),
+    isInCollection: vi.fn(),
+    ...overrides,
   };
 }

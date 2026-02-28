@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { type BionicleSet, Wave } from "@/data/sets";
 import { SetsService } from "@/services/sets.service";
@@ -94,7 +94,9 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock({ setNumbers: ["1"] }),
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["1"]),
+        }),
       );
 
       const result = await service.getSetsListViewModel("user-123");

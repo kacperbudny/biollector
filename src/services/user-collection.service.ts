@@ -14,17 +14,25 @@ export class UserCollectionService {
     private readonly setsRepository: SetsRepository,
   ) {}
 
-  async addSet(userId: string, setNumber: string): Promise<void> {
-    await this.collectionRepository.insert(userId, setNumber);
-  }
+  async toggleSet(userId: string, setNumber: string) {
+    const isInCollection = await this.collectionRepository.isInCollection(
+      userId,
+      setNumber,
+    );
 
-  async removeSet(userId: string, setNumber: string): Promise<void> {
-    await this.collectionRepository.deleteByUserAndSet(userId, setNumber);
+    if (isInCollection) {
+      return await this.collectionRepository.deleteFromCollection(
+        userId,
+        setNumber,
+      );
+    }
+
+    await this.collectionRepository.insert(userId, setNumber);
   }
 
   async getSetsForUser(userId: string): Promise<SetViewModel[]> {
     const userSetsNumbers =
-      await this.collectionRepository.getSetNumbersByUserId(userId);
+      await this.collectionRepository.getUserCollection(userId);
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 

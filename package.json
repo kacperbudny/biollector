@@ -25,6 +25,7 @@
     "@heroui/spacer": "^2.2.24",
     "@heroui/system": "2.4.27",
     "@heroui/theme": "2.4.26",
+    "@heroui/toast": "^2.0.21",
     "@neondatabase/serverless": "^1.0.2",
     "@stackframe/stack": "^2.8.70",
     "@t3-oss/env-nextjs": "^0.13.10",

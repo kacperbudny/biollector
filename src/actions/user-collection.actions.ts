@@ -9,21 +9,10 @@ const setNumberSchema = z.object({
   setNumber: z.string().min(1, "Set number is required").trim(),
 });
 
-export const addToCollection = authActionClient
+export const toggleCollection = authActionClient
   .inputSchema(setNumberSchema)
   .action(async ({ parsedInput: { setNumber }, ctx: { userId } }) => {
-    await userCollectionService.addSet(userId, setNumber);
-
-    revalidatePath("/sets");
-    revalidatePath("/collection");
-
-    return { success: true };
-  });
-
-export const removeFromCollection = authActionClient
-  .inputSchema(setNumberSchema)
-  .action(async ({ parsedInput: { setNumber }, ctx: { userId } }) => {
-    await userCollectionService.removeSet(userId, setNumber);
+    await userCollectionService.toggleSet(userId, setNumber);
 
     revalidatePath("/sets");
     revalidatePath("/collection");

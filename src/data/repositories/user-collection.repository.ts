@@ -4,8 +4,9 @@ import type { DB } from "@/data/db/types";
 
 export type UserCollectionRepositoryPort = {
   insert(userId: string, setNumber: string): Promise<void>;
-  deleteByUserAndSet(userId: string, setNumber: string): Promise<void>;
-  getSetNumbersByUserId(userId: string): Promise<string[]>;
+  deleteFromCollection(userId: string, setNumber: string): Promise<void>;
+  getUserCollection(userId: string): Promise<string[]>;
+  isInCollection(userId: string, setNumber: string): Promise<boolean>;
 };
 
 export class UserCollectionRepository implements UserCollectionRepositoryPort {
@@ -18,7 +19,7 @@ export class UserCollectionRepository implements UserCollectionRepositoryPort {
       .execute();
   }
 
-  async deleteByUserAndSet(userId: string, setNumber: string): Promise<void> {
+  async deleteFromCollection(userId: string, setNumber: string): Promise<void> {
     await this.db
       .deleteFrom("user_collection")
       .where("user_id", "=", userId)
@@ -26,13 +27,24 @@ export class UserCollectionRepository implements UserCollectionRepositoryPort {
       .execute();
   }
 
-  async getSetNumbersByUserId(userId: string): Promise<string[]> {
+  async getUserCollection(userId: string): Promise<string[]> {
     const rows = await this.db
       .selectFrom("user_collection")
       .select("set_number")
       .where("user_id", "=", userId)
       .execute();
     return rows.map((r) => r.set_number);
+  }
+
+  async isInCollection(userId: string, setNumber: string): Promise<boolean> {
+    const row = await this.db
+      .selectFrom("user_collection")
+      .select("user_id")
+      .where("user_id", "=", userId)
+      .where("set_number", "=", setNumber)
+      .limit(1)
+      .executeTakeFirst();
+    return row !== undefined;
   }
 }
 

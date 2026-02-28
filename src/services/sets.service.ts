@@ -21,7 +21,7 @@ export class SetsService {
   async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.repository.getAll();
     const collectionSetNumbers = userId
-      ? await this.userCollectionRepository.getSetNumbersByUserId(userId)
+      ? await this.userCollectionRepository.getUserCollection(userId)
       : [];
 
     const setsWithStatus: SetViewModel[] = sets.map((set) => ({
