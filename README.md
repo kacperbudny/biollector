@@ -57,3 +57,5 @@ pnpm dev
 - **Linter/Formatter**: Biome
 - **Package Manager**: pnpm
 - **Auth solution**: Stack Auth
+- **Database**: Neon + Kysely
+- **Testing**: Vitest
