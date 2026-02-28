@@ -2,15 +2,34 @@ import {
   type SetsRepository,
   setsRepository,
 } from "@/data/repositories/sets.repository";
-import { type BionicleSet, WAVE_ORDER, type Wave } from "@/data/sets";
+import {
+  type UserCollectionRepositoryPort,
+  userCollectionRepository,
+} from "@/data/repositories/user-collection.repository";
+import { WAVE_ORDER, type Wave } from "@/data/sets";
+import type {
+  SetsListViewModel,
+  SetViewModel,
+} from "@/domain/view-models/set.view-model";
 
 export class SetsService {
-  constructor(private readonly repository: SetsRepository) {}
+  constructor(
+    private readonly repository: SetsRepository,
+    private readonly userCollectionRepository: UserCollectionRepositoryPort,
+  ) {}
 
-  getSetsListViewModel() {
+  async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.repository.getAll();
+    const collectionSetNumbers = userId
+      ? await this.userCollectionRepository.getSetNumbersByUserId(userId)
+      : [];
 
-    const grouped = this.groupSetsByYearAndWave(sets);
+    const setsWithStatus: SetViewModel[] = sets.map((set) => ({
+      ...set,
+      isInCollection: collectionSetNumbers.includes(set.catalogNumber),
+    }));
+
+    const grouped = this.groupSetsByYearAndWave(setsWithStatus);
     const years = this.getYearsAscending(grouped);
 
     return years.map((year) => {
@@ -27,7 +46,7 @@ export class SetsService {
     });
   }
 
-  private groupSetsByYearAndWave(sets: BionicleSet[]) {
+  private groupSetsByYearAndWave(sets: SetViewModel[]) {
     const grouped: GroupedSets = {};
 
     for (const set of sets) {
@@ -47,17 +66,20 @@ export class SetsService {
   }
 
   private getWavesForYear(
-    yearSets: { [wave in Wave]?: BionicleSet[] },
+    yearSets: { [wave in Wave]?: SetViewModel[] },
   ): Wave[] {
     const wavesInYear = Object.keys(yearSets) as Wave[];
     return WAVE_ORDER.filter((wave) => wavesInYear.includes(wave));
   }
 }
 
-export const setsService = new SetsService(setsRepository);
+export const setsService = new SetsService(
+  setsRepository,
+  userCollectionRepository,
+);
 
 type GroupedSets = {
   [year: string]: {
-    [wave in Wave]?: BionicleSet[];
+    [wave in Wave]?: SetViewModel[];
   };
 };

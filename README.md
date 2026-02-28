@@ -59,3 +59,4 @@ pnpm dev
 - **Auth solution**: Stack Auth
 - **Database**: Neon + Kysely
 - **Testing**: Vitest
+- **Validation**: zod

@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
+import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import { type BionicleSet, SetType, Wave } from "@/data/sets";
 import { SetsService } from "@/services/sets.service";
 
@@ -12,9 +13,15 @@ const createMockSet = (
   ...overrides,
 });
 
+const mockUserCollectionRepository: UserCollectionRepositoryPort = {
+  insert: () => Promise.resolve(),
+  deleteByUserAndSet: () => Promise.resolve(),
+  getSetNumbersByUserId: () => Promise.resolve([]),
+};
+
 describe("@Unit SetsService", () => {
   describe("getSetsListViewModel", () => {
-    it("returns years in ascending order", () => {
+    it("returns years in ascending order", async () => {
       const sets: BionicleSet[] = [
         createMockSet({
           catalogNumber: "1",
@@ -29,14 +36,17 @@ describe("@Unit SetsService", () => {
           wave: Wave.TOA_MATA,
         }),
       ];
-      const service = new SetsService(new SetsRepository(sets));
+      const service = new SetsService(
+        new SetsRepository(sets),
+        mockUserCollectionRepository,
+      );
 
-      const result = service.getSetsListViewModel();
+      const result = await service.getSetsListViewModel();
 
       expect(result.map((r) => r.year)).toEqual(["2001", "2006"]);
     });
 
-    it("groups sets by year and wave according to WAVE_ORDER", () => {
+    it("groups sets by year and wave according to WAVE_ORDER", async () => {
       const sets: BionicleSet[] = [
         createMockSet({
           catalogNumber: "1",
@@ -51,9 +61,12 @@ describe("@Unit SetsService", () => {
           wave: Wave.TOHUNGA,
         }),
       ];
-      const service = new SetsService(new SetsRepository(sets));
+      const service = new SetsService(
+        new SetsRepository(sets),
+        mockUserCollectionRepository,
+      );
 
-      const result = service.getSetsListViewModel();
+      const result = await service.getSetsListViewModel();
 
       expect(result).toHaveLength(1);
       expect(result[0].year).toBe("2001");
@@ -67,10 +80,13 @@ describe("@Unit SetsService", () => {
       expect(result[0].waves[1].sets[0].name).toBe("Toa");
     });
 
-    it("returns empty array when repository returns no sets", () => {
-      const service = new SetsService(new SetsRepository([]));
+    it("returns empty array when repository returns no sets", async () => {
+      const service = new SetsService(
+        new SetsRepository([]),
+        mockUserCollectionRepository,
+      );
 
-      const result = service.getSetsListViewModel();
+      const result = await service.getSetsListViewModel();
 
       expect(result).toEqual([]);
     });

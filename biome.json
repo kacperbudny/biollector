@@ -30,7 +30,8 @@
               "..": "Use absolute imports (@/...) instead of relative imports."
             }
           }
-        }
+        },
+        "useBlockStatements": "warn"
       }
     },
     "domains": {
