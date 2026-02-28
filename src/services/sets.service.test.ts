@@ -1,35 +1,21 @@
 import { describe, expect, it } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
-import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
-import { type BionicleSet, SetType, Wave } from "@/data/sets";
+import { type BionicleSet, Wave } from "@/data/sets";
 import { SetsService } from "@/services/sets.service";
+import { setFixture } from "@/tests/fixtures";
+import { userCollectionRepositoryMock } from "@/tests/repositories";
 
-const createMockSet = (
-  overrides: Partial<BionicleSet> &
-    Pick<BionicleSet, "catalogNumber" | "name" | "releaseYear" | "wave">,
-): BionicleSet => ({
-  setType: SetType.CANISTER,
-  imageName: "test.png",
-  ...overrides,
-});
-
-const mockUserCollectionRepository: UserCollectionRepositoryPort = {
-  insert: () => Promise.resolve(),
-  deleteByUserAndSet: () => Promise.resolve(),
-  getSetNumbersByUserId: () => Promise.resolve([]),
-};
-
-describe("@Unit SetsService", () => {
-  describe("getSetsListViewModel", () => {
+describe(`@Unit ${SetsService.name}`, () => {
+  describe(`${SetsService.prototype.getSetsListViewModel.name}`, () => {
     it("returns years in ascending order", async () => {
       const sets: BionicleSet[] = [
-        createMockSet({
+        setFixture({
           catalogNumber: "1",
           name: "A",
           releaseYear: "2006",
           wave: Wave.TOA_INIKA,
         }),
-        createMockSet({
+        setFixture({
           catalogNumber: "2",
           name: "B",
           releaseYear: "2001",
@@ -38,7 +24,7 @@ describe("@Unit SetsService", () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        mockUserCollectionRepository,
+        userCollectionRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -48,13 +34,13 @@ describe("@Unit SetsService", () => {
 
     it("groups sets by year and wave according to WAVE_ORDER", async () => {
       const sets: BionicleSet[] = [
-        createMockSet({
+        setFixture({
           catalogNumber: "1",
           name: "Toa",
           releaseYear: "2001",
           wave: Wave.TOA_MATA,
         }),
-        createMockSet({
+        setFixture({
           catalogNumber: "2",
           name: "Tohunga",
           releaseYear: "2001",
@@ -63,7 +49,7 @@ describe("@Unit SetsService", () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        mockUserCollectionRepository,
+        userCollectionRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -83,12 +69,41 @@ describe("@Unit SetsService", () => {
     it("returns empty array when repository returns no sets", async () => {
       const service = new SetsService(
         new SetsRepository([]),
-        mockUserCollectionRepository,
+        userCollectionRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
 
       expect(result).toEqual([]);
+    });
+
+    it("properly marks sets in user collection", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "InCollection",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+        setFixture({
+          catalogNumber: "2",
+          name: "NotInCollection",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new SetsService(
+        new SetsRepository(sets),
+        userCollectionRepositoryMock({ setNumbers: ["1"] }),
+      );
+
+      const result = await service.getSetsListViewModel("user-123");
+
+      const allSets = result.flatMap((y) => y.waves.flatMap((w) => w.sets));
+      const set1 = allSets.find((s) => s.catalogNumber === "1");
+      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      expect(set1?.isInCollection).toBe(true);
+      expect(set2?.isInCollection).toBe(false);
     });
   });
 });
