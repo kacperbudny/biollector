@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
-import { userCollectionService } from "@/services/user-collection.service";
+import { userCollectionService } from "@/domain/services/user-collection.service";
 
 export const metadata: Metadata = {
   title: "My collection",
@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CollectionPage() {
+  // TODO: authenticated layout?
   const user = await stackServerApp.getUser();
   if (!user) {
     redirect("/auth");

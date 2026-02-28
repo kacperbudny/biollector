@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { type BionicleSet, Wave } from "@/data/sets";
-import { UserCollectionService } from "@/services/user-collection.service";
+import { UserCollectionService } from "@/domain/services/user-collection.service";
 import { setFixture } from "@/tests/fixtures";
 import { userCollectionRepositoryMock } from "@/tests/repositories";
 

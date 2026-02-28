@@ -7,7 +7,7 @@ import { addToast } from "@heroui/toast";
 import { useUser } from "@stackframe/stack";
 import { useAction } from "next-safe-action/hooks";
 import { toggleCollection } from "@/actions/user-collection.actions";
-import { getActionErrorMessage } from "@/utils/actions";
+import { getActionErrorMessage } from "@/actions/utils";
 
 type ToggleCollectionButtonProps = {
   setNumber: string;

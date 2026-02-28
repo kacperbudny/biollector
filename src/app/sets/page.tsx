@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
-import { setsService } from "@/services/sets.service";
+import { setsService } from "@/domain/services/sets.service";
 
 export const metadata: Metadata = {
   title: "Sets",
