@@ -1,4 +1,4 @@
-import { type BionicleSet, WAVE_ORDER, type Wave } from "@/data/sets";
+import { type BionicleSet, Wave } from "@/data/sets";
 
 export type SetViewModel = BionicleSet & { isInCollection: boolean };
 
@@ -14,7 +14,7 @@ export namespace SetsListViewModel {
 
     return years.map((year) => {
       const yearSets = grouped[year];
-      const waves = getWavesForYear(yearSets);
+      const waves = getSortedWavesForYear(yearSets);
 
       return {
         year,
@@ -41,8 +41,15 @@ export namespace SetsListViewModel {
     return grouped;
   }
 
-  function getWavesForYear(yearSets: Record<Wave, SetViewModel[]>): Wave[] {
+  function getSortedWavesForYear(
+    yearSets: Record<Wave, SetViewModel[]>,
+  ): Wave[] {
     const wavesInYear = Object.keys(yearSets) as Wave[];
-    return WAVE_ORDER.filter((wave) => wavesInYear.includes(wave));
+
+    return wavesInYear.toSorted((a, b) => {
+      const indexA = Object.values(Wave).indexOf(a);
+      const indexB = Object.values(Wave).indexOf(b);
+      return indexA - indexB;
+    });
   }
 }

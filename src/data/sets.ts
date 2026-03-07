@@ -7,99 +7,78 @@ export enum SetType {
   COMBINER = "Combiner",
 }
 
+// order matters!
 export enum Wave {
+  // 2001
+  TURAGA = "Turaga",
   TOHUNGA = "Tohunga",
-  MATORAN = "Matoran",
-  PROMOTIONAL = "Promotional",
-  ACCESSORIES = "Accessories",
   TOA_MATA = "Toa Mata",
   RAHI = "Rahi",
-  TURAGA = "Turaga",
-  PRODUCT_COLLECTION = "Product Collection",
+
+  // 2002
   BOHROK_VA = "Bohrok Va",
-  WARRIORS = "Warriors",
   BOHROK = "Bohrok",
   TOA_NUVA = "Toa Nuva",
+
+  // 2003
+  MOLTORAN = "MoLtoran",
   BOHROK_KAL = "Bohrok-Kal",
   RAHKSHI = "Rahkshi",
-  MISCELLANEOUS = "Miscellaneous",
+
+  // 2004
+  METRUAN = "Metruan",
   TOA_METRU = "Toa Metru",
   VAHKI = "Vahki",
+
+  // 2005
   RAHAGA = "Rahaga",
   TOA_HORDIKA = "Toa Hordika",
   VISORAK = "Visorak",
-  PLAYSETS = "Playsets",
   TOA_HAGAH = "Toa Hagah",
-  TOA_INIKA = "Toa Inika",
+
+  // 2006
+  VOYATORAN = "Voyatoran",
   PIRAKA = "Piraka",
-  TOA_MAHRI = "Toa Mahri",
-  BARRAKI = "Barraki",
+  TOA_INIKA = "Toa Inika",
+
+  // 2007
+  MAHRITORAN = "Mahritoran",
   HYDRUKA = "Hydruka",
+  BARRAKI = "Barraki",
+  TOA_MAHRI = "Toa Mahri",
+
+  // 2008
+  KARDATORAN = "Kardatoran",
   PHANTOKA = "Phantoka",
   MISTIKA = "Mistika",
-  BATTLE_VEHICLES = "Battle Vehicles",
-  VEHICLES_CREATURES = "Vehicles/Creatures",
+
+  // 2009
   AGORI = "Agori",
   GLATORIAN = "Glatorian",
   GLATORIAN_LEGENDS = "Glatorian Legends",
+
+  // 2010
   STARS = "Stars",
+
+  // 2015
   PROTECTORS = "Protectors",
   TOA_MASTERS = "Toa Masters",
   SKULL_ARMY = "Skull Army",
+
+  // 2016
   ELEMENTAL_CREATURES = "Elemental Creatures",
   TOA_UNITERS = "Toa Uniters",
   SHADOW_HORDE = "Shadow Horde",
-  MAGAZINE_GIFT = "Magazine Gift",
-  MOLTORAN = "MoLtoran",
-  RELEASED_COMBINERS = "Released Combiners",
-}
 
-export const WAVE_ORDER: Wave[] = [
-  Wave.TURAGA,
-  Wave.TOHUNGA,
-  Wave.TOA_MATA,
-  Wave.RAHI,
-  Wave.BOHROK_VA,
-  Wave.BOHROK,
-  Wave.TOA_NUVA,
-  Wave.MOLTORAN,
-  Wave.MATORAN,
-  Wave.PRODUCT_COLLECTION,
-  Wave.BOHROK_KAL,
-  Wave.RAHKSHI,
-  Wave.MISCELLANEOUS,
-  Wave.TOA_METRU,
-  Wave.VAHKI,
-  Wave.RAHAGA,
-  Wave.TOA_HORDIKA,
-  Wave.VISORAK,
-  Wave.PLAYSETS,
-  Wave.TOA_HAGAH,
-  Wave.TOA_INIKA,
-  Wave.PIRAKA,
-  Wave.TOA_MAHRI,
-  Wave.BARRAKI,
-  Wave.HYDRUKA,
-  Wave.PHANTOKA,
-  Wave.MISTIKA,
-  Wave.BATTLE_VEHICLES,
-  Wave.VEHICLES_CREATURES,
-  Wave.AGORI,
-  Wave.GLATORIAN,
-  Wave.GLATORIAN_LEGENDS,
-  Wave.STARS,
-  Wave.PROTECTORS,
-  Wave.TOA_MASTERS,
-  Wave.SKULL_ARMY,
-  Wave.ELEMENTAL_CREATURES,
-  Wave.TOA_UNITERS,
-  Wave.SHADOW_HORDE,
-  Wave.MAGAZINE_GIFT,
-  Wave.PROMOTIONAL,
-  Wave.ACCESSORIES,
-  Wave.WARRIORS,
-  Wave.RELEASED_COMBINERS,
-];
+  // Generic
+  TITANS = "Titans",
+  BATTLE_VEHICLES = "Battle Vehicles",
+  RELEASED_COMBINERS = "Released Combiners",
+  PLAYSETS = "Playsets",
+  PROMOTIONAL = "Promotional",
+  ACCESSORIES = "Accessories",
+  MISCELLANEOUS = "Miscellaneous",
+}
 
 export type BionicleSet = {
   catalogNumber: string;
@@ -596,7 +575,7 @@ export const bionicleSets = [
     name: "Boxor",
     releaseYear: "2002",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8556.jpg",
   },
   {
@@ -604,7 +583,7 @@ export const bionicleSets = [
     name: "Exo-Toa",
     releaseYear: "2002",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8557.jpg",
   },
   {
@@ -612,7 +591,7 @@ export const bionicleSets = [
     name: "Cahdok and Gahdok",
     releaseYear: "2002",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8558.jpg",
   },
   {
@@ -860,7 +839,7 @@ export const bionicleSets = [
     name: "Makuta",
     releaseYear: "2003",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8593.jpg",
   },
   {
@@ -868,7 +847,7 @@ export const bionicleSets = [
     name: "Jaller and Gukko",
     releaseYear: "2003",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8594.jpg",
   },
   {
@@ -876,7 +855,7 @@ export const bionicleSets = [
     name: "Takua and Pewku",
     releaseYear: "2003",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8595.jpg",
   },
   {
@@ -884,7 +863,7 @@ export const bionicleSets = [
     name: "Takanuva",
     releaseYear: "2003",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8596.jpg",
   },
   {
@@ -940,7 +919,7 @@ export const bionicleSets = [
     name: "Nuhrii",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8607.jpg",
   },
   {
@@ -948,7 +927,7 @@ export const bionicleSets = [
     name: "Vhisola",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8608.jpg",
   },
   {
@@ -956,7 +935,7 @@ export const bionicleSets = [
     name: "Tehutti",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8609.jpg",
   },
   {
@@ -964,7 +943,7 @@ export const bionicleSets = [
     name: "Ahkmou",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8610.jpg",
   },
   {
@@ -972,7 +951,7 @@ export const bionicleSets = [
     name: "Orkahm",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8611.jpg",
   },
   {
@@ -980,7 +959,7 @@ export const bionicleSets = [
     name: "Ehrye",
     releaseYear: "2004",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.METRUAN,
     imageName: "8612.jpg",
   },
   {
@@ -1036,7 +1015,7 @@ export const bionicleSets = [
     name: "Turaga Dume and Nivawk",
     releaseYear: "2004",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8621.jpg",
   },
   {
@@ -1044,7 +1023,7 @@ export const bionicleSets = [
     name: "Nidhiki",
     releaseYear: "2004",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8622.jpg",
   },
   {
@@ -1052,7 +1031,7 @@ export const bionicleSets = [
     name: "Krekka",
     releaseYear: "2004",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8623.jpg",
   },
   {
@@ -1068,7 +1047,7 @@ export const bionicleSets = [
     name: "Umbra",
     releaseYear: "2006",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8625.jpg",
   },
   {
@@ -1180,7 +1159,7 @@ export const bionicleSets = [
     name: "Toa Ignika",
     releaseYear: "2008",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8697.jpg",
   },
   {
@@ -1188,7 +1167,7 @@ export const bionicleSets = [
     name: "Vultraz",
     releaseYear: "2008",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8698.jpg",
   },
   {
@@ -1196,7 +1175,7 @@ export const bionicleSets = [
     name: "Takanuva",
     releaseYear: "2008",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8699.jpg",
   },
   {
@@ -1204,7 +1183,7 @@ export const bionicleSets = [
     name: "Velika",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8721.jpg",
   },
   {
@@ -1212,7 +1191,7 @@ export const bionicleSets = [
     name: "Kazi",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8722.jpg",
   },
   {
@@ -1220,7 +1199,7 @@ export const bionicleSets = [
     name: "Piruk",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8723.jpg",
   },
   {
@@ -1228,7 +1207,7 @@ export const bionicleSets = [
     name: "Garan",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8724.jpg",
   },
   {
@@ -1236,7 +1215,7 @@ export const bionicleSets = [
     name: "Balta",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8725.jpg",
   },
   {
@@ -1244,7 +1223,7 @@ export const bionicleSets = [
     name: "Dalu",
     releaseYear: "2006",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.VOYATORAN,
     imageName: "8726.jpg",
   },
   {
@@ -1300,7 +1279,7 @@ export const bionicleSets = [
     name: "Axonn",
     releaseYear: "2006",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8733.jpg",
   },
   {
@@ -1308,7 +1287,7 @@ export const bionicleSets = [
     name: "Brutaka",
     releaseYear: "2006",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8734.jpg",
   },
   {
@@ -1412,7 +1391,7 @@ export const bionicleSets = [
     name: "Keetongu",
     releaseYear: "2005",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8755.jpg",
   },
   {
@@ -1420,7 +1399,7 @@ export const bionicleSets = [
     name: "Sidorak",
     releaseYear: "2005",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8756.jpg",
   },
   {
@@ -1452,7 +1431,7 @@ export const bionicleSets = [
     name: "Roodaka",
     releaseYear: "2005",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8761.jpg",
   },
   {
@@ -1476,7 +1455,7 @@ export const bionicleSets = [
     name: "Vezon & Fenrakk",
     releaseYear: "2006",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8764.jpg",
   },
   {
@@ -1492,7 +1471,7 @@ export const bionicleSets = [
     name: "Toa Lhikan and Kikanalo",
     releaseYear: "2004",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8811.jpg",
   },
   {
@@ -1668,7 +1647,7 @@ export const bionicleSets = [
     name: "Gadunka",
     releaseYear: "2007",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8922.jpg",
   },
   {
@@ -1676,7 +1655,7 @@ export const bionicleSets = [
     name: "Hydraxon",
     releaseYear: "2007",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8923.jpg",
   },
   {
@@ -1684,7 +1663,7 @@ export const bionicleSets = [
     name: "Maxilos and Spinax",
     releaseYear: "2007",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8924.jpg",
   },
   {
@@ -1716,7 +1695,7 @@ export const bionicleSets = [
     name: "Defilak",
     releaseYear: "2007",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.MAHRITORAN,
     imageName: "8929.jpg",
   },
   {
@@ -1724,7 +1703,7 @@ export const bionicleSets = [
     name: "Dekar",
     releaseYear: "2007",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.MAHRITORAN,
     imageName: "8930.jpg",
   },
   {
@@ -1748,7 +1727,7 @@ export const bionicleSets = [
     name: "Nocturn",
     releaseYear: "2007",
     setType: SetType.CANISTER,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8935.jpg",
   },
   {
@@ -1756,7 +1735,7 @@ export const bionicleSets = [
     name: "Lesovikk",
     releaseYear: "2007",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8939.jpg",
   },
   {
@@ -1764,7 +1743,7 @@ export const bionicleSets = [
     name: "Karzahni",
     releaseYear: "2007",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8940.jpg",
   },
   {
@@ -1796,7 +1775,7 @@ export const bionicleSets = [
     name: "Tanma",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8944.jpg",
   },
   {
@@ -1804,7 +1783,7 @@ export const bionicleSets = [
     name: "Solek",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8945.jpg",
   },
   {
@@ -1812,7 +1791,7 @@ export const bionicleSets = [
     name: "Photok",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8946.jpg",
   },
   {
@@ -1820,7 +1799,7 @@ export const bionicleSets = [
     name: "Radiak",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8947.jpg",
   },
   {
@@ -1828,7 +1807,7 @@ export const bionicleSets = [
     name: "Gavla",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8948.jpg",
   },
   {
@@ -1836,7 +1815,7 @@ export const bionicleSets = [
     name: "Kirop",
     releaseYear: "2008",
     setType: SetType.SMALL,
-    wave: Wave.MATORAN,
+    wave: Wave.KARDATORAN,
     imageName: "8949.jpg",
   },
   {
@@ -1844,7 +1823,7 @@ export const bionicleSets = [
     name: "Mutran and Vican",
     releaseYear: "2008",
     setType: SetType.CANISTER,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8952.jpg",
   },
   {
@@ -1852,7 +1831,7 @@ export const bionicleSets = [
     name: "Makuta Icarax",
     releaseYear: "2008",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8953.jpg",
   },
   {
@@ -1860,7 +1839,7 @@ export const bionicleSets = [
     name: "Mazeka",
     releaseYear: "2008",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8954.jpg",
   },
   {
@@ -2012,7 +1991,7 @@ export const bionicleSets = [
     name: "Fero and Skirmix",
     releaseYear: "2009",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8990.jpg",
   },
   {
@@ -2020,7 +1999,7 @@ export const bionicleSets = [
     name: "Tuma",
     releaseYear: "2009",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8991.jpg",
   },
   {
@@ -2068,7 +2047,7 @@ export const bionicleSets = [
     name: "Toa Mata Nui",
     releaseYear: "2009",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "8998.jpg",
   },
   {
@@ -2268,7 +2247,7 @@ export const bionicleSets = [
     name: "Mask Maker vs. Skull Grinder",
     releaseYear: "2015",
     setType: SetType.LARGE,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "70795.jpg",
   },
   {
@@ -2372,7 +2351,7 @@ export const bionicleSets = [
     name: "Ekimu the Mask Maker",
     releaseYear: "2016",
     setType: SetType.CANISTER,
-    wave: Wave.WARRIORS,
+    wave: Wave.TITANS,
     imageName: "71312.jpg",
   },
   {

@@ -32,7 +32,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       expect(result.map((r) => r.year)).toEqual(["2001", "2006"]);
     });
 
-    it("groups sets by year and wave according to WAVE_ORDER", async () => {
+    it("groups sets by year and wave according to Wave enum order", async () => {
       const sets: BionicleSet[] = [
         setFixture({
           catalogNumber: "1",
