@@ -1,4 +1,4 @@
-import { type BionicleSet, SetType } from "@/data/sets";
+import { type BionicleSet, SetType } from "@/domain/sets";
 
 export function setFixture(
   overrides: Partial<BionicleSet> &

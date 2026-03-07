@@ -15,8 +15,8 @@ export default async function SetsPage() {
 
   return (
     <>
-      <PageTitle>Sets</PageTitle>
-      <SetsList data={data} />
+      <PageTitle>Sets ({data.totalCount})</PageTitle>
+      <SetsList viewModel={data} />
     </>
   );
 }

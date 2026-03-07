@@ -1,4 +1,5 @@
-import { type BionicleSet, bionicleSets } from "@/data/sets";
+import { bionicleSets } from "@/data/sets";
+import type { BionicleSet } from "@/domain/sets";
 
 export class SetsRepository {
   constructor(private readonly dataSource: BionicleSet[]) {}

@@ -18,12 +18,18 @@ export default async function CollectionPage() {
     redirect("/auth");
   }
 
-  const data = await userCollectionService.getCollectionListViewModel(user.id);
+  const viewModel = await userCollectionService.getCollectionListViewModel(
+    user.id,
+  );
 
   return (
     <>
       <PageTitle>My collection</PageTitle>
-      {data.length > 0 ? <SetsList data={data} /> : <CollectionEmpty />}
+      {viewModel.data.length > 0 ? (
+        <SetsList viewModel={viewModel} />
+      ) : (
+        <CollectionEmpty />
+      )}
     </>
   );
 }

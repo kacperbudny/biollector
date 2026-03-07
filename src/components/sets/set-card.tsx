@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import Image from "next/image";
 import { ToggleCollectionButton } from "@/components/sets/toggle-collection-button";
-import type { Wave } from "@/data/sets";
+import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 
 type SetCardProps = {
@@ -32,6 +32,7 @@ export function SetCard({ set, wave }: SetCardProps) {
       </CardHeader>
       <CardBody className="px-3 py-2">
         <h3 className="mb-1 text-sm font-semibold">{set.name}</h3>
+        <p className="text-xs font-semibold mb-1">{set.catalogNumber}</p>
         <p className="text-xs text-default-500">
           {set.releaseYear} • {wave}
         </p>

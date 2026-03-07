@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
-import { type BionicleSet, Wave } from "@/data/sets";
 import { SetsService } from "@/domain/services/sets.service";
+import { type BionicleSet, Wave } from "@/domain/sets";
 import { setFixture } from "@/tests/fixtures";
 import { userCollectionRepositoryMock } from "@/tests/repositories";
 
@@ -29,10 +29,10 @@ describe(`@Unit ${SetsService.name}`, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result.map((r) => r.year)).toEqual(["2001", "2006"]);
+      expect(result.data.map((r) => r.year)).toEqual(["2001", "2006"]);
     });
 
-    it("groups sets by year and wave according to WAVE_ORDER", async () => {
+    it("groups sets by year and wave according to Wave enum order", async () => {
       const sets: BionicleSet[] = [
         setFixture({
           catalogNumber: "1",
@@ -54,16 +54,16 @@ describe(`@Unit ${SetsService.name}`, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result).toHaveLength(1);
-      expect(result[0].year).toBe("2001");
-      expect(result[0].waves.map((w) => w.wave)).toEqual([
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0].year).toBe("2001");
+      expect(result.data[0].waves.map((w) => w.wave)).toEqual([
         Wave.TOHUNGA,
         Wave.TOA_MATA,
       ]);
-      expect(result[0].waves[0].sets).toHaveLength(1);
-      expect(result[0].waves[0].sets[0].name).toBe("Tohunga");
-      expect(result[0].waves[1].sets).toHaveLength(1);
-      expect(result[0].waves[1].sets[0].name).toBe("Toa");
+      expect(result.data[0].waves[0].sets).toHaveLength(1);
+      expect(result.data[0].waves[0].sets[0].name).toBe("Tohunga");
+      expect(result.data[0].waves[1].sets).toHaveLength(1);
+      expect(result.data[0].waves[1].sets[0].name).toBe("Toa");
     });
 
     it("returns empty array when repository returns no sets", async () => {
@@ -74,7 +74,7 @@ describe(`@Unit ${SetsService.name}`, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result).toEqual([]);
+      expect(result.data).toEqual([]);
     });
 
     it("properly marks sets in user collection", async () => {
@@ -101,7 +101,9 @@ describe(`@Unit ${SetsService.name}`, () => {
 
       const result = await service.getSetsListViewModel("user-123");
 
-      const allSets = result.flatMap((y) => y.waves.flatMap((w) => w.sets));
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
       const set1 = allSets.find((s) => s.catalogNumber === "1");
       const set2 = allSets.find((s) => s.catalogNumber === "2");
       expect(set1?.isInCollection).toBe(true);
