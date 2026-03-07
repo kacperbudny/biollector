@@ -4,17 +4,15 @@ import {
   SubsectionHeading,
 } from "@/components/typography/headings";
 import type { Wave } from "@/domain/sets";
-import type {
-  SetsListViewModel,
-  SetViewModel,
-} from "@/domain/view-models/set.view-model";
+import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 type SetsListProps = {
-  data: SetsListViewModel;
+  viewModel: SetsListViewModel;
 };
 
-export function SetsList({ data }: SetsListProps) {
-  return data.map((yearSection) => (
+export function SetsList({ viewModel }: SetsListProps) {
+  return viewModel.data.map((yearSection) => (
     <YearSection
       key={yearSection.year}
       year={yearSection.year}

@@ -6,10 +6,8 @@ import {
   type UserCollectionRepositoryPort,
   userCollectionRepository,
 } from "@/data/repositories/user-collection.repository";
-import {
-  SetsListViewModel,
-  type SetViewModel,
-} from "@/domain/view-models/set.view-model";
+import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class SetsService {
   constructor(

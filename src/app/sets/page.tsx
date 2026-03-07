@@ -16,7 +16,7 @@ export default async function SetsPage() {
   return (
     <>
       <PageTitle>Sets</PageTitle>
-      <SetsList data={data} />
+      <SetsList viewModel={data} />
     </>
   );
 }
