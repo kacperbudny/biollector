@@ -12,30 +12,29 @@ type YearSection = {
 };
 
 export class SetsListViewModel {
-  data: YearSection[];
-
-  constructor(data: YearSection[]) {
-    this.data = data;
-  }
+  constructor(
+    public readonly data: YearSection[],
+    public readonly totalCount: number,
+  ) {}
 
   static fromSetViewModels(sets: SetViewModel[]): SetsListViewModel {
     const grouped = SetsListViewModel.groupSetsByYearAndWave(sets);
     const years = Object.keys(grouped).sort((a, b) => Number(a) - Number(b));
 
-    return new SetsListViewModel(
-      years.map((year) => {
-        const yearSets = grouped[year];
-        const waves = SetsListViewModel.getSortedWavesForYear(yearSets);
+    const data = years.map((year) => {
+      const yearSets = grouped[year];
+      const waves = SetsListViewModel.getSortedWavesForYear(yearSets);
 
-        return {
-          year,
-          waves: waves.map((wave) => ({
-            wave,
-            sets: yearSets[wave] ?? [],
-          })),
-        };
-      }),
-    );
+      return {
+        year,
+        waves: waves.map((wave) => ({
+          wave,
+          sets: yearSets[wave] ?? [],
+        })),
+      };
+    });
+
+    return new SetsListViewModel(data, sets.length);
   }
 
   private static groupSetsByYearAndWave(sets: SetViewModel[]) {

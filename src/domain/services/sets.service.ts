@@ -11,12 +11,12 @@ import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class SetsService {
   constructor(
-    private readonly repository: SetsRepository,
+    private readonly setsRepository: SetsRepository,
     private readonly userCollectionRepository: UserCollectionRepositoryPort,
   ) {}
 
   async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
-    const sets = this.repository.getAll();
+    const sets = this.setsRepository.getAll();
     const collectionSetNumbers = userId
       ? await this.userCollectionRepository.getUserCollection(userId)
       : [];
