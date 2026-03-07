@@ -1143,7 +1143,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
-    imageName: "8727.jpg",
+    imageName: "8727.png",
   },
   {
     catalogNumber: "8728",
