@@ -1,7 +1,7 @@
 import { Card, CardBody, CardHeader } from "@heroui/card";
 import Image from "next/image";
 import { ToggleCollectionButton } from "@/components/sets/toggle-collection-button";
-import type { Wave } from "@/data/sets";
+import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 
 type SetCardProps = {

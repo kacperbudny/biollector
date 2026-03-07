@@ -1,4 +1,4 @@
-import { type BionicleSet, Wave } from "@/data/sets";
+import { type BionicleSet, Wave } from "@/domain/sets";
 
 export type SetViewModel = BionicleSet & { isInCollection: boolean };
 

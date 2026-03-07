@@ -3,7 +3,7 @@ import {
   SectionHeading,
   SubsectionHeading,
 } from "@/components/typography/headings";
-import type { Wave } from "@/data/sets";
+import type { Wave } from "@/domain/sets";
 import type {
   SetsListViewModel,
   SetViewModel,
