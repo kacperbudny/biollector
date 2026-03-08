@@ -1,4 +1,8 @@
 import {
+  type SetRatingRepositoryPort,
+  setRatingRepository,
+} from "@/data/repositories/set-rating.repository";
+import {
   type SetsRepository,
   setsRepository,
 } from "@/data/repositories/sets.repository";
@@ -13,9 +17,15 @@ export class UserCollectionService {
   constructor(
     private readonly collectionRepository: UserCollectionRepositoryPort,
     private readonly setsRepository: SetsRepository,
+    private readonly setRatingRepository: SetRatingRepositoryPort,
   ) {}
 
   async toggleSet(userId: string, setNumber: string) {
+    const set = this.setsRepository.findOne(setNumber);
+    if (!set) {
+      throw new Error(`Set not found: ${setNumber}`);
+    }
+
     const isInCollection = await this.collectionRepository.isInCollection(
       userId,
       setNumber,
@@ -32,8 +42,10 @@ export class UserCollectionService {
   }
 
   async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
-    const userSetsNumbers =
-      await this.collectionRepository.getUserCollection(userId);
+    const [userSetsNumbers, ratingsBySet] = await Promise.all([
+      this.collectionRepository.getUserCollection(userId),
+      this.setRatingRepository.getUserRatings(userId),
+    ]);
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
@@ -42,7 +54,11 @@ export class UserCollectionService {
     for (const num of userSetsNumbers) {
       const set = byNumber.get(num);
       if (set) {
-        userSets.push({ ...set, isInCollection: true });
+        userSets.push({
+          ...set,
+          isInCollection: true,
+          userRating: ratingsBySet[num],
+        });
       }
     }
 
@@ -55,4 +71,5 @@ export class UserCollectionService {
 export const userCollectionService = new UserCollectionService(
   userCollectionRepository,
   setsRepository,
+  setRatingRepository,
 );

@@ -7,6 +7,10 @@ export class SetsRepository {
   getAll(): BionicleSet[] {
     return [...this.dataSource];
   }
+
+  findOne(setNumber: string): BionicleSet | undefined {
+    return this.dataSource.find((set) => set.catalogNumber === setNumber);
+  }
 }
 
 export const setsRepository = new SetsRepository(bionicleSets);

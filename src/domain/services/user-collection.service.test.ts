@@ -3,7 +3,10 @@ import { SetsRepository } from "@/data/repositories/sets.repository";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
 import { type BionicleSet, Wave } from "@/domain/sets";
 import { setFixture } from "@/tests/fixtures";
-import { userCollectionRepositoryMock } from "@/tests/repositories";
+import {
+  setRatingRepositoryMock,
+  userCollectionRepositoryMock,
+} from "@/tests/repositories";
 
 describe(`@Unit ${UserCollectionService.name}`, () => {
   describe(`${UserCollectionService.prototype.toggleSet.name}`, () => {
@@ -11,7 +14,19 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       const mock = userCollectionRepositoryMock({
         isInCollection: vi.fn().mockResolvedValue(true),
       });
-      const service = new UserCollectionService(mock, new SetsRepository([]));
+      const setsRepo = new SetsRepository([
+        setFixture({
+          catalogNumber: "1",
+          name: "Test",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ]);
+      const service = new UserCollectionService(
+        mock,
+        setsRepo,
+        setRatingRepositoryMock(),
+      );
 
       await service.toggleSet("user-123", "1");
 
@@ -23,12 +38,38 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       const mock = userCollectionRepositoryMock({
         isInCollection: vi.fn().mockResolvedValue(false),
       });
-      const service = new UserCollectionService(mock, new SetsRepository([]));
+      const setsRepo = new SetsRepository([
+        setFixture({
+          catalogNumber: "1",
+          name: "Test",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ]);
+      const service = new UserCollectionService(
+        mock,
+        setsRepo,
+        setRatingRepositoryMock(),
+      );
 
       await service.toggleSet("user-123", "1");
 
       expect(mock.insert).toHaveBeenCalledWith("user-123", "1");
       expect(mock.deleteFromCollection).not.toHaveBeenCalled();
+    });
+
+    it("throws when set does not exist", async () => {
+      const service = new UserCollectionService(
+        userCollectionRepositoryMock({
+          isInCollection: vi.fn().mockResolvedValue(false),
+        }),
+        new SetsRepository([]),
+        setRatingRepositoryMock(),
+      );
+
+      await expect(service.toggleSet("user-123", "99999")).rejects.toThrow(
+        "Set not found: 99999",
+      );
     });
   });
 
@@ -77,6 +118,9 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
           getUserCollection: vi.fn().mockResolvedValue(["1", "3", "5", "6"]),
         }),
         new SetsRepository(sets),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({}),
+        }),
       );
 
       const result = await service.getCollectionListViewModel("user-123");
@@ -135,6 +179,7 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
           getUserCollection: vi.fn().mockResolvedValue([]),
         }),
         new SetsRepository(sets),
+        setRatingRepositoryMock(),
       );
 
       const result = await service.getCollectionListViewModel("user-123");
@@ -158,6 +203,9 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
           getUserCollection: vi.fn().mockResolvedValue(["1", "999"]),
         }),
         new SetsRepository(sets),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({}),
+        }),
       );
 
       const result = await service.getCollectionListViewModel("user-123");
@@ -165,6 +213,42 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data).toHaveLength(1);
       expect(result.data[0].waves[0].sets).toHaveLength(1);
       expect(result.data[0].waves[0].sets[0].catalogNumber).toBe("1");
+    });
+
+    it("includes user ratings on set view models", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "Tahu",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+        setFixture({
+          catalogNumber: "2",
+          name: "Gali",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new UserCollectionService(
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["1", "2"]),
+        }),
+        new SetsRepository(sets),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({ "1": 5, "2": 3 }),
+        }),
+      );
+
+      const result = await service.getCollectionListViewModel("user-123");
+
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
+      const set1 = allSets.find((s) => s.catalogNumber === "1");
+      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      expect(set1?.userRating).toBe(5);
+      expect(set2?.userRating).toBe(3);
     });
   });
 });
