@@ -122,8 +122,10 @@ export class SetsListViewModel {
     return grouped;
   }
 
-  private static getSortedWavesForYear<T>(yearData: Record<Wave, T>): Wave[] {
-    const wavesInYear = Object.keys(yearData) as Wave[];
+  private static getSortedWavesForYear(
+    yearSets: Record<Wave, SetViewModel[]>,
+  ): Wave[] {
+    const wavesInYear = Object.keys(yearSets) as Wave[];
 
     return wavesInYear.toSorted((a, b) => {
       const indexA = Object.values(Wave).indexOf(a);
