@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
+import { MutedText } from "@/components/typography/text";
 import { userCollectionService } from "@/domain/services/user-collection.service";
 
 export const metadata: Metadata = {
@@ -27,10 +28,9 @@ export default async function CollectionPage() {
     <>
       <PageTitle>
         My collection
-        <span className="ml-2 font-normal text-default-500">
-          ({collectionCount} set
-          {collectionCount !== 1 ? "s" : ""})
-        </span>
+        <MutedText>
+          ({collectionCount} set{collectionCount !== 1 ? "s" : ""})
+        </MutedText>
       </PageTitle>
       {collectionCount > 0 ? (
         <SetsList viewModel={viewModel} />

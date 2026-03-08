@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
+import { MutedText } from "@/components/typography/text";
 import { setsService } from "@/domain/services/sets.service";
 
 export const metadata: Metadata = {
@@ -15,7 +16,10 @@ export default async function SetsPage() {
 
   return (
     <>
-      <PageTitle>Sets ({data.totalCount})</PageTitle>
+      <PageTitle>
+        Sets
+        <MutedText>({data.totalCount})</MutedText>
+      </PageTitle>
       <SetsList viewModel={data} />
     </>
   );

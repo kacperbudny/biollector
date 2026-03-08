@@ -4,6 +4,7 @@ import {
   SectionHeading,
   SubsectionHeading,
 } from "@/components/typography/headings";
+import { MutedText } from "@/components/typography/text";
 import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import type {
@@ -43,9 +44,9 @@ function YearSection({
         </span>
 
         {collectionCount && (
-          <span className="ml-2 font-normal text-default-500">
+          <MutedText>
             ({collectionCount} of {totalCount} sets)
-          </span>
+          </MutedText>
         )}
       </SectionHeading>
       {waves.map((waveSection) => (
@@ -76,9 +77,9 @@ function WaveSection({
         </span>
 
         {collectionCount && (
-          <span className="ml-2 font-normal text-default-500">
+          <MutedText>
             ({collectionCount} of {totalCount} sets)
-          </span>
+          </MutedText>
         )}
       </SubsectionHeading>
       <SetGrid sets={sets} wave={wave} />
