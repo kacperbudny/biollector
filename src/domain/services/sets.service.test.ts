@@ -3,7 +3,10 @@ import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetsService } from "@/domain/services/sets.service";
 import { type BionicleSet, Wave } from "@/domain/sets";
 import { setFixture } from "@/tests/fixtures";
-import { userCollectionRepositoryMock } from "@/tests/repositories";
+import {
+  setRatingRepositoryMock,
+  userCollectionRepositoryMock,
+} from "@/tests/repositories";
 
 describe(`@Unit ${SetsService.name}`, () => {
   describe(`${SetsService.prototype.getSetsListViewModel.name}`, () => {
@@ -25,6 +28,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       const service = new SetsService(
         new SetsRepository(sets),
         userCollectionRepositoryMock(),
+        setRatingRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -50,6 +54,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       const service = new SetsService(
         new SetsRepository(sets),
         userCollectionRepositoryMock(),
+        setRatingRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -70,6 +75,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       const service = new SetsService(
         new SetsRepository([]),
         userCollectionRepositoryMock(),
+        setRatingRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -97,6 +103,9 @@ describe(`@Unit ${SetsService.name}`, () => {
         userCollectionRepositoryMock({
           getUserCollection: vi.fn().mockResolvedValue(["1"]),
         }),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({}),
+        }),
       );
 
       const result = await service.getSetsListViewModel("user-123");
@@ -108,6 +117,65 @@ describe(`@Unit ${SetsService.name}`, () => {
       const set2 = allSets.find((s) => s.catalogNumber === "2");
       expect(set1?.isInCollection).toBe(true);
       expect(set2?.isInCollection).toBe(false);
+    });
+
+    it("includes user rating when userId is provided", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "Rated",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+        setFixture({
+          catalogNumber: "2",
+          name: "Unrated",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new SetsService(
+        new SetsRepository(sets),
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue([]),
+        }),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({ "1": 4 }),
+        }),
+      );
+
+      const result = await service.getSetsListViewModel("user-123");
+
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
+      const set1 = allSets.find((s) => s.catalogNumber === "1");
+      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      expect(set1?.userRating).toBe(4);
+      expect(set2?.userRating).toBeUndefined();
+    });
+
+    it("omits user rating when userId is not provided", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "Set",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new SetsService(
+        new SetsRepository(sets),
+        userCollectionRepositoryMock(),
+        setRatingRepositoryMock(),
+      );
+
+      const result = await service.getSetsListViewModel();
+
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
+      expect(allSets[0]?.userRating).toBeUndefined();
     });
   });
 });

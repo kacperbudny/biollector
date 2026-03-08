@@ -1,4 +1,5 @@
 import { vi } from "vitest";
+import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 
 export function userCollectionRepositoryMock(
@@ -9,6 +10,16 @@ export function userCollectionRepositoryMock(
     deleteFromCollection: vi.fn(),
     getUserCollection: vi.fn(),
     isInCollection: vi.fn(),
+    ...overrides,
+  };
+}
+
+export function setRatingRepositoryMock(
+  overrides?: Partial<SetRatingRepositoryPort>,
+): SetRatingRepositoryPort {
+  return {
+    getUserRatings: vi.fn(),
+    setRating: vi.fn(),
     ...overrides,
   };
 }

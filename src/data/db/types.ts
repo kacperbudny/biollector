@@ -19,6 +19,16 @@ export interface UserCollection {
   user_id: string;
 }
 
+export interface UserRating {
+  created_at: Generated<Timestamp>;
+  id: Generated<number>;
+  rating: number;
+  set_number: string;
+  updated_at: Generated<Timestamp>;
+  user_id: string;
+}
+
 export interface DB {
   user_collection: UserCollection;
+  user_rating: UserRating;
 }
