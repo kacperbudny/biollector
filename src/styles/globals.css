@@ -27,3 +27,37 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * Hovered star and all previous ones get the warning color.
+ * "Previous + self" = buttons that are NOT after the hovered button.
+ */
+@layer utilities {
+  .set-rating-stars:has(button:not(:disabled):hover)
+    button:not(button:not(:disabled):hover ~ button) {
+    @apply text-warning;
+  }
+}
+
+@keyframes rating-shimmer {
+  from {
+    transform: translateX(-200%);
+  }
+  to {
+    transform: translateX(200%);
+  }
+}
+
+.set-rating-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.45),
+    transparent
+  );
+  animation: rating-shimmer 1s ease-in-out infinite;
+  pointer-events: none;
+}

@@ -8,7 +8,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 - [x] List of sets
 - [ ] Set details
 - [x] Managing your collection
-- [ ] Set rating
+- [x] Set rating
 - [ ] Wishlist
 - [ ] Recommendations
 - [ ] Exporting your tierlist as an image
