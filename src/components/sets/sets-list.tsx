@@ -21,7 +21,7 @@ export function SetsList({ viewModel }: SetsListProps) {
       key={yearSection.year}
       year={yearSection.year}
       waves={yearSection.waves}
-      totalInYear={yearSection.totalInYear}
+      totalInYear={yearSection.totalCount}
       collectionCount={yearSection.collectionCount}
     />
   ));
@@ -66,7 +66,7 @@ function YearSection({
           key={waveSection.wave}
           wave={waveSection.wave}
           sets={waveSection.sets}
-          totalInWave={waveSection.totalInWave}
+          totalInWave={waveSection.totalCount}
           collectionCount={waveSection.collectionCount}
         />
       ))}

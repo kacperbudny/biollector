@@ -53,19 +53,45 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
           releaseYear: "2001",
           wave: Wave.TOA_MATA,
         }),
+        setFixture({
+          catalogNumber: "4",
+          name: "Pohatu Nuva",
+          releaseYear: "2002",
+          wave: Wave.TOA_NUVA,
+        }),
+        setFixture({
+          catalogNumber: "5",
+          name: "Tahu Nuva",
+          releaseYear: "2002",
+          wave: Wave.TOA_NUVA,
+        }),
+        setFixture({
+          catalogNumber: "6",
+          name: "Gahlok Va",
+          releaseYear: "2002",
+          wave: Wave.BOHROK_VA,
+        }),
       ];
       const service = new UserCollectionService(
         userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["1", "3"]),
+          getUserCollection: vi.fn().mockResolvedValue(["1", "3", "5", "6"]),
         }),
         new SetsRepository(sets),
       );
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      expect(result.data).toHaveLength(1);
+      expect(result.data).toHaveLength(2);
+      expect(result.totalCount).toBe(4);
+
       expect(result.data[0].year).toBe("2001");
+      expect(result.data[0].totalCount).toBe(3);
+      expect(result.data[0].collectionCount).toBe(2);
       expect(result.data[0].waves).toHaveLength(1);
+
+      expect(result.data[0].waves[0].wave).toBe(Wave.TOA_MATA);
+      expect(result.data[0].waves[0].totalCount).toBe(3);
+      expect(result.data[0].waves[0].collectionCount).toBe(2);
       expect(result.data[0].waves[0].sets).toHaveLength(2);
       expect(result.data[0].waves[0].sets.map((s) => s.catalogNumber)).toEqual([
         "1",
@@ -74,10 +100,27 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data[0].waves[0].sets.every((s) => s.isInCollection)).toBe(
         true,
       );
-      expect(result.data[0].totalInYear).toBe(3);
-      expect(result.data[0].collectionCount).toBe(2);
-      expect(result.data[0].waves[0].totalInWave).toBe(3);
-      expect(result.data[0].waves[0].collectionCount).toBe(2);
+
+      expect(result.data[1].year).toBe("2002");
+      expect(result.data[1].totalCount).toBe(3);
+      expect(result.data[1].collectionCount).toBe(2);
+      expect(result.data[1].waves).toHaveLength(2);
+
+      expect(result.data[1].waves[0].wave).toBe(Wave.BOHROK_VA);
+      expect(result.data[1].waves[0].totalCount).toBe(1);
+      expect(result.data[1].waves[0].collectionCount).toBe(1);
+      expect(result.data[1].waves[0].sets).toHaveLength(1);
+      expect(result.data[1].waves[0].sets.map((s) => s.catalogNumber)).toEqual([
+        "6",
+      ]);
+
+      expect(result.data[1].waves[1].wave).toBe(Wave.TOA_NUVA);
+      expect(result.data[1].waves[1].totalCount).toBe(2);
+      expect(result.data[1].waves[1].collectionCount).toBe(1);
+      expect(result.data[1].waves[1].sets).toHaveLength(1);
+      expect(result.data[1].waves[1].sets.map((s) => s.catalogNumber)).toEqual([
+        "5",
+      ]);
     });
 
     it("returns no sections when user has no sets in collection", async () => {

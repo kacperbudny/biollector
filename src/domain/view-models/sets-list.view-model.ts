@@ -5,14 +5,14 @@ import type { SetViewModel } from "@/domain/view-models/set.view-model";
 export type WaveSection = {
   wave: Wave;
   sets: SetViewModel[];
-  totalInWave: number;
+  totalCount: number;
   collectionCount?: number;
 };
 
 export type YearSection = {
   year: string;
   waves: WaveSection[];
-  totalInYear: number;
+  totalCount: number;
   collectionCount?: number;
 };
 
@@ -38,70 +38,46 @@ export class SetsListViewModel {
         return {
           wave,
           sets: waveSets,
-          totalInWave: count,
+          totalCount: count,
         };
       });
 
       return {
         year,
         waves: waveSections,
-        totalInYear,
+        totalCount: totalInYear,
       };
     });
 
     return new SetsListViewModel(data, sets.length);
   }
 
-  static forCollection(
-    userSets: SetViewModel[],
-    allSets: BionicleSet[],
-  ): SetsListViewModel {
+  toCollectionViewModel(allSets: BionicleSet[]): SetsListViewModel {
     const totalsByYearAndWave = SetsListViewModel.countByYearAndWave(allSets);
-    const grouped = SetsListViewModel.groupSetsByYearAndWave(userSets);
-    const years = Object.keys(totalsByYearAndWave).sort(
-      (a, b) => Number(a) - Number(b),
-    );
 
-    const data = years
-      .map((year) => {
-        const yearTotals = totalsByYearAndWave[year];
-        const waves = SetsListViewModel.getSortedWavesForYear(yearTotals);
-        const yearSets = grouped[year] ?? ({} as Record<Wave, SetViewModel[]>);
-        let totalInYear = 0;
+    // we have to re-calculate the total count for each year and wave because the user's collection may not have all sets
+    const data = this.data.map((yearSection) => {
+      const yearTotals = totalsByYearAndWave[yearSection.year] ?? {};
+      const totalInYear = Object.values(yearTotals).reduce(
+        (sum, count) => sum + count,
+        0,
+      );
 
-        const waveSections = waves
-          .map((wave) => {
-            const totalInWave = yearTotals[wave] ?? 0;
-            totalInYear += totalInWave;
-            const waveSets = yearSets[wave] ?? [];
-            return {
-              wave,
-              sets: waveSets,
-              totalInWave,
-              collectionCount: waveSets.length,
-            };
-          })
-          .filter((section) => section.sets.length > 0);
+      const waves = yearSection.waves.map((waveSection) => ({
+        ...waveSection,
+        totalCount: yearTotals[waveSection.wave] ?? 0,
+        collectionCount: waveSection.totalCount,
+      }));
 
-        if (waveSections.length === 0) {
-          return null;
-        }
+      return {
+        ...yearSection,
+        waves,
+        totalCount: totalInYear,
+        collectionCount: yearSection.totalCount,
+      };
+    });
 
-        const collectionCount = waveSections.reduce(
-          (sum, section) => sum + section.collectionCount,
-          0,
-        );
-
-        return {
-          year,
-          waves: waveSections,
-          totalInYear,
-          collectionCount,
-        };
-      })
-      .filter((section): section is NonNullable<typeof section> => section !== null);
-
-    return new SetsListViewModel(data, userSets.length);
+    return new SetsListViewModel(data, this.totalCount);
   }
 
   private static countByYearAndWave(
@@ -135,9 +111,7 @@ export class SetsListViewModel {
     return grouped;
   }
 
-  private static getSortedWavesForYear<T>(
-    yearData: Record<Wave, T>,
-  ): Wave[] {
+  private static getSortedWavesForYear<T>(yearData: Record<Wave, T>): Wave[] {
     const wavesInYear = Object.keys(yearData) as Wave[];
 
     return wavesInYear.toSorted((a, b) => {

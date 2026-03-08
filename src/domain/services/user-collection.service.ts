@@ -46,7 +46,9 @@ export class UserCollectionService {
       }
     }
 
-    return SetsListViewModel.forCollection(userSets, allSets);
+    return SetsListViewModel.fromSetViewModels(userSets).toCollectionViewModel(
+      allSets,
+    );
   }
 }
 
