@@ -177,5 +177,39 @@ describe(`@Unit ${SetsService.name}`, () => {
       );
       expect(allSets[0]?.userRating).toBeUndefined();
     });
+
+    it("includes average rating when getAverageRatings returns data", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "Rated",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+        setFixture({
+          catalogNumber: "2",
+          name: "Unrated",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new SetsService(
+        new SetsRepository(sets),
+        userCollectionRepositoryMock(),
+        setRatingRepositoryMock({
+          getAverageRatings: vi.fn().mockResolvedValue({ "1": 4.2 }),
+        }),
+      );
+
+      const result = await service.getSetsListViewModel();
+
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
+      const set1 = allSets.find((s) => s.catalogNumber === "1");
+      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      expect(set1?.averageRating).toBe(4.2);
+      expect(set2?.averageRating).toBeUndefined();
+    });
   });
 });

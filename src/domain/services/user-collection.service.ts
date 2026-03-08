@@ -42,9 +42,10 @@ export class UserCollectionService {
   }
 
   async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
-    const [userSetsNumbers, ratingsBySet] = await Promise.all([
+    const [userSetsNumbers, ratingsBySet, averageRatings] = await Promise.all([
       this.collectionRepository.getUserCollection(userId),
       this.setRatingRepository.getUserRatings(userId),
+      this.setRatingRepository.getAverageRatings(),
     ]);
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
@@ -58,6 +59,7 @@ export class UserCollectionService {
           ...set,
           isInCollection: true,
           userRating: ratingsBySet[num],
+          averageRating: averageRatings[num],
         });
       }
     }

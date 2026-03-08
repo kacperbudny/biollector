@@ -19,6 +19,7 @@ export function setRatingRepositoryMock(
 ): SetRatingRepositoryPort {
   return {
     getUserRatings: vi.fn(),
+    getAverageRatings: vi.fn().mockResolvedValue({}),
     setRating: vi.fn(),
     ...overrides,
   };

@@ -37,6 +37,9 @@ export function SetCard({ set, wave }: SetCardProps) {
         <p className="text-xs text-default-500 mb-1">
           {set.releaseYear} • {wave}
         </p>
+        <p className="text-xs text-default-500 mb-1">
+          {set.averageRating ? `Avg ${set.averageRating}` : "No ratings"}
+        </p>
         <SetRatingInput
           setNumber={set.catalogNumber}
           userRating={set.userRating}
