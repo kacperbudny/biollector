@@ -5,11 +5,13 @@ alwaysApply: true
 
 - Use HeroUI (previously NextUI) components whenever possible.
 - Use Tailwind for styling.
+- Use the `cn()` utility from `@/styles/cn` (clsx) for conditional or composed class names instead of template literals.
 
 # Project structure
 
 - Put repositories in `data/repositories`. Use naming like `sets.repository.ts` (dot notation).
 - Put services in `services`. Use naming like `sets.service.ts` (dot notation).
+- Use consistent feature naming across filenames, class names, and types (e.g. set-rating everywhere, not user-rating in one place).
 - Don't use barrel files (index.ts re-exports). Import from direct file paths.
 - Always use absolute imports (`@/...`).
 
@@ -19,10 +21,15 @@ alwaysApply: true
 - Rely on TypeScript inference when possible. Don't export helper-like types unnecessarily.
 - For view models with conversion logic, use a namespace merge: export the type and a namespace with the same name containing a static factory (e.g. `SetsListViewModel.fromSetViewModels(sets)`). Keep conversion out of services.
 
+# Domain entities
+
+- Use domain entities when you need to perform some sort of domain-specific validation (e.g. `SetRatingEntity`)
+
 # Repository pattern
 
 - Repositories accept their data source explicitly in the constructor (e.g. `new SetsRepository(bionicleSets)`).
 - Data retrieval lives in the repository; data manipulation and domain logic live in the service.
+- Prefer passing domain entities to repository methods when the operation is entity-centric (e.g. `setRating(entity)`).
 - Focus on testability: inject data sources so tests can use dummy data without complex mocking.
 
 # Dependency injection
@@ -36,7 +43,8 @@ alwaysApply: true
 # Server actions
 
 - Use next-safe-action's `useAction` hook with callbacks (`onError`, `onSuccess`) instead of manual `useTransition` + result handling.
-- For action error toasts, use `getActionErrorMessage` from utils (uses `flattenValidationErrors` from next-safe-action)
+- For optimistic UI with server actions, use `useOptimisticAction` from `next-safe-action/hooks` with `currentState`, `updateFn`, and callbacks.
+- For action error toasts, use `getActionErrorMessage` from utils (uses `flattenValidationErrors` from next-safe-action).
 
 # Services
 
@@ -45,6 +53,7 @@ alwaysApply: true
 # Components
 
 - Colocate components that are only used together in the same file. Only export the top-level component that is used externally.
+- Prefer hooks (e.g. `useUser()`) in the component that needs the data rather than prop drilling.
 - Data fetching can happen inside the component that needs the data; the page renders the component and doesn't need to wire data.
 - Extract shared typography (PageTitle, SectionHeading, SubsectionHeading) to reusable components in `components/typography`.
 
