@@ -74,9 +74,13 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data[0].waves[0].sets.every((s) => s.isInCollection)).toBe(
         true,
       );
+      expect(result.data[0].totalInYear).toBe(3);
+      expect(result.data[0].collectionCount).toBe(2);
+      expect(result.data[0].waves[0].totalInWave).toBe(3);
+      expect(result.data[0].waves[0].collectionCount).toBe(2);
     });
 
-    it("returns empty array when user has no sets in collection", async () => {
+    it("returns no sections when user has no sets in collection", async () => {
       const sets: BionicleSet[] = [
         setFixture({
           catalogNumber: "1",
@@ -94,7 +98,8 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      expect(result.data).toEqual([]);
+      expect(result.totalCount).toBe(0);
+      expect(result.data).toHaveLength(0);
     });
 
     it("excludes set numbers not found in catalog", async () => {

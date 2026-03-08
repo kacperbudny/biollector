@@ -24,8 +24,13 @@ export default async function CollectionPage() {
 
   return (
     <>
-      <PageTitle>My collection</PageTitle>
-      {viewModel.data.length > 0 ? (
+      <PageTitle>
+        My collection
+        <span className="ml-2 font-normal text-default-500">
+          ({viewModel.totalCount} set{viewModel.totalCount !== 1 ? "s" : ""})
+        </span>
+      </PageTitle>
+      {viewModel.totalCount > 0 ? (
         <SetsList viewModel={viewModel} />
       ) : (
         <CollectionEmpty />

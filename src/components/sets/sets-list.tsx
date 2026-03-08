@@ -1,3 +1,4 @@
+import { CheckCircleIcon } from "@heroicons/react/24/solid";
 import { SetCard } from "@/components/sets/set-card";
 import {
   SectionHeading,
@@ -5,7 +6,10 @@ import {
 } from "@/components/typography/headings";
 import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
-import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
+import type {
+  SetsListViewModel,
+  WaveSection as WaveSectionType,
+} from "@/domain/view-models/sets-list.view-model";
 
 type SetsListProps = {
   viewModel: SetsListViewModel;
@@ -17,27 +21,53 @@ export function SetsList({ viewModel }: SetsListProps) {
       key={yearSection.year}
       year={yearSection.year}
       waves={yearSection.waves}
+      totalInYear={yearSection.totalInYear}
+      collectionCount={yearSection.collectionCount}
     />
   ));
 }
 
 type YearSectionProps = {
   year: string;
-  waves: {
-    wave: Wave;
-    sets: SetViewModel[];
-  }[];
+  waves: WaveSectionType[];
+  totalInYear: number;
+  collectionCount?: number;
 };
 
-function YearSection({ year, waves }: YearSectionProps) {
+function YearSection({
+  year,
+  waves,
+  totalInYear,
+  collectionCount,
+}: YearSectionProps) {
+  const isComplete =
+    collectionCount !== undefined && collectionCount === totalInYear;
+
   return (
     <div className="mb-12">
-      <SectionHeading>{year}</SectionHeading>
+      <SectionHeading>
+        <span className={`inline-flex items-center gap-2`}>
+          {year}
+          {isComplete && (
+            <CheckCircleIcon
+              className="h-5 w-5 shrink-0 text-success-600"
+              aria-hidden
+            />
+          )}
+        </span>
+        {collectionCount !== undefined && (
+          <span className="ml-2 font-normal text-default-500">
+            ({collectionCount} of {totalInYear} sets)
+          </span>
+        )}
+      </SectionHeading>
       {waves.map((waveSection) => (
         <WaveSection
           key={waveSection.wave}
           wave={waveSection.wave}
           sets={waveSection.sets}
+          totalInWave={waveSection.totalInWave}
+          collectionCount={waveSection.collectionCount}
         />
       ))}
     </div>
@@ -47,12 +77,37 @@ function YearSection({ year, waves }: YearSectionProps) {
 type WaveSectionProps = {
   wave: Wave;
   sets: SetViewModel[];
+  totalInWave: number;
+  collectionCount?: number;
 };
 
-function WaveSection({ wave, sets }: WaveSectionProps) {
+function WaveSection({
+  wave,
+  sets,
+  totalInWave,
+  collectionCount,
+}: WaveSectionProps) {
+  const isComplete =
+    collectionCount !== undefined && collectionCount === totalInWave;
+
   return (
     <div className="mb-8">
-      <SubsectionHeading>{wave}</SubsectionHeading>
+      <SubsectionHeading>
+        <span className={`inline-flex items-center gap-2`}>
+          {wave}
+          {isComplete && (
+            <CheckCircleIcon
+              className="h-5 w-5 shrink-0 text-success-600"
+              aria-hidden
+            />
+          )}
+        </span>
+        {collectionCount !== undefined && (
+          <span className="ml-2 font-normal text-default-500">
+            ({collectionCount} of {totalInWave} sets)
+          </span>
+        )}
+      </SubsectionHeading>
       <SetGrid sets={sets} wave={wave} />
     </div>
   );
