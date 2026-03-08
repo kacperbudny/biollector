@@ -18,7 +18,9 @@ type SetRatingInputProps = {
 };
 
 export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
-  const isSignedIn = !!useUser();
+  const user = useUser();
+  const isSignedIn = !!user;
+
   const { execute, optimisticState, isExecuting } = useOptimisticAction(
     setRating,
     {
@@ -33,82 +35,67 @@ export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
     },
   );
 
-  const stars = (
-    <RatingStars
-      isSignedIn={isSignedIn}
-      isExecuting={isExecuting}
-      displayedRating={optimisticState}
-      userRating={userRating}
-      onStarClick={(rating) => execute({ setNumber, rating })}
-    />
-  );
-
   return (
     <fieldset className="border-0 p-0" aria-label="Rating">
-      {!isSignedIn ? (
-        <Tooltip
-          content={
-            <span className="inline-flex items-center gap-1.5">
-              <LockClosedIcon className="h-3.5 w-3.5 shrink-0" aria-hidden />
-              Sign in to rate
-            </span>
-          }
-          placement="top"
-          delay={300}
+      <Tooltip
+        content={
+          <span className="inline-flex items-center gap-1.5">
+            <LockClosedIcon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+            Sign in to rate
+          </span>
+        }
+        placement="top"
+        delay={300}
+        isDisabled={isSignedIn}
+      >
+        <div
+          className={cn(
+            "set-rating-stars relative flex items-center gap-0.5 overflow-hidden",
+            isExecuting && "set-rating-shimmer",
+          )}
         >
-          {stars}
-        </Tooltip>
-      ) : (
-        stars
-      )}
+          {Array.from({ length: MAX_RATING }, (_, i) => {
+            const value = i + 1;
+            return (
+              <RatingStar
+                key={value}
+                value={value}
+                filled={
+                  optimisticState !== undefined && value <= optimisticState
+                }
+                disabled={!isSignedIn || isExecuting}
+                onClick={() => execute({ setNumber, rating: value })}
+              />
+            );
+          })}
+        </div>
+      </Tooltip>
     </fieldset>
   );
 }
 
-type RatingStarsProps = {
-  isSignedIn: boolean;
-  isExecuting: boolean;
-  displayedRating: number | undefined;
-  userRating: number | undefined;
-  onStarClick: (rating: number) => void;
+type RatingStarProps = {
+  value: number;
+  filled: boolean;
+  disabled: boolean;
+  onClick: () => void;
 };
 
-function RatingStars({
-  isSignedIn,
-  isExecuting,
-  displayedRating,
-  userRating,
-  onStarClick,
-}: RatingStarsProps) {
+function RatingStar({ value, filled, disabled, onClick }: RatingStarProps) {
   return (
-    <div
-      className={cn(
-        "set-rating-stars relative flex items-center gap-0.5 overflow-hidden",
-        isExecuting && "set-rating-shimmer",
-      )}
+    <button
+      type="button"
+      disabled={disabled}
+      onClick={onClick}
+      className="touch-manipulation p-0.5 text-default-400 transition-colors disabled:cursor-default disabled:opacity-70"
+      aria-label={`${value} star${value !== 1 ? "s" : ""}`}
+      aria-pressed={filled}
     >
-      {Array.from({ length: MAX_RATING }, (_, i) => {
-        const value = i + 1;
-        const filled =
-          displayedRating !== undefined && value <= displayedRating;
-        return (
-          <button
-            key={value}
-            type="button"
-            disabled={!isSignedIn || isExecuting}
-            onClick={() => onStarClick(value)}
-            className="touch-manipulation p-0.5 text-default-400 transition-colors disabled:cursor-default disabled:opacity-70"
-            aria-label={`${value} star${value !== 1 ? "s" : ""}`}
-            aria-pressed={userRating !== undefined && value <= userRating}
-          >
-            {filled ? (
-              <StarIconSolid className="h-4 w-4 text-warning" />
-            ) : (
-              <StarIcon className="h-4 w-4" />
-            )}
-          </button>
-        );
-      })}
-    </div>
+      {filled ? (
+        <StarIconSolid className="h-4 w-4 text-warning" />
+      ) : (
+        <StarIcon className="h-4 w-4" />
+      )}
+    </button>
   );
 }
