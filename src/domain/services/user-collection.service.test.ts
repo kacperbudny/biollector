@@ -82,7 +82,8 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       const result = await service.getCollectionListViewModel("user-123");
 
       expect(result.data).toHaveLength(2);
-      expect(result.totalCount).toBe(4);
+      expect(result.totalCount).toBe(6);
+      expect(result.collectionCount).toBe(4);
 
       expect(result.data[0].year).toBe("2001");
       expect(result.data[0].totalCount).toBe(3);
@@ -92,6 +93,7 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data[0].waves[0].wave).toBe(Wave.TOA_MATA);
       expect(result.data[0].waves[0].totalCount).toBe(3);
       expect(result.data[0].waves[0].collectionCount).toBe(2);
+      expect(result.data[0].waves[0].isComplete).toBe(false);
       expect(result.data[0].waves[0].sets).toHaveLength(2);
       expect(result.data[0].waves[0].sets.map((s) => s.catalogNumber)).toEqual([
         "1",
@@ -109,6 +111,7 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data[1].waves[0].wave).toBe(Wave.BOHROK_VA);
       expect(result.data[1].waves[0].totalCount).toBe(1);
       expect(result.data[1].waves[0].collectionCount).toBe(1);
+      expect(result.data[1].waves[0].isComplete).toBe(true);
       expect(result.data[1].waves[0].sets).toHaveLength(1);
       expect(result.data[1].waves[0].sets.map((s) => s.catalogNumber)).toEqual([
         "6",
@@ -117,6 +120,7 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(result.data[1].waves[1].wave).toBe(Wave.TOA_NUVA);
       expect(result.data[1].waves[1].totalCount).toBe(2);
       expect(result.data[1].waves[1].collectionCount).toBe(1);
+      expect(result.data[1].waves[1].isComplete).toBe(false);
       expect(result.data[1].waves[1].sets).toHaveLength(1);
       expect(result.data[1].waves[1].sets.map((s) => s.catalogNumber)).toEqual([
         "5",
@@ -141,7 +145,8 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      expect(result.totalCount).toBe(0);
+      expect(result.totalCount).toBe(1);
+      expect(result.collectionCount).toBe(0);
       expect(result.data).toHaveLength(0);
     });
 

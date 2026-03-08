@@ -21,16 +21,18 @@ export default async function CollectionPage() {
   const viewModel = await userCollectionService.getCollectionListViewModel(
     user.id,
   );
+  const collectionCount = viewModel.collectionCount ?? 0;
 
   return (
     <>
       <PageTitle>
         My collection
         <span className="ml-2 font-normal text-default-500">
-          ({viewModel.totalCount} set{viewModel.totalCount !== 1 ? "s" : ""})
+          ({collectionCount} set
+          {collectionCount !== 1 ? "s" : ""})
         </span>
       </PageTitle>
-      {viewModel.totalCount > 0 ? (
+      {collectionCount > 0 ? (
         <SetsList viewModel={viewModel} />
       ) : (
         <CollectionEmpty />

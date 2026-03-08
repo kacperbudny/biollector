@@ -7,6 +7,7 @@ export type WaveSection = {
   sets: SetViewModel[];
   totalCount: number;
   collectionCount?: number;
+  isComplete?: boolean;
 };
 
 export type YearSection = {
@@ -14,12 +15,14 @@ export type YearSection = {
   waves: WaveSection[];
   totalCount: number;
   collectionCount?: number;
+  isComplete?: boolean;
 };
 
 export class SetsListViewModel {
   constructor(
     public readonly data: YearSection[],
     public readonly totalCount: number,
+    public readonly collectionCount?: number,
   ) {}
 
   static fromSetViewModels(sets: SetViewModel[]): SetsListViewModel {
@@ -58,26 +61,34 @@ export class SetsListViewModel {
     // we have to re-calculate the total count for each year and wave because the user's collection may not have all sets
     const data = this.data.map((yearSection) => {
       const yearTotals = totalsByYearAndWave[yearSection.year] ?? {};
-      const totalInYear = Object.values(yearTotals).reduce(
+      const yearTotalCount = Object.values(yearTotals).reduce(
         (sum, count) => sum + count,
         0,
       );
+      const yearCollectionCount = yearSection.totalCount;
 
-      const waves = yearSection.waves.map((waveSection) => ({
-        ...waveSection,
-        totalCount: yearTotals[waveSection.wave] ?? 0,
-        collectionCount: waveSection.totalCount,
-      }));
+      const waves = yearSection.waves.map((waveSection) => {
+        const waveTotalCount = yearTotals[waveSection.wave] ?? 0;
+        const waveCollectionCount = waveSection.totalCount;
+
+        return {
+          ...waveSection,
+          totalCount: waveTotalCount,
+          collectionCount: waveCollectionCount,
+          isComplete: waveTotalCount === waveCollectionCount,
+        };
+      });
 
       return {
         ...yearSection,
         waves,
-        totalCount: totalInYear,
-        collectionCount: yearSection.totalCount,
+        totalCount: yearTotalCount,
+        collectionCount: yearCollectionCount,
+        isComplete: yearTotalCount === yearCollectionCount,
       };
     });
 
-    return new SetsListViewModel(data, this.totalCount);
+    return new SetsListViewModel(data, allSets.length, this.totalCount);
   }
 
   private static countByYearAndWave(

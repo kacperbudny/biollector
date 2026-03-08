@@ -8,7 +8,8 @@ import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import type {
   SetsListViewModel,
-  WaveSection as WaveSectionType,
+  WaveSection as WaveSectionViewModel,
+  YearSection as YearSectionViewModel,
 } from "@/domain/view-models/sets-list.view-model";
 
 type SetsListProps = {
@@ -17,32 +18,17 @@ type SetsListProps = {
 
 export function SetsList({ viewModel }: SetsListProps) {
   return viewModel.data.map((yearSection) => (
-    <YearSection
-      key={yearSection.year}
-      year={yearSection.year}
-      waves={yearSection.waves}
-      totalInYear={yearSection.totalCount}
-      collectionCount={yearSection.collectionCount}
-    />
+    <YearSection key={yearSection.year} viewModel={yearSection} />
   ));
 }
 
 type YearSectionProps = {
-  year: string;
-  waves: WaveSectionType[];
-  totalInYear: number;
-  collectionCount?: number;
+  viewModel: YearSectionViewModel;
 };
 
 function YearSection({
-  year,
-  waves,
-  totalInYear,
-  collectionCount,
+  viewModel: { year, waves, totalCount, collectionCount, isComplete },
 }: YearSectionProps) {
-  const isComplete =
-    collectionCount !== undefined && collectionCount === totalInYear;
-
   return (
     <div className="mb-12">
       <SectionHeading>
@@ -55,41 +41,27 @@ function YearSection({
             />
           )}
         </span>
-        {collectionCount !== undefined && (
+
+        {collectionCount && (
           <span className="ml-2 font-normal text-default-500">
-            ({collectionCount} of {totalInYear} sets)
+            ({collectionCount} of {totalCount} sets)
           </span>
         )}
       </SectionHeading>
       {waves.map((waveSection) => (
-        <WaveSection
-          key={waveSection.wave}
-          wave={waveSection.wave}
-          sets={waveSection.sets}
-          totalInWave={waveSection.totalCount}
-          collectionCount={waveSection.collectionCount}
-        />
+        <WaveSection key={waveSection.wave} viewModel={waveSection} />
       ))}
     </div>
   );
 }
 
 type WaveSectionProps = {
-  wave: Wave;
-  sets: SetViewModel[];
-  totalInWave: number;
-  collectionCount?: number;
+  viewModel: WaveSectionViewModel;
 };
 
 function WaveSection({
-  wave,
-  sets,
-  totalInWave,
-  collectionCount,
+  viewModel: { wave, sets, totalCount, collectionCount, isComplete },
 }: WaveSectionProps) {
-  const isComplete =
-    collectionCount !== undefined && collectionCount === totalInWave;
-
   return (
     <div className="mb-8">
       <SubsectionHeading>
@@ -102,9 +74,10 @@ function WaveSection({
             />
           )}
         </span>
-        {collectionCount !== undefined && (
+
+        {collectionCount && (
           <span className="ml-2 font-normal text-default-500">
-            ({collectionCount} of {totalInWave} sets)
+            ({collectionCount} of {totalCount} sets)
           </span>
         )}
       </SubsectionHeading>
