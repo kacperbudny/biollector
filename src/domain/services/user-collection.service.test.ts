@@ -250,5 +250,45 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
       expect(set1?.userRating).toBe(5);
       expect(set2?.userRating).toBe(3);
     });
+
+    it("includes average ratings on set view models", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "1",
+          name: "Tahu",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+        setFixture({
+          catalogNumber: "2",
+          name: "Gali",
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      ];
+      const service = new UserCollectionService(
+        userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["1", "2"]),
+        }),
+        new SetsRepository(sets),
+        setRatingRepositoryMock({
+          getUserRatings: vi.fn().mockResolvedValue({}),
+          getAverageRatings: vi.fn().mockResolvedValue({
+            "1": 4.5,
+            "2": 3,
+          }),
+        }),
+      );
+
+      const result = await service.getCollectionListViewModel("user-123");
+
+      const allSets = result.data.flatMap((y) =>
+        y.waves.flatMap((w) => w.sets),
+      );
+      const set1 = allSets.find((s) => s.catalogNumber === "1");
+      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      expect(set1?.averageRating).toBe(4.5);
+      expect(set2?.averageRating).toBe(3);
+    });
   });
 });

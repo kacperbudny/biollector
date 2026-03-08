@@ -22,17 +22,22 @@ export class SetsService {
 
   async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.setsRepository.getAll();
-    const [collectionSetNumbers, ratingsBySet] = userId
-      ? await Promise.all([
-          this.userCollectionRepository.getUserCollection(userId),
-          this.setRatingRepository.getUserRatings(userId),
-        ])
-      : [[] as string[], {} as Record<string, number>];
+    const [collectionSetNumbers, ratingsBySet, averageRatings] =
+      await Promise.all([
+        userId
+          ? this.userCollectionRepository.getUserCollection(userId)
+          : Promise.resolve([]),
+        userId
+          ? this.setRatingRepository.getUserRatings(userId)
+          : Promise.resolve({} as Record<string, number>),
+        this.setRatingRepository.getAverageRatings(),
+      ]);
 
     const setsWithStatus: SetViewModel[] = sets.map((set) => ({
       ...set,
       isInCollection: collectionSetNumbers.includes(set.catalogNumber),
       userRating: ratingsBySet[set.catalogNumber],
+      averageRating: averageRatings[set.catalogNumber],
     }));
 
     return SetsListViewModel.fromSetViewModels(setsWithStatus);
