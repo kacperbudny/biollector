@@ -13,7 +13,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 - [ ] Recommendations
 - [ ] Exporting your tierlist as an image
 - [ ] Sharing your collection/wishlist
-- [ ] Full list of officially released sets
+- [x] Full list of officially released sets
 
 ## Live Preview
 

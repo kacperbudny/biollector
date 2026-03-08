@@ -37,16 +37,18 @@ export class UserCollectionService {
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
-    const sets: SetViewModel[] = [];
+    const userSets: SetViewModel[] = [];
 
     for (const num of userSetsNumbers) {
       const set = byNumber.get(num);
       if (set) {
-        sets.push({ ...set, isInCollection: true });
+        userSets.push({ ...set, isInCollection: true });
       }
     }
 
-    return SetsListViewModel.fromSetViewModels(sets);
+    return SetsListViewModel.fromSetViewModels(userSets).toCollectionViewModel(
+      allSets,
+    );
   }
 }
 
