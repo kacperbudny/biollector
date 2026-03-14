@@ -1,3 +1,4 @@
+import { Divider } from "@heroui/divider";
 import {
   Navbar as HeroUINavbar,
   NavbarBrand,
@@ -26,7 +27,19 @@ export async function Navbar() {
           />
         </Link>
       </NavbarBrand>
+      {/* TODO: active state */}
       <NavbarContent justify="center">
+        <NavbarItem>
+          <Link
+            href="/"
+            className="text-foreground hover:text-primary transition-colors"
+          >
+            Home
+          </Link>
+        </NavbarItem>
+
+        <Divider orientation="vertical" className="h-4" />
+
         <NavbarItem>
           <Link
             href="/sets"
@@ -35,15 +48,19 @@ export async function Navbar() {
             Sets
           </Link>
         </NavbarItem>
+
         {isSignedIn && (
-          <NavbarItem>
-            <Link
-              href="/collection"
-              className="text-foreground hover:text-primary transition-colors"
-            >
-              Collection
-            </Link>
-          </NavbarItem>
+          <>
+            <Divider orientation="vertical" className="h-4" />
+            <NavbarItem>
+              <Link
+                href="/collection"
+                className="text-foreground hover:text-primary transition-colors"
+              >
+                Collection
+              </Link>
+            </NavbarItem>
+          </>
         )}
       </NavbarContent>
       <NavbarContent justify="end">

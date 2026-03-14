@@ -1,4 +1,5 @@
 import type { Kysely } from "kysely";
+import { sql } from "kysely";
 import { db } from "@/data/db/config";
 import type { DB } from "@/data/db/types";
 
@@ -6,6 +7,7 @@ export type UserCollectionRepositoryPort = {
   insert(userId: string, setNumber: string): Promise<void>;
   deleteFromCollection(userId: string, setNumber: string): Promise<void>;
   getUserCollection(userId: string): Promise<string[]>;
+  getDistinctCollectionsCount(): Promise<number>;
   isInCollection(userId: string, setNumber: string): Promise<boolean>;
 };
 
@@ -34,6 +36,15 @@ export class UserCollectionRepository implements UserCollectionRepositoryPort {
       .where("user_id", "=", userId)
       .execute();
     return rows.map((r) => r.set_number);
+  }
+
+  async getDistinctCollectionsCount(): Promise<number> {
+    const row = await this.db
+      .selectFrom("user_collection")
+      .select(sql<number>`count(distinct user_id)::int`.as("total_count"))
+      .executeTakeFirst();
+
+    return row?.total_count ?? 0;
   }
 
   async isInCollection(userId: string, setNumber: string): Promise<boolean> {

@@ -14,6 +14,10 @@ export class SetRatingService {
     private readonly setRatingRepository: SetRatingRepositoryPort,
   ) {}
 
+  async getTotalRatingsCount(): Promise<number> {
+    return this.setRatingRepository.getTotalRatingsCount();
+  }
+
   async setRating(
     userId: string,
     setNumber: string,
