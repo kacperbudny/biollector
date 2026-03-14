@@ -4,6 +4,7 @@ import { Chip } from "@heroui/chip";
 import Image from "next/image";
 import { SetRatingInput } from "@/components/sets/set-rating-input";
 import { ToggleCollectionButton } from "@/components/sets/toggle-collection-button";
+import { ToggleWishlistButton } from "@/components/sets/toggle-wishlist-button";
 import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import { cn } from "@/styles/cn";
@@ -27,6 +28,10 @@ export function SetCard({ set, wave }: SetCardProps) {
             fill
             className="object-cover"
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
+          />
+          <ToggleWishlistButton
+            setNumber={set.catalogNumber}
+            wishlisted={set.wishlisted}
           />
           <ToggleCollectionButton
             setNumber={set.catalogNumber}

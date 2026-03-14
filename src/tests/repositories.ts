@@ -1,6 +1,7 @@
 import { vi } from "vitest";
 import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
+import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 
 export function userCollectionRepositoryMock(
   overrides?: Partial<UserCollectionRepositoryPort>,
@@ -11,6 +12,18 @@ export function userCollectionRepositoryMock(
     getUserCollection: vi.fn(),
     isInCollection: vi.fn(),
     getDistinctCollectionsCount: vi.fn().mockResolvedValue(0),
+    ...overrides,
+  };
+}
+
+export function userWishlistRepositoryMock(
+  overrides?: Partial<UserWishlistRepositoryPort>,
+): UserWishlistRepositoryPort {
+  return {
+    insert: vi.fn(),
+    deleteFromWishlist: vi.fn(),
+    getUserWishlist: vi.fn().mockResolvedValue([]),
+    isOnWishlist: vi.fn(),
     ...overrides,
   };
 }

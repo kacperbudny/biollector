@@ -15,6 +15,7 @@ export const metadata: Metadata = {
     "Browse every Bionicle set, track what you own, discover top-rated favorites, and start building your collection.",
 };
 
+// TODO: this page should probably be statically generated
 export default async function Home() {
   const user = await stackServerApp.getUser();
   // TODO: lazy load these in separate components
