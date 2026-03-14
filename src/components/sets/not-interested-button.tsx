@@ -47,7 +47,7 @@ export function NotInterestedButton({
       isIconOnly
       size="sm"
       variant="flat"
-      className="absolute left-10 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
+      className="absolute left-2 top-11 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
       aria-label={label}
       title={label}
       isDisabled={!isSignedIn || isPending}
