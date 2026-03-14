@@ -31,23 +31,19 @@ export class SetsService {
 
   async getRandomSets(count: number, userId?: string): Promise<SetViewModel[]> {
     const sets = this.setsRepository.getRandomSets(count);
-    const [
-      averageRatings,
-      collectionSetNumbers,
-      ratingsBySet,
-      wishlistState,
-    ] = await Promise.all([
-      this.setRatingRepository.getAverageRatings(),
-      userId
-        ? this.userCollectionRepository.getUserCollection(userId)
-        : Promise.resolve([]),
-      userId
-        ? this.setRatingRepository.getUserRatings(userId)
-        : Promise.resolve({} as Record<string, number>),
-      userId
-        ? this.userWishlistRepository.getWishlistState(userId)
-        : Promise.resolve({}),
-    ]);
+    const [averageRatings, collectionSetNumbers, ratingsBySet, wishlistState] =
+      await Promise.all([
+        this.setRatingRepository.getAverageRatings(),
+        userId
+          ? this.userCollectionRepository.getUserCollection(userId)
+          : Promise.resolve([]),
+        userId
+          ? this.setRatingRepository.getUserRatings(userId)
+          : Promise.resolve({} as Record<string, number>),
+        userId
+          ? this.userWishlistRepository.getWishlistState(userId)
+          : Promise.resolve({}),
+      ]);
 
     return sets.map((set) =>
       SetViewModel.fromBionicleSet({
@@ -96,23 +92,19 @@ export class SetsService {
 
   async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.setsRepository.getAll();
-    const [
-      collectionSetNumbers,
-      ratingsBySet,
-      averageRatings,
-      wishlistState,
-    ] = await Promise.all([
-      userId
-        ? this.userCollectionRepository.getUserCollection(userId)
-        : Promise.resolve([]),
-      userId
-        ? this.setRatingRepository.getUserRatings(userId)
-        : Promise.resolve({} as Record<string, number>),
-      this.setRatingRepository.getAverageRatings(),
-      userId
-        ? this.userWishlistRepository.getWishlistState(userId)
-        : Promise.resolve({}),
-    ]);
+    const [collectionSetNumbers, ratingsBySet, averageRatings, wishlistState] =
+      await Promise.all([
+        userId
+          ? this.userCollectionRepository.getUserCollection(userId)
+          : Promise.resolve([]),
+        userId
+          ? this.setRatingRepository.getUserRatings(userId)
+          : Promise.resolve({} as Record<string, number>),
+        this.setRatingRepository.getAverageRatings(),
+        userId
+          ? this.userWishlistRepository.getWishlistState(userId)
+          : Promise.resolve({}),
+      ]);
 
     const setViewModels = sets.map((set) =>
       SetViewModel.fromBionicleSet({
