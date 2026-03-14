@@ -60,6 +60,15 @@ export async function Navbar() {
                 Collection
               </Link>
             </NavbarItem>
+            <Divider orientation="vertical" className="h-4" />
+            <NavbarItem>
+              <Link
+                href="/wishlist"
+                className="text-foreground hover:text-primary transition-colors"
+              >
+                Wishlist
+              </Link>
+            </NavbarItem>
           </>
         )}
       </NavbarContent>

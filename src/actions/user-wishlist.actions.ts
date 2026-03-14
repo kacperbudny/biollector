@@ -18,6 +18,7 @@ export const setWishlist = authActionClient
 
     revalidatePath("/sets");
     revalidatePath("/collection");
+    revalidatePath("/wishlist");
 
     return { success: true };
   });
