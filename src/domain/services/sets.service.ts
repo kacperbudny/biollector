@@ -30,6 +30,7 @@ export class SetsService {
   }
 
   async getRandomSets(count: number, userId?: string): Promise<SetViewModel[]> {
+    // TODO: find a way to unify this logic, it's getting too repetetive
     const sets = this.setsRepository.getRandomSets(count);
     const [averageRatings, collectionSetNumbers, ratingsBySet, wishlistState] =
       await Promise.all([
