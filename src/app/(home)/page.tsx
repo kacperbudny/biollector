@@ -6,18 +6,17 @@ import {
 } from "@heroicons/react/24/outline";
 import { Button } from "@heroui/button";
 import { Card, CardBody } from "@heroui/card";
-import { Chip } from "@heroui/chip";
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { stackServerApp } from "@/auth/server";
+import { HeroSection } from "@/components/homepage/hero-section";
 import { SetCard } from "@/components/sets/set-card";
 import { SectionHeading } from "@/components/typography/headings";
 import { setRatingService } from "@/domain/services/set-rating.service";
 import { setsService } from "@/domain/services/sets.service";
 import { userCollectionService } from "@/domain/services/user-collection.service";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
-import { cn } from "@/styles/cn";
 
 export const metadata: Metadata = {
   title: "Track Your Bionicle Collection",
@@ -27,6 +26,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const user = await stackServerApp.getUser();
+  // TODO: lazy load these in separate components
   const [randomSets, topRatedSets, setCount, collectionCount, ratingsCount] =
     await Promise.all([
       setsService.getRandomSets(5, user?.id), // TODO: fix this reloading upon every request
@@ -51,139 +51,6 @@ export default async function Home() {
       />
       <BottomCtaSection />
     </div>
-  );
-}
-
-function HeroSection({
-  setCount,
-  ratingsCount,
-}: {
-  setCount: number;
-  ratingsCount: number;
-}) {
-  return (
-    <section className="relative overflow-hidden rounded-4xl border border-default-200 bg-linear-to-br from-primary-100 via-background to-warning-50 px-6 py-14 shadow-sm sm:px-10 lg:px-14">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.85),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,214,102,0.28),transparent_28%)]" />
-      <div className="absolute -right-10 top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
-      <div className="absolute -left-8 bottom-0 h-36 w-36 rounded-full bg-warning/20 blur-3xl" />
-
-      <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
-        <div className="space-y-8">
-          <div className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-              Bionicle Collection Tracker
-            </p>
-            <div className="space-y-4">
-              <h1 className="max-w-3xl text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-                Track your Bionicle collection
-              </h1>
-              <p className="max-w-2xl text-lg leading-8 text-default-700">
-                Browse every Bionicle set, track what you own, build a wanted
-                list, and rank your favorite sets.
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <Link href="/auth">
-              <Button variant="shadow" radius="full" color="primary" size="lg">
-                Create Account
-              </Button>
-            </Link>
-            <Link href="/sets">
-              <Button variant="bordered" radius="full" size="lg">
-                Browse Sets
-              </Button>
-            </Link>
-          </div>
-
-          <div className="flex flex-wrap gap-3">
-            <Chip
-              variant="bordered"
-              className={cn(
-                "border-default-200 bg-background/80 font-medium backdrop-blur",
-              )}
-            >
-              {setCount} sets
-            </Chip>
-            <Chip
-              variant="bordered"
-              className={cn(
-                "border-default-200 bg-background/80 font-medium backdrop-blur",
-              )}
-            >
-              2001-2023
-            </Chip>
-            <Chip
-              variant="bordered"
-              className={cn(
-                "border-default-200 bg-background/80 font-medium backdrop-blur",
-              )}
-            >
-              {ratingsCount} ratings
-            </Chip>
-          </div>
-        </div>
-
-        <div className="grid gap-4">
-          <Card className="border border-default-200/80 bg-background/90 shadow-xl shadow-black/5 backdrop-blur">
-            <CardBody className="space-y-6 p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-                    Preview Dashboard
-                  </p>
-                  <h2 className="mt-2 text-2xl font-bold">Your collection</h2>
-                </div>
-                <Chip color="success" variant="flat" size="sm">
-                  20% complete
-                </Chip>
-              </div>
-
-              <div className="grid gap-4 sm:grid-cols-3">
-                <HeroMetric label="Owned" value="12" />
-                <HeroMetric label="Wanted" value="8" />
-                <HeroMetric label="Rated" value="7" />
-              </div>
-
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm font-medium text-default-600">
-                  <span>Collection progress</span>
-                  <span>20%</span>
-                </div>
-                <div className="h-3 overflow-hidden rounded-full bg-default-200">
-                  <div
-                    className="h-full rounded-full bg-linear-to-r from-primary to-warning"
-                    style={{ width: "20%" }}
-                  />
-                </div>
-              </div>
-            </CardBody>
-          </Card>
-
-          <Card className="ml-auto w-full max-w-sm border border-default-200/80 bg-background/85 shadow-lg shadow-black/5 backdrop-blur">
-            <CardBody className="space-y-3 p-5">
-              <div className="flex items-center justify-between">
-                <h3 className="font-semibold">Community favorites</h3>
-                <Chip
-                  color="warning"
-                  variant="flat"
-                  size="sm"
-                  startContent={<StarIcon className="h-3.5 w-3.5" />}
-                >
-                  Live ratings
-                </Chip>
-              </div>
-              <div className="space-y-2 text-sm text-default-600">
-                <HeroListRow name="Axalara T9" value="4.8" />
-                <HeroListRow name="Takanuva" value="4.7" />
-                <HeroListRow name="Toa Metru Vakama" value="4.6" />
-              </div>
-            </CardBody>
-          </Card>
-        </div>
-      </div>
-    </section>
   );
 }
 
@@ -472,24 +339,6 @@ function BottomCtaSection() {
         </div>
       </div>
     </section>
-  );
-}
-
-function HeroMetric({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-3xl border border-default-200 bg-default-50 p-4">
-      <p className="text-sm text-default-500">{label}</p>
-      <p className="mt-2 text-2xl font-bold">{value}</p>
-    </div>
-  );
-}
-
-function HeroListRow({ name, value }: { name: string; value: string }) {
-  return (
-    <div className="flex items-center justify-between rounded-2xl border border-default-200 bg-default-50 px-3 py-2">
-      <span className="font-medium text-foreground">{name}</span>
-      <span className="font-semibold text-warning-600">{value}</span>
-    </div>
   );
 }
 
