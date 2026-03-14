@@ -10,7 +10,11 @@ import {
   type UserCollectionRepositoryPort,
   userCollectionRepository,
 } from "@/data/repositories/user-collection.repository";
-import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import {
+  type UserWishlistRepositoryPort,
+  userWishlistRepository,
+} from "@/data/repositories/user-wishlist.repository";
+import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class UserCollectionService {
@@ -18,6 +22,7 @@ export class UserCollectionService {
     private readonly collectionRepository: UserCollectionRepositoryPort,
     private readonly setsRepository: SetsRepository,
     private readonly setRatingRepository: SetRatingRepositoryPort,
+    private readonly wishlistRepository: UserWishlistRepositoryPort,
   ) {}
 
   async getCollectionsCount(): Promise<number> {
@@ -46,11 +51,13 @@ export class UserCollectionService {
   }
 
   async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
-    const [userSetsNumbers, ratingsBySet, averageRatings] = await Promise.all([
-      this.collectionRepository.getUserCollection(userId),
-      this.setRatingRepository.getUserRatings(userId),
-      this.setRatingRepository.getAverageRatings(),
-    ]);
+    const [userSetsNumbers, ratingsBySet, averageRatings, wishlistState] =
+      await Promise.all([
+        this.collectionRepository.getUserCollection(userId),
+        this.setRatingRepository.getUserRatings(userId),
+        this.setRatingRepository.getAverageRatings(),
+        this.wishlistRepository.getWishlistState(userId),
+      ]);
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
@@ -59,12 +66,15 @@ export class UserCollectionService {
     for (const num of userSetsNumbers) {
       const set = byNumber.get(num);
       if (set) {
-        userSets.push({
-          ...set,
-          isInCollection: true,
-          userRating: ratingsBySet[num],
-          averageRating: averageRatings[num],
-        });
+        userSets.push(
+          SetViewModel.fromBionicleSet({
+            set,
+            collectionSetNumbers: userSetsNumbers,
+            ratingsBySet,
+            averageRatings,
+            wishlistState,
+          }),
+        );
       }
     }
 
@@ -78,4 +88,5 @@ export const userCollectionService = new UserCollectionService(
   userCollectionRepository,
   setsRepository,
   setRatingRepository,
+  userWishlistRepository,
 );

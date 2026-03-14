@@ -1,7 +1,7 @@
 "use client";
 
-import { PlusIcon } from "@heroicons/react/24/outline";
-import { BookmarkIcon as BookmarkIconSolid } from "@heroicons/react/24/solid";
+import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
+import { ArchiveBoxIcon as ArchiveBoxIconSolid } from "@heroicons/react/24/solid";
 import { Button } from "@heroui/button";
 import { addToast } from "@heroui/toast";
 import { useUser } from "@stackframe/stack";
@@ -50,9 +50,9 @@ export function ToggleCollectionButton({
       onPress={handleClick}
     >
       {isInCollection ? (
-        <BookmarkIconSolid className="h-5 w-5" />
+        <ArchiveBoxIconSolid className="h-5 w-5" />
       ) : (
-        <PlusIcon className="h-5 w-5" />
+        <ArchiveBoxIcon className="h-5 w-5" />
       )}
     </Button>
   );

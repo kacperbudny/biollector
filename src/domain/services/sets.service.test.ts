@@ -6,6 +6,7 @@ import { setFixture } from "@/tests/fixtures";
 import {
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
+  userWishlistRepositoryMock,
 } from "@/tests/repositories";
 
 describe(`@Unit ${SetsService.name}`, () => {
@@ -29,6 +30,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         new SetsRepository(sets),
         userCollectionRepositoryMock(),
         setRatingRepositoryMock(),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -55,6 +57,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         new SetsRepository(sets),
         userCollectionRepositoryMock(),
         setRatingRepositoryMock(),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -76,6 +79,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         new SetsRepository([]),
         userCollectionRepositoryMock(),
         setRatingRepositoryMock(),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -106,6 +110,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         setRatingRepositoryMock({
           getUserRatings: vi.fn().mockResolvedValue({}),
         }),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel("user-123");
@@ -142,6 +147,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         setRatingRepositoryMock({
           getUserRatings: vi.fn().mockResolvedValue({ "1": 4 }),
         }),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel("user-123");
@@ -168,6 +174,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         new SetsRepository(sets),
         userCollectionRepositoryMock(),
         setRatingRepositoryMock(),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -199,6 +206,7 @@ describe(`@Unit ${SetsService.name}`, () => {
         setRatingRepositoryMock({
           getAverageRatings: vi.fn().mockResolvedValue({ "1": 4.2 }),
         }),
+        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();

@@ -13,7 +13,8 @@
       "!.next",
       "!dist",
       "!build",
-      "!src/data/db/migrations"
+      "!src/data/db/migrations",
+      "!src/data/db/types.ts"
     ]
   },
   "formatter": {
