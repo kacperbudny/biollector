@@ -10,6 +10,7 @@ export function userCollectionRepositoryMock(
     deleteFromCollection: vi.fn(),
     getUserCollection: vi.fn(),
     isInCollection: vi.fn(),
+    getDistinctCollectionsCount: vi.fn().mockResolvedValue(0),
     ...overrides,
   };
 }
@@ -21,6 +22,7 @@ export function setRatingRepositoryMock(
     getUserRatings: vi.fn(),
     getAverageRatings: vi.fn().mockResolvedValue({}),
     setRating: vi.fn(),
+    getTotalRatingsCount: vi.fn().mockResolvedValue(0),
     ...overrides,
   };
 }

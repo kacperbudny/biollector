@@ -20,6 +20,10 @@ export class UserCollectionService {
     private readonly setRatingRepository: SetRatingRepositoryPort,
   ) {}
 
+  async getCollectionsCount(): Promise<number> {
+    return this.collectionRepository.getDistinctCollectionsCount();
+  }
+
   async toggleSet(userId: string, setNumber: string) {
     const set = this.setsRepository.findOne(setNumber);
     if (!set) {

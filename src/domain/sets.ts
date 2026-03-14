@@ -80,11 +80,11 @@ export enum Wave {
   MISCELLANEOUS = "Miscellaneous",
 }
 
-export type BionicleSet = {
+export interface BionicleSet {
   catalogNumber: string;
   name: string;
   releaseYear: string;
   setType: SetType;
   imageName: string;
   wave: Wave;
-};
+}

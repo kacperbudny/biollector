@@ -10,7 +10,7 @@ import {
   type UserCollectionRepositoryPort,
   userCollectionRepository,
 } from "@/data/repositories/user-collection.repository";
-import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class SetsService {
@@ -19,6 +19,58 @@ export class SetsService {
     private readonly userCollectionRepository: UserCollectionRepositoryPort,
     private readonly setRatingRepository: SetRatingRepositoryPort,
   ) {}
+
+  getSetsCount(): number {
+    return this.setsRepository.getAll().length;
+  }
+
+  async getRandomSets(count: number, userId?: string): Promise<SetViewModel[]> {
+    const sets = this.setsRepository.getRandomSets(count);
+    const [averageRatings, collectionSetNumbers, ratingsBySet] =
+      await Promise.all([
+        this.setRatingRepository.getAverageRatings(),
+        userId
+          ? this.userCollectionRepository.getUserCollection(userId)
+          : Promise.resolve([]),
+        userId
+          ? this.setRatingRepository.getUserRatings(userId)
+          : Promise.resolve({} as Record<string, number>),
+      ]);
+
+    return SetViewModel.fromBionicleSets(
+      sets,
+      collectionSetNumbers,
+      ratingsBySet,
+      averageRatings,
+    );
+  }
+
+  async getTopRatedSets(
+    count: number,
+    userId?: string,
+  ): Promise<SetViewModel[]> {
+    const [topRated, collectionSetNumbers, ratingsBySet] = await Promise.all([
+      this.setRatingRepository.getAverageRatings({
+        sortBy: "rating",
+        sortOrder: "desc",
+        limit: count,
+      }),
+      userId
+        ? this.userCollectionRepository.getUserCollection(userId)
+        : Promise.resolve([]),
+      userId
+        ? this.setRatingRepository.getUserRatings(userId)
+        : Promise.resolve({} as Record<string, number>),
+    ]);
+    const sets = this.setsRepository.getByCatalogNumbers(Object.keys(topRated));
+
+    return SetViewModel.fromBionicleSets(
+      sets,
+      collectionSetNumbers,
+      ratingsBySet,
+      topRated,
+    );
+  }
 
   async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.setsRepository.getAll();
@@ -33,14 +85,14 @@ export class SetsService {
         this.setRatingRepository.getAverageRatings(),
       ]);
 
-    const setsWithStatus: SetViewModel[] = sets.map((set) => ({
-      ...set,
-      isInCollection: collectionSetNumbers.includes(set.catalogNumber),
-      userRating: ratingsBySet[set.catalogNumber],
-      averageRating: averageRatings[set.catalogNumber],
-    }));
+    const setViewModels: SetViewModel[] = SetViewModel.fromBionicleSets(
+      sets,
+      collectionSetNumbers,
+      ratingsBySet,
+      averageRatings,
+    );
 
-    return SetsListViewModel.fromSetViewModels(setsWithStatus);
+    return SetsListViewModel.fromSetViewModels(setViewModels);
   }
 }
 
