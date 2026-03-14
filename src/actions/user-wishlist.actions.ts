@@ -4,15 +4,17 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { authActionClient } from "@/actions/action-client";
 import { userWishlistService } from "@/domain/services/user-wishlist.service";
+import { UserWishlistScale } from "@/domain/user-wishlist";
 
-const setNumberSchema = z.object({
+const setWishlistSchema = z.object({
   setNumber: z.string().min(1, "Set number is required").trim(),
+  scale: z.enum(UserWishlistScale).nullable(),
 });
 
-export const toggleWishlist = authActionClient
-  .inputSchema(setNumberSchema)
-  .action(async ({ parsedInput: { setNumber }, ctx: { userId } }) => {
-    await userWishlistService.toggleSet(userId, setNumber);
+export const setWishlist = authActionClient
+  .inputSchema(setWishlistSchema)
+  .action(async ({ parsedInput: { setNumber, scale }, ctx: { userId } }) => {
+    await userWishlistService.setWishlist(userId, setNumber, scale);
 
     revalidatePath("/sets");
     revalidatePath("/collection");

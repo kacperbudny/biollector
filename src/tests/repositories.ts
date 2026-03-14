@@ -20,10 +20,9 @@ export function userWishlistRepositoryMock(
   overrides?: Partial<UserWishlistRepositoryPort>,
 ): UserWishlistRepositoryPort {
   return {
-    insert: vi.fn(),
+    getWishlistState: vi.fn().mockResolvedValue({}),
     deleteFromWishlist: vi.fn(),
-    getUserWishlist: vi.fn().mockResolvedValue([]),
-    isOnWishlist: vi.fn(),
+    setWishlist: vi.fn(),
     ...overrides,
   };
 }

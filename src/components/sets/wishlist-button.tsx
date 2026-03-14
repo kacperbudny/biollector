@@ -6,20 +6,18 @@ import { Button } from "@heroui/button";
 import { addToast } from "@heroui/toast";
 import { useUser } from "@stackframe/stack";
 import { useAction } from "next-safe-action/hooks";
-import { toggleWishlist } from "@/actions/user-wishlist.actions";
+import { setWishlist } from "@/actions/user-wishlist.actions";
 import { getActionErrorMessage } from "@/actions/utils";
+import { UserWishlistScale } from "@/domain/user-wishlist";
 
-type ToggleWishlistButtonProps = {
+type WishlistButtonProps = {
   setNumber: string;
   wishlisted: boolean;
 };
 
-export function ToggleWishlistButton({
-  setNumber,
-  wishlisted,
-}: ToggleWishlistButtonProps) {
+export function WishlistButton({ setNumber, wishlisted }: WishlistButtonProps) {
   const user = useUser();
-  const { execute, isPending } = useAction(toggleWishlist, {
+  const { execute, isPending } = useAction(setWishlist, {
     onError: ({ error }) => {
       addToast({
         title: "Error",
@@ -35,7 +33,10 @@ export function ToggleWishlistButton({
     if (!isSignedIn) {
       return;
     }
-    execute({ setNumber });
+    execute({
+      setNumber,
+      scale: wishlisted ? null : UserWishlistScale.WISHLISTED,
+    });
   }
 
   return (

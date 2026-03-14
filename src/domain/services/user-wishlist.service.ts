@@ -6,6 +6,7 @@ import {
   type UserWishlistRepositoryPort,
   userWishlistRepository,
 } from "@/data/repositories/user-wishlist.repository";
+import type { UserWishlistScale } from "@/domain/user-wishlist";
 
 export class UserWishlistService {
   constructor(
@@ -13,25 +14,22 @@ export class UserWishlistService {
     private readonly wishlistRepository: UserWishlistRepositoryPort,
   ) {}
 
-  async toggleSet(userId: string, setNumber: string) {
+  async setWishlist(
+    userId: string,
+    setNumber: string,
+    scale: UserWishlistScale | null,
+  ): Promise<void> {
     const set = this.setsRepository.findOne(setNumber);
     if (!set) {
       throw new Error(`Set not found: ${setNumber}`);
     }
 
-    const isOnWishlist = await this.wishlistRepository.isOnWishlist(
-      userId,
-      setNumber,
-    );
-
-    if (isOnWishlist) {
-      return await this.wishlistRepository.deleteFromWishlist(
-        userId,
-        setNumber,
-      );
+    if (scale === null) {
+      await this.wishlistRepository.deleteFromWishlist(userId, setNumber);
+      return;
     }
 
-    await this.wishlistRepository.insert(userId, setNumber);
+    await this.wishlistRepository.setWishlist(userId, setNumber, scale);
   }
 }
 

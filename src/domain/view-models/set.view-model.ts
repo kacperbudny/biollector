@@ -1,4 +1,5 @@
 import type { BionicleSet, SetType, Wave } from "@/domain/sets";
+import { UserWishlistScale } from "@/domain/user-wishlist";
 
 export class SetViewModel implements BionicleSet {
   constructor(
@@ -10,6 +11,7 @@ export class SetViewModel implements BionicleSet {
     public readonly wave: Wave,
     public readonly isInCollection: boolean,
     public readonly wishlisted: boolean,
+    public readonly notInterested: boolean,
     public readonly userRating?: number,
     public readonly averageRating?: number,
   ) {}
@@ -19,14 +21,15 @@ export class SetViewModel implements BionicleSet {
     collectionSetNumbers,
     ratingsBySet,
     averageRatings,
-    wishlistSetNumbers,
+    wishlistState,
   }: {
     set: BionicleSet;
     collectionSetNumbers: string[];
     ratingsBySet: Record<string, number>;
     averageRatings: Record<string, number>;
-    wishlistSetNumbers: string[];
+    wishlistState: Record<string, number>;
   }): SetViewModel {
+    const scale = wishlistState[set.catalogNumber];
     return new SetViewModel(
       set.catalogNumber,
       set.name,
@@ -35,7 +38,8 @@ export class SetViewModel implements BionicleSet {
       set.imageName,
       set.wave,
       collectionSetNumbers.includes(set.catalogNumber),
-      wishlistSetNumbers.includes(set.catalogNumber),
+      scale === UserWishlistScale.WISHLISTED,
+      scale === UserWishlistScale.NOT_INTERESTED,
       ratingsBySet[set.catalogNumber],
       averageRatings[set.catalogNumber],
     );

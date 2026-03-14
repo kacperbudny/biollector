@@ -35,7 +35,7 @@ export class SetsService {
       averageRatings,
       collectionSetNumbers,
       ratingsBySet,
-      wishlistSetNumbers,
+      wishlistState,
     ] = await Promise.all([
       this.setRatingRepository.getAverageRatings(),
       userId
@@ -45,8 +45,8 @@ export class SetsService {
         ? this.setRatingRepository.getUserRatings(userId)
         : Promise.resolve({} as Record<string, number>),
       userId
-        ? this.userWishlistRepository.getUserWishlist(userId)
-        : Promise.resolve([]),
+        ? this.userWishlistRepository.getWishlistState(userId)
+        : Promise.resolve({}),
     ]);
 
     return sets.map((set) =>
@@ -55,7 +55,7 @@ export class SetsService {
         collectionSetNumbers,
         ratingsBySet,
         averageRatings,
-        wishlistSetNumbers,
+        wishlistState,
       }),
     );
   }
@@ -64,7 +64,7 @@ export class SetsService {
     count: number,
     userId?: string,
   ): Promise<SetViewModel[]> {
-    const [topRated, collectionSetNumbers, ratingsBySet, wishlistSetNumbers] =
+    const [topRated, collectionSetNumbers, ratingsBySet, wishlistState] =
       await Promise.all([
         this.setRatingRepository.getAverageRatings({
           sortBy: "rating",
@@ -78,8 +78,8 @@ export class SetsService {
           ? this.setRatingRepository.getUserRatings(userId)
           : Promise.resolve({} as Record<string, number>),
         userId
-          ? this.userWishlistRepository.getUserWishlist(userId)
-          : Promise.resolve([]),
+          ? this.userWishlistRepository.getWishlistState(userId)
+          : Promise.resolve({}),
       ]);
     const sets = this.setsRepository.getByCatalogNumbers(Object.keys(topRated));
 
@@ -89,7 +89,7 @@ export class SetsService {
         collectionSetNumbers,
         ratingsBySet,
         averageRatings: topRated,
-        wishlistSetNumbers,
+        wishlistState,
       }),
     );
   }
@@ -100,7 +100,7 @@ export class SetsService {
       collectionSetNumbers,
       ratingsBySet,
       averageRatings,
-      wishlistSetNumbers,
+      wishlistState,
     ] = await Promise.all([
       userId
         ? this.userCollectionRepository.getUserCollection(userId)
@@ -110,8 +110,8 @@ export class SetsService {
         : Promise.resolve({} as Record<string, number>),
       this.setRatingRepository.getAverageRatings(),
       userId
-        ? this.userWishlistRepository.getUserWishlist(userId)
-        : Promise.resolve([]),
+        ? this.userWishlistRepository.getWishlistState(userId)
+        : Promise.resolve({}),
     ]);
 
     const setViewModels = sets.map((set) =>
@@ -120,7 +120,7 @@ export class SetsService {
         collectionSetNumbers,
         ratingsBySet,
         averageRatings,
-        wishlistSetNumbers,
+        wishlistState,
       }),
     );
 

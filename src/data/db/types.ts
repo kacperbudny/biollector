@@ -30,6 +30,7 @@ export interface UserRating {
 export interface UserWishlist {
   created_at: Generated<Timestamp>;
   id: Generated<number>;
+  scale: Generated<number>;
   set_number: string;
   user_id: string;
 }
