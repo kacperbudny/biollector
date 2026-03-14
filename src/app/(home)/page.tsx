@@ -19,26 +19,11 @@ import { userCollectionService } from "@/domain/services/user-collection.service
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import { cn } from "@/styles/cn";
 
-const primaryButtonClassName =
-  "rounded-full bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-lg shadow-primary/20 transition-transform hover:-translate-y-0.5";
-const secondaryButtonClassName =
-  "rounded-full border border-default-300 bg-background/80 px-6 py-3 text-sm font-semibold text-foreground backdrop-blur transition-colors hover:bg-default-100";
-
-const MOCK_COLLECTION_PREVIEW = {
-  owned: 12,
-  wanted: 8,
-  completion: 20,
-  ratings: 7,
-};
-
 export const metadata: Metadata = {
   title: "Track Your Bionicle Collection",
   description:
     "Browse every Bionicle set, track what you own, discover top-rated favorites, and start building your collection.",
 };
-
-const SETS_YEAR_START = 2001;
-const SETS_YEAR_END = 2023;
 
 export default async function Home() {
   const user = await stackServerApp.getUser();
@@ -53,79 +38,17 @@ export default async function Home() {
 
   return (
     <div className="space-y-24 pb-16">
-      <HeroSection
+      <HeroSection setCount={setCount} ratingsCount={ratingsCount} />
+      <FeaturePreviewSection />
+      <ExampleContentSection
+        randomSets={randomSets}
+        topRatedSets={topRatedSets}
+      />
+      <ToolsAndStatsSection
         setCount={setCount}
-        yearStart={SETS_YEAR_START}
-        yearEnd={SETS_YEAR_END}
+        collectionCount={collectionCount}
         ratingsCount={ratingsCount}
       />
-
-      <section className="space-y-6">
-        <div className="max-w-2xl space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-            What You Can Do
-          </p>
-          <SectionHeading>
-            Built for browsing, collecting, and ranking
-          </SectionHeading>
-          <p className="text-default-600">
-            Keep your collection organized, surface your next targets, and see
-            which sets stand out with the community.
-          </p>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
-          <FeaturePreviewCard
-            title="Track Your Collection"
-            description="Mark sets as owned, keep an eye on your progress, and understand how close you are to finishing each era."
-            icon={<ArchiveBoxIcon className="h-6 w-6" />}
-          />
-          <FeaturePreviewCard
-            title="Build a Wanted List"
-            description="Keep the sets you are hunting for front and center so your next pickup is always easy to choose."
-            icon={<HeartIcon className="h-6 w-6" />}
-          />
-          <FeaturePreviewCard
-            title="Rate Your Favorites"
-            description="Give your top sets a score and quickly see which community favorites rise to the top."
-            icon={<StarIcon className="h-6 w-6" />}
-          />
-        </div>
-      </section>
-
-      <section className="space-y-10">
-        <div className="max-w-2xl space-y-3">
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-            Example Content
-          </p>
-          <SectionHeading>See what is inside the archive</SectionHeading>
-          <p className="text-default-600">
-            Browse a quick sample of the database and see which sets are getting
-            the strongest ratings.
-          </p>
-        </div>
-        <SetsShowcaseSection
-          title="Five random sets"
-          description="A quick sample from across the Bionicle lineup."
-          sets={randomSets}
-        />
-        <SetsShowcaseSection
-          title="Highest rated sets"
-          description="A snapshot of the sets currently leading the community rankings."
-          sets={topRatedSets}
-        />
-      </section>
-
-      <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
-        <CollectionPreviewCard />
-        <DatabaseStatsCard
-          setCount={setCount}
-          yearStart={SETS_YEAR_START}
-          yearEnd={SETS_YEAR_END}
-          collectionCount={collectionCount}
-          ratingsCount={ratingsCount}
-        />
-      </section>
-
       <BottomCtaSection />
     </div>
   );
@@ -133,20 +56,13 @@ export default async function Home() {
 
 function HeroSection({
   setCount,
-  yearStart,
-  yearEnd,
   ratingsCount,
 }: {
   setCount: number;
-  yearStart: number | null;
-  yearEnd: number | null;
   ratingsCount: number;
 }) {
-  const yearRange =
-    yearStart && yearEnd ? `${yearStart}-${yearEnd}` : "Across the full run";
-
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-default-200 bg-gradient-to-br from-primary-100 via-background to-warning-50 px-6 py-14 shadow-sm sm:px-10 lg:px-14">
+    <section className="relative overflow-hidden rounded-4xl border border-default-200 bg-linear-to-br from-primary-100 via-background to-warning-50 px-6 py-14 shadow-sm sm:px-10 lg:px-14">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.85),transparent_32%),radial-gradient(circle_at_bottom_right,rgba(255,214,102,0.28),transparent_28%)]" />
       <div className="absolute -right-10 top-10 h-40 w-40 rounded-full bg-primary/10 blur-3xl" />
       <div className="absolute -left-8 bottom-0 h-36 w-36 rounded-full bg-warning/20 blur-3xl" />
@@ -170,16 +86,12 @@ function HeroSection({
 
           <div className="flex flex-col gap-3 sm:flex-row">
             <Link href="/auth">
-              <Button
-                className={primaryButtonClassName}
-                variant="flat"
-                color="primary"
-              >
+              <Button variant="shadow" radius="full" color="primary" size="lg">
                 Create Account
               </Button>
             </Link>
             <Link href="/sets">
-              <Button className={secondaryButtonClassName} variant="bordered">
+              <Button variant="bordered" radius="full" size="lg">
                 Browse Sets
               </Button>
             </Link>
@@ -200,7 +112,7 @@ function HeroSection({
                 "border-default-200 bg-background/80 font-medium backdrop-blur",
               )}
             >
-              {yearRange}
+              2001-2023
             </Chip>
             <Chip
               variant="bordered"
@@ -224,34 +136,25 @@ function HeroSection({
                   <h2 className="mt-2 text-2xl font-bold">Your collection</h2>
                 </div>
                 <Chip color="success" variant="flat" size="sm">
-                  {MOCK_COLLECTION_PREVIEW.completion}% complete
+                  20% complete
                 </Chip>
               </div>
 
               <div className="grid gap-4 sm:grid-cols-3">
-                <HeroMetric
-                  label="Owned"
-                  value={String(MOCK_COLLECTION_PREVIEW.owned)}
-                />
-                <HeroMetric
-                  label="Wanted"
-                  value={String(MOCK_COLLECTION_PREVIEW.wanted)}
-                />
-                <HeroMetric
-                  label="Rated"
-                  value={String(MOCK_COLLECTION_PREVIEW.ratings)}
-                />
+                <HeroMetric label="Owned" value="12" />
+                <HeroMetric label="Wanted" value="8" />
+                <HeroMetric label="Rated" value="7" />
               </div>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between text-sm font-medium text-default-600">
                   <span>Collection progress</span>
-                  <span>{MOCK_COLLECTION_PREVIEW.completion}%</span>
+                  <span>20%</span>
                 </div>
                 <div className="h-3 overflow-hidden rounded-full bg-default-200">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-primary to-warning"
-                    style={{ width: `${MOCK_COLLECTION_PREVIEW.completion}%` }}
+                    className="h-full rounded-full bg-linear-to-r from-primary to-warning"
+                    style={{ width: "20%" }}
                   />
                 </div>
               </div>
@@ -284,6 +187,96 @@ function HeroSection({
   );
 }
 
+function FeaturePreviewSection() {
+  return (
+    <section className="space-y-6">
+      <div className="max-w-2xl space-y-3">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+          What You Can Do
+        </p>
+        <SectionHeading>
+          Built for browsing, collecting, and ranking
+        </SectionHeading>
+        <p className="text-default-600">
+          Keep your collection organized, surface your next targets, and see
+          which sets stand out with the community.
+        </p>
+      </div>
+      <div className="grid gap-6 md:grid-cols-3">
+        <FeaturePreviewCard
+          title="Track Your Collection"
+          description="Mark sets as owned, keep an eye on your progress, and understand how close you are to finishing each era."
+          icon={<ArchiveBoxIcon className="h-6 w-6" />}
+        />
+        <FeaturePreviewCard
+          title="Build a Wanted List"
+          description="Keep the sets you are hunting for front and center so your next pickup is always easy to choose."
+          icon={<HeartIcon className="h-6 w-6" />}
+        />
+        <FeaturePreviewCard
+          title="Rate Your Favorites"
+          description="Give your top sets a score and quickly see which community favorites rise to the top."
+          icon={<StarIcon className="h-6 w-6" />}
+        />
+      </div>
+    </section>
+  );
+}
+
+function ExampleContentSection({
+  randomSets,
+  topRatedSets,
+}: {
+  randomSets: SetViewModel[];
+  topRatedSets: SetViewModel[];
+}) {
+  return (
+    <section className="space-y-10">
+      <div className="max-w-2xl space-y-3">
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
+          Example Content
+        </p>
+        <SectionHeading>See what is inside the archive</SectionHeading>
+        <p className="text-default-600">
+          Browse a quick sample of the database and see which sets are getting
+          the strongest ratings.
+        </p>
+      </div>
+      <SetsShowcaseSection
+        title="Five random sets"
+        description="A quick sample from across the Bionicle lineup."
+        sets={randomSets}
+      />
+      <SetsShowcaseSection
+        title="Highest rated sets"
+        description="A snapshot of the sets currently leading the community rankings."
+        sets={topRatedSets}
+      />
+    </section>
+  );
+}
+
+function ToolsAndStatsSection({
+  setCount,
+  collectionCount,
+  ratingsCount,
+}: {
+  setCount: number;
+  collectionCount: number;
+  ratingsCount: number;
+}) {
+  return (
+    <section className="grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+      <CollectionPreviewCard />
+      <DatabaseStatsCard
+        setCount={setCount}
+        collectionCount={collectionCount}
+        ratingsCount={ratingsCount}
+      />
+    </section>
+  );
+}
+
 function FeaturePreviewCard({
   title,
   description,
@@ -294,7 +287,7 @@ function FeaturePreviewCard({
   icon: ReactNode;
 }) {
   return (
-    <Card className="h-full border border-default-200 bg-gradient-to-b from-background to-default-50 shadow-sm">
+    <Card className="h-full border border-default-200 bg-linear-to-b from-background to-default-50 shadow-sm">
       <CardBody className="space-y-4 p-6">
         <div className="inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-primary/10 text-primary">
           {icon}
@@ -343,7 +336,7 @@ function SetsShowcaseSection({
 
 function CollectionPreviewCard() {
   return (
-    <Card className="border border-default-200 bg-gradient-to-br from-default-50 to-background shadow-sm">
+    <Card className="border border-default-200 bg-linear-to-br from-default-50 to-background shadow-sm">
       <CardBody className="space-y-8 p-6 sm:p-8">
         <div className="space-y-3">
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
@@ -384,7 +377,7 @@ function CollectionPreviewCard() {
               </span>
             </div>
             <div className="mt-4 h-3 overflow-hidden rounded-full bg-default-200">
-              <div className="h-full w-1/5 rounded-full bg-gradient-to-r from-primary to-success" />
+              <div className="h-full w-1/5 rounded-full bg-linear-to-r from-primary to-success" />
             </div>
             <div className="mt-4 flex items-center justify-between text-sm text-default-500">
               <span>Current pace</span>
@@ -408,14 +401,10 @@ function CollectionPreviewCard() {
 
 function DatabaseStatsCard({
   setCount,
-  yearStart,
-  yearEnd,
   collectionCount,
   ratingsCount,
 }: {
   setCount: number;
-  yearStart: number | null;
-  yearEnd: number | null;
   collectionCount: number;
   ratingsCount: number;
 }) {
@@ -439,9 +428,7 @@ function DatabaseStatsCard({
           />
           <DatabaseStat
             label="Years covered"
-            value={
-              yearStart && yearEnd ? `${yearStart}-${yearEnd}` : "Full range"
-            }
+            value={"2001-2023"}
             description="From the original run to G2"
           />
           <DatabaseStat
@@ -462,7 +449,7 @@ function DatabaseStatsCard({
 
 function BottomCtaSection() {
   return (
-    <section className="rounded-[2rem] border border-default-200 bg-gradient-to-r from-primary-100 via-background to-warning-50 px-6 py-14 text-center shadow-sm sm:px-10">
+    <section className="rounded-4xl border border-default-200 bg-linear-to-r from-primary-100 via-background to-warning-50 px-6 py-14 text-center shadow-sm sm:px-10">
       <div className="mx-auto max-w-3xl space-y-6">
         <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
           Ready To Start?
@@ -478,11 +465,7 @@ function BottomCtaSection() {
         </div>
         <div className="flex justify-center">
           <Link href="/auth">
-            <Button
-              className={primaryButtonClassName}
-              variant="flat"
-              color="primary"
-            >
+            <Button variant="shadow" radius="full" color="primary">
               Create Free Account
             </Button>
           </Link>
