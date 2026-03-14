@@ -37,7 +37,9 @@ export async function Navbar() {
             Home
           </Link>
         </NavbarItem>
+
         <Divider orientation="vertical" className="h-4" />
+
         <NavbarItem>
           <Link
             href="/sets"

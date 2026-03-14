@@ -4,6 +4,7 @@ import { Card, CardBody, CardFooter, CardHeader } from "@heroui/card";
 import { Chip } from "@heroui/chip";
 import { Progress } from "@heroui/progress";
 import Link from "next/link";
+import { EyebrowHeadline } from "@/components/typography/text";
 
 export function HeroSection({
   setCount,
@@ -21,9 +22,7 @@ export function HeroSection({
       <div className="relative grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
         <div className="space-y-8">
           <div className="space-y-4">
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-primary">
-              Bionicle Collection Tracker
-            </p>
+            <EyebrowHeadline>Bionicle Collection Tracker</EyebrowHeadline>
             <div className="space-y-4">
               <h1 className="max-w-3xl text-4xl font-black tracking-tight text-foreground sm:text-5xl lg:text-6xl">
                 Track your Bionicle collection
@@ -92,9 +91,7 @@ function PreviewDashboardCard() {
     <Card className="border border-default-200/80 bg-background/90 shadow-xl shadow-black/5 backdrop-blur">
       <CardHeader className="flex items-center justify-between p-6 pb-0">
         <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
-            Preview Dashboard
-          </p>
+          <EyebrowHeadline>Preview Dashboard</EyebrowHeadline>
           <h2 className="mt-2 text-2xl font-bold">Your collection</h2>
         </div>
         <Chip color="success" variant="flat" size="sm">
