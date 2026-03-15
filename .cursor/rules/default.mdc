@@ -3,7 +3,7 @@ alwaysApply: true
 ---
 # Styling
 
-- Use HeroUI (previously NextUI) components whenever possible.
+- Use HeroUI (previously NextUI) components whenever possible. You are allowed to install new HeroUI components. Prefer using HeroUI components over manually creating and styling new ones.
 - Use Tailwind for styling.
 - Use the `cn()` utility from `@/styles/cn` (clsx) for conditional or composed class names instead of template literals.
 
@@ -39,6 +39,10 @@ alwaysApply: true
 - Define a port/interface in the service for the repository shape it needs; the concrete repository satisfies it structurally.
 - Export a default instance for production: `setsService = new SetsService(setsRepository)`.
 - Tests inject a mock: `new SetsService(new SetsRepository(mockData))` — no mocking framework needed.
+
+# Search params
+
+- Parse query params in Next.js pages with nuqs server-side: define a descriptor (e.g. `parseAsBoolean.withDefault(false)`), create a loader with `createLoader` from `nuqs/server`, then `await loadSearchParams(searchParams)` in the page.
 
 # Server actions
 

@@ -10,7 +10,7 @@ A fun little side project of mine - a web app for managing your Bionicle collect
 - [x] Managing your collection
 - [x] Set rating
 - [x] Wishlist
-- [ ] Recommendations
+- [x] Recommendations
 - [ ] Sharing your collection/wishlist
 - [x] Full list of officially released sets
 

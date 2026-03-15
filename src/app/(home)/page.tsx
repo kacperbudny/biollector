@@ -10,7 +10,6 @@ import { setsService } from "@/domain/services/sets.service";
 import { userCollectionService } from "@/domain/services/user-collection.service";
 
 export const metadata: Metadata = {
-  title: "Track Your Bionicle Collection",
   description:
     "Browse every Bionicle set, track what you own, discover top-rated favorites, and start building your collection.",
 };
