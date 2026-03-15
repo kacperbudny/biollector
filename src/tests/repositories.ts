@@ -9,7 +9,7 @@ export function userCollectionRepositoryMock(
   return {
     insert: vi.fn(),
     deleteFromCollection: vi.fn(),
-    getUserCollection: vi.fn(),
+    getUserCollection: vi.fn().mockResolvedValue([]),
     isInCollection: vi.fn(),
     getDistinctCollectionsCount: vi.fn().mockResolvedValue(0),
     ...overrides,
@@ -31,7 +31,7 @@ export function setRatingRepositoryMock(
   overrides?: Partial<SetRatingRepositoryPort>,
 ): SetRatingRepositoryPort {
   return {
-    getUserRatings: vi.fn(),
+    getUserRatings: vi.fn().mockResolvedValue({}),
     getAverageRatings: vi.fn().mockResolvedValue({}),
     setRating: vi.fn(),
     getTotalRatingsCount: vi.fn().mockResolvedValue(0),

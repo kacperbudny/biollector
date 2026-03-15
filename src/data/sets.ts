@@ -39,7 +39,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
-    imageName: "1392.jpg",
+    imageName: "1392.png",
   },
   {
     catalogNumber: "1393",
@@ -47,7 +47,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
-    imageName: "1393.jpg",
+    imageName: "1393.webp",
   },
   {
     catalogNumber: "1441",

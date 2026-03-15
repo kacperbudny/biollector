@@ -54,7 +54,9 @@ export class SetRatingRepository implements SetRatingRepositoryPort {
     }
 
     const rows = await query.execute();
-    return Object.fromEntries(rows.map((r) => [r.set_number, r.avg_rating]));
+    return Object.fromEntries(
+      rows.map((r) => [r.set_number, Number(r.avg_rating)]),
+    );
   }
 
   async getTotalRatingsCount(): Promise<number> {

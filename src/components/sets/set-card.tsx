@@ -76,7 +76,7 @@ function AverageRatingChip({ averageRating }: { averageRating?: number }) {
         averageRating ? `Average rating ${averageRating}` : "No ratings yet"
       }
     >
-      {averageRating ? averageRating : "–"}
+      {averageRating ? averageRating.toFixed(1) : "–"}
     </Chip>
   );
 }

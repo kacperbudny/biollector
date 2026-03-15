@@ -16,7 +16,7 @@ export async function Navbar() {
   const isSignedIn = !!user;
 
   return (
-    <HeroUINavbar isBordered>
+    <HeroUINavbar isBordered maxWidth="xl">
       <NavbarBrand className="h-full">
         <Link href="/" className="flex h-full items-center">
           <Image
@@ -67,6 +67,15 @@ export async function Navbar() {
                 className="text-foreground hover:text-primary transition-colors"
               >
                 Wishlist
+              </Link>
+            </NavbarItem>
+            <Divider orientation="vertical" className="h-4" />
+            <NavbarItem>
+              <Link
+                href="/recommendations"
+                className="text-foreground hover:text-primary transition-colors"
+              >
+                Recommendations
               </Link>
             </NavbarItem>
           </>
