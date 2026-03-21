@@ -1,19 +1,7 @@
-import {
-  type SetRatingRepositoryPort,
-  setRatingRepository,
-} from "@/data/repositories/set-rating.repository";
-import {
-  type SetsRepository,
-  setsRepository,
-} from "@/data/repositories/sets.repository";
-import {
-  type UserCollectionRepositoryPort,
-  userCollectionRepository,
-} from "@/data/repositories/user-collection.repository";
-import {
-  type UserWishlistRepositoryPort,
-  userWishlistRepository,
-} from "@/data/repositories/user-wishlist.repository";
+import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
+import type { SetsRepository } from "@/data/repositories/sets.repository";
+import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
+import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 import type { BionicleSet, Wave } from "@/domain/sets";
 import { RecommendationViewModel } from "@/domain/view-models/recommendation.view-model";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
@@ -200,10 +188,3 @@ export class RecommendationsService {
     return new RecommendationViewModel(set, score, reasons);
   }
 }
-
-export const recommendationsService = new RecommendationsService(
-  setsRepository,
-  userCollectionRepository,
-  setRatingRepository,
-  userWishlistRepository,
-);

@@ -1,6 +1,5 @@
 import type { Kysely } from "kysely";
 import { sql } from "kysely";
-import { db } from "@/data/db/config";
 import type { DB } from "@/data/db/types";
 import type { SetRatingEntity } from "@/domain/set-rating.entity";
 
@@ -85,5 +84,3 @@ export class SetRatingRepository implements SetRatingRepositoryPort {
       .execute();
   }
 }
-
-export const setRatingRepository = new SetRatingRepository(db);

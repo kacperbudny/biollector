@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { authActionClient } from "@/actions/action-client";
-import { userWishlistService } from "@/domain/services/user-wishlist.service";
+import { userWishlistService } from "@/dependency-injection";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 
 const setWishlistSchema = z.object({

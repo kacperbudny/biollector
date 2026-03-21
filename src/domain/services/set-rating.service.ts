@@ -1,11 +1,5 @@
-import {
-  type SetRatingRepositoryPort,
-  setRatingRepository,
-} from "@/data/repositories/set-rating.repository";
-import {
-  type SetsRepository,
-  setsRepository,
-} from "@/data/repositories/sets.repository";
+import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
+import type { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingEntity } from "@/domain/set-rating.entity";
 
 export class SetRatingService {
@@ -34,8 +28,3 @@ export class SetRatingService {
     );
   }
 }
-
-export const setRatingService = new SetRatingService(
-  setsRepository,
-  setRatingRepository,
-);

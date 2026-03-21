@@ -3,7 +3,7 @@ import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
-import { setsService } from "@/domain/services/sets.service";
+import { setsService } from "@/dependency-injection";
 
 export const metadata: Metadata = {
   title: "Sets",

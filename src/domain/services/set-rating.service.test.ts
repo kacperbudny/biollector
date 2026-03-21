@@ -1,7 +1,9 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import { SetRatingRepository } from "@/data/repositories/set-rating.repository";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { Wave } from "@/domain/sets";
+import { getTestDb, truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
 import { setRatingRepositoryMock } from "@/tests/repositories";
 
@@ -44,6 +46,44 @@ describe(`@Unit ${SetRatingService.name}`, () => {
       );
 
       expect(ratingMock.setRating).not.toHaveBeenCalled();
+    });
+  });
+});
+
+describe(`@Integration ${SetRatingService.name}`, () => {
+  afterEach(async () => {
+    await truncateTestDb();
+  });
+
+  describe(`${SetRatingService.prototype.setRating.name}`, () => {
+    it("sets the rating successfully", async () => {
+      const setsRepo = new SetsRepository([
+        setFixture({
+          catalogNumber: "8534",
+          name: "Test",
+          releaseYear: "2004",
+          wave: Wave.TOA_METRU,
+        }),
+      ]);
+      const service = new SetRatingService(
+        setsRepo,
+        new SetRatingRepository(getTestDb()),
+      );
+
+      await service.setRating("user-123", "8534", 4);
+
+      const row = await getTestDb()
+        .selectFrom("user_rating")
+        .selectAll()
+        .where("user_id", "=", "user-123")
+        .where("set_number", "=", "8534")
+        .executeTakeFirst();
+
+      expect(row).toMatchObject({
+        user_id: "user-123",
+        set_number: "8534",
+        rating: 4,
+      });
     });
   });
 });

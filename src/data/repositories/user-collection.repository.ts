@@ -1,6 +1,5 @@
 import type { Kysely } from "kysely";
 import { sql } from "kysely";
-import { db } from "@/data/db/config";
 import type { DB } from "@/data/db/types";
 
 export type UserCollectionRepositoryPort = {
@@ -58,5 +57,3 @@ export class UserCollectionRepository implements UserCollectionRepositoryPort {
     return row !== undefined;
   }
 }
-
-export const userCollectionRepository = new UserCollectionRepository(db);

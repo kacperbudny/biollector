@@ -8,7 +8,7 @@ import { stackServerApp } from "@/auth/server";
 import { SetCard } from "@/components/sets/set-card";
 import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
-import { recommendationsService } from "@/domain/services/recommendations.service";
+import { recommendationsService } from "@/dependency-injection";
 import type { RecommendationViewModel } from "@/domain/view-models/recommendation.view-model";
 
 const recommendationsSearchParams = {

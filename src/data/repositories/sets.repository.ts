@@ -1,4 +1,3 @@
-import { bionicleSets } from "@/data/sets";
 import type { BionicleSet } from "@/domain/sets";
 
 export class SetsRepository {
@@ -30,5 +29,3 @@ export class SetsRepository {
       .filter((set): set is BionicleSet => set !== undefined);
   }
 }
-
-export const setsRepository = new SetsRepository(bionicleSets);

@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { authActionClient } from "@/actions/action-client";
-import { setRatingService } from "@/domain/services/set-rating.service";
+import { setRatingService } from "@/dependency-injection";
 
 const setRatingSchema = z.object({
   setNumber: z.string().min(1, "Set number is required").trim(),

@@ -5,9 +5,11 @@ import { ExampleContentSection } from "@/components/homepage/example-content-sec
 import { FeaturePreviewSection } from "@/components/homepage/feature-preview-section";
 import { HeroSection } from "@/components/homepage/hero-section";
 import { ToolsAndStatsSection } from "@/components/homepage/tools-and-stats-section";
-import { setRatingService } from "@/domain/services/set-rating.service";
-import { setsService } from "@/domain/services/sets.service";
-import { userCollectionService } from "@/domain/services/user-collection.service";
+import {
+  setRatingService,
+  setsService,
+  userCollectionService,
+} from "@/dependency-injection";
 
 export const metadata: Metadata = {
   description:
