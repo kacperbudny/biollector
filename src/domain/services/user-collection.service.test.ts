@@ -13,7 +13,7 @@ import {
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
   userWishlistRepositoryMock,
-} from "@/tests/repositories";
+} from "@/tests/unit";
 
 describe(`@Unit ${UserCollectionService.name}`, () => {
   describe(`${UserCollectionService.prototype.toggleSet.name}`, () => {

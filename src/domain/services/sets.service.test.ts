@@ -14,7 +14,7 @@ import {
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
   userWishlistRepositoryMock,
-} from "@/tests/repositories";
+} from "@/tests/unit";
 
 describe(`@Unit ${SetsService.name}`, () => {
   describe(`${SetsService.prototype.getSetsListViewModel.name}`, () => {

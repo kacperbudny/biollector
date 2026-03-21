@@ -1,7 +1,10 @@
 import { vi } from "vitest";
 import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
+import { SetsRepository } from "@/data/repositories/sets.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
+import { bionicleSets } from "@/data/sets";
+import { RecommendationsService } from "@/domain/services/recommendations.service";
 
 export function userCollectionRepositoryMock(
   overrides?: Partial<UserCollectionRepositoryPort>,
@@ -37,4 +40,20 @@ export function setRatingRepositoryMock(
     getTotalRatingsCount: vi.fn().mockResolvedValue(0),
     ...overrides,
   };
+}
+
+export function recommendationsServiceMock(
+  overrides?: Partial<{
+    setsRepository: SetsRepository;
+    userCollectionRepository: UserCollectionRepositoryPort;
+    setRatingRepository: SetRatingRepositoryPort;
+    userWishlistRepository: UserWishlistRepositoryPort;
+  }>,
+) {
+  return new RecommendationsService(
+    overrides?.setsRepository ?? new SetsRepository(bionicleSets),
+    overrides?.userCollectionRepository ?? userCollectionRepositoryMock(),
+    overrides?.setRatingRepository ?? setRatingRepositoryMock(),
+    overrides?.userWishlistRepository ?? userWishlistRepositoryMock(),
+  );
 }

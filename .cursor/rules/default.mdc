@@ -63,6 +63,7 @@ alwaysApply: true
 
 # Testing
 
+- Unit mocks and helpers: `src/tests/unit.ts`; fixtures: `src/tests/fixtures.ts`. Integration wiring: `src/tests/integration.ts`; DB helpers: `src/tests/db.ts`. Vitest projects, Docker, and integration patterns: `.cursor/rules/testing.mdc`.
 - Mock repositories accept `Partial<RepositoryPort>` as overrides. Use plain `vi.fn()` by default; no default resolved values. Tests pass mock implementations explicitly (e.g. `getUserCollection: vi.fn().mockResolvedValue(["1"])`).
 
 # Code organization

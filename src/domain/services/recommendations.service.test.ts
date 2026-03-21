@@ -7,11 +7,11 @@ import { truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
 import { getIntegrationRecommendationsService } from "@/tests/integration";
 import {
+  recommendationsServiceMock,
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
   userWishlistRepositoryMock,
-} from "@/tests/repositories";
-import { recommendationsServiceMock } from "@/tests/services";
+} from "@/tests/unit";
 
 describe(`@Unit ${RecommendationsService.name}`, () => {
   describe(`${RecommendationsService.prototype.getRecommendations.name}`, () => {

@@ -47,6 +47,17 @@ pnpm dev
 
 5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Tests
+
+Scripts:
+
+- **`pnpm test`** — full suite via `vitest.all.config.ts` (one run; starts Postgres with Testcontainers for DB-backed tests).
+- **`pnpm test:unit`** — workspace **unit** project only (`@Unit` in describe names).
+- **`pnpm test:integration`** — workspace **integration** project only (`@Integration` in describe names).
+
+**Docker** must be available for `pnpm test` and `pnpm test:integration` (Testcontainers). On **WSL**, if `docker ps` fails with **permission denied**, add your user to the `docker` group (`sudo usermod -aG docker $USER`) and start a new shell session (or restart WSL). With **Docker Desktop**, enable WSL integration for your distro.
+
+
 ## Project structure
 
 - **Repositories** (`src/data/repositories`) – data access; inject data sources for testability.
@@ -65,5 +76,5 @@ pnpm dev
 - **Package Manager**: pnpm
 - **Auth solution**: Stack Auth
 - **Database**: Neon + Kysely
-- **Testing**: Vitest
+- **Testing**: Vitest + testcontainers
 - **Validation**: zod

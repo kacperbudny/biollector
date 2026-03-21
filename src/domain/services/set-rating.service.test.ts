@@ -9,7 +9,7 @@ import {
   getIntegrationSetRatingRepository,
   getIntegrationSetRatingService,
 } from "@/tests/integration";
-import { setRatingRepositoryMock } from "@/tests/repositories";
+import { setRatingRepositoryMock } from "@/tests/unit";
 
 describe(`@Unit ${SetRatingService.name}`, () => {
   describe(`${SetRatingService.prototype.setRating.name}`, () => {
