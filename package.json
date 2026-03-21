@@ -63,7 +63,6 @@
     "kysely-ctl": "^0.20.0",
     "pg": "^8.20.0",
     "tailwindcss": "^4.2.1",
-    "testcontainers": "^11.13.0",
     "typescript": "^5.9.3",
     "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^4.0.18"
