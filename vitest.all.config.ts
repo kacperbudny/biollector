@@ -6,6 +6,8 @@ export default defineConfig({
   test: {
     name: "all",
     environment: "node",
+    maxWorkers: 1,
+    maxConcurrency: 1,
     globalSetup: ["./vitest.integration.global-setup.ts"],
   },
 });

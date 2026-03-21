@@ -1,10 +1,14 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
-import { SetRatingRepository } from "@/data/repositories/set-rating.repository";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import type { SetRatingRepository } from "@/data/repositories/set-rating.repository";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { Wave } from "@/domain/sets";
-import { getTestDb, truncateTestDb } from "@/tests/db";
+import { truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
+import {
+  getIntegrationSetRatingRepository,
+  getIntegrationSetRatingService,
+} from "@/tests/integration";
 import { setRatingRepositoryMock } from "@/tests/repositories";
 
 describe(`@Unit ${SetRatingService.name}`, () => {
@@ -51,39 +55,33 @@ describe(`@Unit ${SetRatingService.name}`, () => {
 });
 
 describe(`@Integration ${SetRatingService.name}`, () => {
+  let setRatingRepository: SetRatingRepository;
+  let setRatingService: SetRatingService;
+
+  beforeAll(() => {
+    setRatingRepository = getIntegrationSetRatingRepository();
+    setRatingService = getIntegrationSetRatingService();
+  });
+
   afterEach(async () => {
     await truncateTestDb();
   });
 
+  describe(`${SetRatingService.prototype.getTotalRatingsCount.name}`, () => {
+    it("returns the number of ratings stored", async () => {
+      expect(await setRatingService.getTotalRatingsCount()).toBe(0);
+      await setRatingService.setRating("user-a", "8534", 4);
+      await setRatingService.setRating("user-b", "1388", 5);
+      expect(await setRatingService.getTotalRatingsCount()).toBe(2);
+    });
+  });
+
   describe(`${SetRatingService.prototype.setRating.name}`, () => {
     it("sets the rating successfully", async () => {
-      const setsRepo = new SetsRepository([
-        setFixture({
-          catalogNumber: "8534",
-          name: "Test",
-          releaseYear: "2004",
-          wave: Wave.TOA_METRU,
-        }),
-      ]);
-      const service = new SetRatingService(
-        setsRepo,
-        new SetRatingRepository(getTestDb()),
-      );
+      await setRatingService.setRating("user-123", "8534", 4);
 
-      await service.setRating("user-123", "8534", 4);
-
-      const row = await getTestDb()
-        .selectFrom("user_rating")
-        .selectAll()
-        .where("user_id", "=", "user-123")
-        .where("set_number", "=", "8534")
-        .executeTakeFirst();
-
-      expect(row).toMatchObject({
-        user_id: "user-123",
-        set_number: "8534",
-        rating: 4,
-      });
+      const ratings = await setRatingRepository.getUserRatings("user-123");
+      expect(ratings["8534"]).toBe(4);
     });
   });
 });
