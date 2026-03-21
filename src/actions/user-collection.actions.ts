@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { authActionClient } from "@/actions/action-client";
-import { userCollectionService } from "@/domain/services/user-collection.service";
+import { userCollectionService } from "@/dependency-injection";
 
 const setNumberSchema = z.object({
   setNumber: z.string().min(1, "Set number is required").trim(),

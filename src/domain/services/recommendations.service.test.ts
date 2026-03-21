@@ -1,15 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { RecommendationsService } from "@/domain/services/recommendations.service";
 import { type BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
+import { truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
+import { getIntegrationRecommendationsService } from "@/tests/integration";
 import {
+  recommendationsServiceMock,
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
   userWishlistRepositoryMock,
-} from "@/tests/repositories";
-import { recommendationsServiceMock } from "@/tests/services";
+} from "@/tests/unit";
 
 describe(`@Unit ${RecommendationsService.name}`, () => {
   describe(`${RecommendationsService.prototype.getRecommendations.name}`, () => {
@@ -624,6 +626,33 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
       expect(result).toHaveLength(1);
       expect(result[0]?.set.catalogNumber).toBe("951");
       expect(result[0]?.reasons.length).toBeGreaterThan(0);
+    });
+  });
+});
+
+describe(`@Integration ${RecommendationsService.name}`, () => {
+  let recommendationsService: RecommendationsService;
+
+  beforeAll(() => {
+    recommendationsService = getIntegrationRecommendationsService();
+  });
+
+  afterEach(async () => {
+    await truncateTestDb();
+  });
+
+  describe(`${RecommendationsService.prototype.getRecommendations.name}`, () => {
+    it("returns a non-empty ranked list for a new user", async () => {
+      const limit = 20;
+      const result = await recommendationsService.getRecommendations(
+        "new-user-999",
+        limit,
+      );
+      expect(result.length).toEqual(limit);
+      expect(result[0]).toMatchObject({
+        score: expect.any(Number),
+        reasons: expect.any(Array),
+      });
     });
   });
 });

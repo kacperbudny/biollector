@@ -1,0 +1,29 @@
+---
+alwaysApply: true
+---
+# Vitest layout
+
+- Root `vitest.config.ts` is a **workspace** with `vitest.unit.config.ts` and `vitest.integration.config.ts`.
+- **`pnpm test:unit`** → `vitest run --project unit`; **`pnpm test:integration`** → `vitest run --project integration`. Each project uses `testNamePattern` on describe names: `@Unit` / `@Integration` (see `@ts-expect-error` on `testNamePattern` in project configs; Vitest applies it at runtime).
+- **`pnpm test`** runs **`vitest.all.config.ts`**: one pass over all tests (no doubled skips from running unit + integration projects). It uses the same Postgres global setup as integration.
+- **`vitest.all.config.ts`** and **`vitest.integration.config.ts`** set **`maxWorkers: 1`** and **`maxConcurrency: 1`**: a single Testcontainers Postgres is shared; tests reset data with `truncateTestDb()` in `afterEach`, so parallel tests would race.
+
+# Integration tests (database)
+
+- **Global setup**: `vitest.integration.global-setup.ts` starts Postgres (Testcontainers), runs migrations, and `project.provide("integrationDatabaseUrl", uri)` for workers.
+- **`src/tests/db.ts`**: `getTestDb()` (lazy singleton using `inject("integrationDatabaseUrl")` from Vitest), `truncateTestDb()`, `migrateTestDb()` used from global setup.
+- **`src/tests/integration.ts`**: production-like wiring — `SetsRepository(bionicleSets)` plus real repositories on `getTestDb()`. Add **`getIntegration*`** factories here instead of ad-hoc wiring in each test file.
+- **Assertions**: prefer **repository methods** (e.g. `getUserRatings`) over raw Kysely queries in tests.
+- Tag integration suites with **`@Integration`** in the outer describe string, e.g. `` describe(`@Integration ${MyService.name}`, () => { ... }) ``.
+- Inside `@Integration` blocks: assign services/repos in **`beforeAll`**, not at module top level or in the `describe` callback body before hooks run (avoids calling `inject` / `getTestDb()` when the integration context is not active). Keep **`afterEach` → `truncateTestDb()`**.
+
+# Docker and Testcontainers (including WSL)
+
+- Integration and full `pnpm test` need a working container runtime. If you see **"Could not find a working container runtime strategy"**, verify **`docker ps`** works as the same OS user that runs Vitest.
+- **`permission denied`** on `docker ps`: add the user to the **`docker`** group (`sudo usermod -aG docker $USER`), then start a new login session (or `wsl --shutdown` from Windows). With **Docker Desktop**, enable **WSL integration** for your distro and keep Docker Desktop running.
+- If the socket is not at `/var/run/docker.sock`, set **`DOCKER_HOST`** (e.g. `unix:///path/to/docker.sock`) or use Testcontainers’ **`.testcontainers.properties`** / **`tc.host`** — see [testcontainers-node](https://github.com/testcontainers/testcontainers-node) docs. (Optional: a small side-effect module imported from `vitest.integration.config.ts` can probe common Docker Desktop socket paths and set `DOCKER_HOST` before Testcontainers loads.)
+
+# Unit test helpers
+
+- **`src/tests/unit.ts`**: mocks (`*RepositoryMock`, etc.) and unit-test service factories; import from here for `@Unit` tests.
+- **`src/tests/fixtures.ts`**: shared fixtures (e.g. `setFixture`).

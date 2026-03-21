@@ -1,19 +1,7 @@
-import {
-  type SetRatingRepositoryPort,
-  setRatingRepository,
-} from "@/data/repositories/set-rating.repository";
-import {
-  type SetsRepository,
-  setsRepository,
-} from "@/data/repositories/sets.repository";
-import {
-  type UserCollectionRepositoryPort,
-  userCollectionRepository,
-} from "@/data/repositories/user-collection.repository";
-import {
-  type UserWishlistRepositoryPort,
-  userWishlistRepository,
-} from "@/data/repositories/user-wishlist.repository";
+import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
+import type { SetsRepository } from "@/data/repositories/sets.repository";
+import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
+import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
@@ -83,10 +71,3 @@ export class UserCollectionService {
     );
   }
 }
-
-export const userCollectionService = new UserCollectionService(
-  userCollectionRepository,
-  setsRepository,
-  setRatingRepository,
-  userWishlistRepository,
-);

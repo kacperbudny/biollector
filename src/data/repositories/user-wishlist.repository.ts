@@ -1,5 +1,4 @@
 import type { Kysely } from "kysely";
-import { db } from "@/data/db/config";
 import type { DB } from "@/data/db/types";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 
@@ -62,5 +61,3 @@ export class UserWishlistRepository implements UserWishlistRepositoryPort {
       .execute();
   }
 }
-
-export const userWishlistRepository = new UserWishlistRepository(db);

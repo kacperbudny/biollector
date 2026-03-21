@@ -5,7 +5,7 @@ import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
-import { userCollectionService } from "@/domain/services/user-collection.service";
+import { userCollectionService } from "@/dependency-injection";
 
 export const metadata: Metadata = {
   title: "My collection",
