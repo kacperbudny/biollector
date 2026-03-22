@@ -1,7 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { RecommendationsService } from "@/domain/services/recommendations.service";
-import { type BionicleSet, Wave } from "@/domain/sets";
+import { BionicleCharacter, type BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
@@ -145,6 +145,42 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
       expect(result[0]?.reasons.join(" ")).toContain("Only 1 set left");
     });
 
+    it("does not apply wave completion until user owns at least half of the wave", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "320",
+          name: "Owned In Wave",
+          releaseYear: "2003",
+          wave: Wave.RAHKSHI,
+        }),
+        setFixture({
+          catalogNumber: "321",
+          name: "Candidate Wave Completion",
+          releaseYear: "2003",
+          wave: Wave.RAHKSHI,
+        }),
+        setFixture({
+          catalogNumber: "322",
+          name: "Third In Wave",
+          releaseYear: "2003",
+          wave: Wave.RAHKSHI,
+        }),
+      ];
+      const service = recommendationsServiceMock({
+        setsRepository: new SetsRepository(sets),
+        userCollectionRepository: userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["320"]),
+        }),
+      });
+
+      const result = await service.getRecommendations("user-1");
+      const candidate = result.find((item) => item.set.catalogNumber === "321");
+
+      expect(
+        candidate?.reasons.some((reason) => reason.includes("complete Rahkshi")),
+      ).toBe(false);
+    });
+
     it("does not apply completion score for waves and years with zero owned sets", async () => {
       const sets: BionicleSet[] = [
         setFixture({
@@ -247,6 +283,38 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
 
       expect(result[0]?.set.catalogNumber).toBe("501");
       expect(result[0]?.reasons.join(" ")).toContain("complete 2001");
+    });
+
+    it("does not apply year completion when more than 10 sets are missing", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "520",
+          name: "Owned 2006",
+          releaseYear: "2006",
+          wave: Wave.PIRAKA,
+        }),
+        ...Array.from({ length: 11 }, (_, index) =>
+          setFixture({
+            catalogNumber: `${521 + index}`,
+            name: `Candidate ${index + 1}`,
+            releaseYear: "2006",
+            wave: Wave.TOA_INIKA,
+          }),
+        ),
+      ];
+      const service = recommendationsServiceMock({
+        setsRepository: new SetsRepository(sets),
+        userCollectionRepository: userCollectionRepositoryMock({
+          getUserCollection: vi.fn().mockResolvedValue(["520"]),
+        }),
+      });
+
+      const result = await service.getRecommendations("user-1");
+      const candidate = result.find((item) => item.set.catalogNumber === "521");
+
+      expect(
+        candidate?.reasons.some((reason) => reason.includes("complete 2006")),
+      ).toBe(false);
     });
 
     it("includes weak average rating contribution", async () => {
@@ -626,6 +694,825 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
       expect(result).toHaveLength(1);
       expect(result[0]?.set.catalogNumber).toBe("951");
       expect(result[0]?.reasons.length).toBeGreaterThan(0);
+    });
+
+    describe("character and generation scoring", () => {
+      it("adds character completion for characters[] when user is nearing completion", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1000",
+            name: "Owned Tahu A",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1001",
+            name: "Owned Tahu B",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1002",
+            name: "Candidate Tahu",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1003",
+            name: "Non Character Candidate",
+            releaseYear: "2014",
+            wave: Wave.MISCELLANEOUS,
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1000", "1001"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const tahuCandidate = result.find(
+          (item) => item.set.catalogNumber === "1002",
+        );
+        const nonCharacterCandidate = result.find(
+          (item) => item.set.catalogNumber === "1003",
+        );
+
+        expect(tahuCandidate).toBeDefined();
+        expect(tahuCandidate?.reasons.join(" ")).toContain(
+          "left to complete Tahu",
+        );
+        expect(
+          nonCharacterCandidate?.reasons.some((reason) =>
+            reason.includes("left to complete Tahu"),
+          ),
+        ).toBe(false);
+        expect(tahuCandidate?.score).toBe(80);
+        expect(nonCharacterCandidate?.score).toBe(0);
+      });
+
+      it("considers character completed when user owns a minifigure of particular variation", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1010",
+            name: "Owned Hakann",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+            minifigures: [{ character: BionicleCharacter.HAKANN }],
+          }),
+          setFixture({
+            catalogNumber: "1011",
+            name: "Candidate Hakann",
+            releaseYear: "2007",
+            wave: Wave.BARRAKI,
+            minifigures: [{ character: BionicleCharacter.HAKANN }],
+          }),
+          setFixture({
+            catalogNumber: "1012",
+            name: "Other Candidate",
+            releaseYear: "2007",
+            wave: Wave.BARRAKI,
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1010"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const hakannCandidate = result.find(
+          (item) => item.set.catalogNumber === "1011",
+        );
+
+        expect(
+          hakannCandidate?.reasons.some((reason) =>
+            reason.includes("character version"),
+          ),
+        ).toBe(false);
+        expect(hakannCandidate?.score).toBe(0);
+      });
+
+      it("counts minifigure variation completion per character variation that is still missing", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1020",
+            name: "Owned Hewkii Inika",
+            releaseYear: "2006",
+            wave: Wave.TOA_INIKA,
+            minifigures: [
+              { character: BionicleCharacter.HEWKII, variation: "INIKA" },
+            ],
+          }),
+          setFixture({
+            catalogNumber: "1021",
+            name: "Candidate Hewkii Bio018",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+            minifigures: [
+              { character: BionicleCharacter.HEWKII, variation: "bio018" },
+            ],
+          }),
+          setFixture({
+            catalogNumber: "1022",
+            name: "Candidate Hewkii Inika Again",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+            minifigures: [
+              { character: BionicleCharacter.HEWKII, variation: "INIKA" },
+            ],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1020"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const missingVariationCandidate = result.find(
+          (item) => item.set.catalogNumber === "1021",
+        );
+        const ownedVariationCandidate = result.find(
+          (item) => item.set.catalogNumber === "1022",
+        );
+
+        expect(
+          missingVariationCandidate?.reasons
+            .join(" ")
+            .includes("character version"),
+        ).toBe(true);
+        expect(
+          ownedVariationCandidate?.reasons.some((reason) =>
+            reason.includes("character version"),
+          ),
+        ).toBe(false);
+        expect(missingVariationCandidate?.score).toBe(80);
+      });
+
+      it("applies character completion once when set has multiple qualifying minifigure characters", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1025",
+            name: "Owned Tahu",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1026",
+            name: "Owned Gali",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.GALI],
+          }),
+          setFixture({
+            catalogNumber: "1027",
+            name: "Owned Onua",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.ONUA],
+          }),
+          setFixture({
+            catalogNumber: "1028",
+            name: "Candidate Triple Minifigs",
+            releaseYear: "2007",
+            wave: Wave.BARRAKI,
+            minifigures: [
+              { character: BionicleCharacter.TAHU, variation: "a" },
+              { character: BionicleCharacter.GALI, variation: "a" },
+              { character: BionicleCharacter.ONUA, variation: "a" },
+            ],
+          }),
+        ];
+
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1025", "1026", "1027"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find((item) => item.set.catalogNumber === "1028");
+
+        expect(candidate).toBeDefined();
+        expect(
+          candidate?.reasons.filter((reason) =>
+            reason.includes("Only 1 character version left to complete"),
+          ).length,
+        ).toBe(3);
+        // Missing versions: 1 per character => 3 total, single completion contribution.
+        expect(candidate?.score).toBeCloseTo(80 / 3, 6);
+      });
+
+      it("does not apply character completion when user has zero progress on that character", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1030",
+            name: "Owned Gali",
+            releaseYear: "2005",
+            wave: Wave.TOA_HORDIKA,
+            characters: [BionicleCharacter.GALI],
+          }),
+          setFixture({
+            catalogNumber: "1031",
+            name: "Candidate Tahu",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+            characters: [BionicleCharacter.TAHU],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1030"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1031",
+        );
+
+        expect(
+          candidate?.reasons.some((reason) =>
+            reason.includes("left to complete Tahu"),
+          ),
+        ).toBe(false);
+        expect(candidate?.score).toBe(0);
+      });
+
+      it("does not apply character completion until at least half of character versions are owned", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1035",
+            name: "Owned Tahu",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1036",
+            name: "Unowned Tahu 1",
+            releaseYear: "2002",
+            wave: Wave.BOHROK,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1037",
+            name: "Unowned Tahu 2",
+            releaseYear: "2003",
+            wave: Wave.RAHKSHI,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1038",
+            name: "Candidate Tahu",
+            releaseYear: "2004",
+            wave: Wave.METRUAN,
+            characters: [BionicleCharacter.TAHU],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1035"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find((item) => item.set.catalogNumber === "1038");
+
+        expect(
+          candidate?.reasons.some((reason) =>
+            reason.includes("left to complete Tahu"),
+          ),
+        ).toBe(false);
+        expect(candidate?.score).toBe(0);
+      });
+
+      it("ignores not-interested sets for character progress and discovery", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1040",
+            name: "Not Interested Tahu",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1041",
+            name: "Candidate Tahu",
+            releaseYear: "2002",
+            wave: Wave.BOHROK,
+            characters: [BionicleCharacter.TAHU],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue([]),
+          }),
+          userWishlistRepository: userWishlistRepositoryMock({
+            getWishlistState: vi.fn().mockResolvedValue({
+              "1040": UserWishlistScale.NOT_INTERESTED,
+            }),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 5,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1041",
+        );
+
+        expect(
+          candidate?.reasons.some((reason) =>
+            reason.includes("left to complete Tahu"),
+          ),
+        ).toBe(false);
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("Discover Tahu")),
+        ).toBe(true);
+        expect(candidate?.score).toBe(5);
+      });
+
+      it("ignores not-interested owned sets for character progress and discovery", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1040",
+            name: "Owned but Not Interested Tahu",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+            characters: [BionicleCharacter.TAHU],
+          }),
+          setFixture({
+            catalogNumber: "1041",
+            name: "Candidate Tahu",
+            releaseYear: "2002",
+            wave: Wave.BOHROK,
+            characters: [BionicleCharacter.TAHU],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1040"]),
+          }),
+          userWishlistRepository: userWishlistRepositoryMock({
+            getWishlistState: vi.fn().mockResolvedValue({
+              "1040": UserWishlistScale.NOT_INTERESTED,
+            }),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 5,
+            generationCompletion: 0,
+            generationDiscovery: 0,
+            averageRating: 0,
+            characterCompletion: 80,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1041",
+        );
+
+        expect(
+          candidate?.reasons.some((reason) =>
+            reason.includes("left to complete Tahu"),
+          ),
+        ).toBe(false);
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("Discover Tahu")),
+        ).toBe(true);
+        expect(candidate?.score).toBe(5);
+      });
+
+      it("stacks character discovery for distinct candidate characters with weight 5 each", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1050",
+            name: "Owned Kopaka",
+            releaseYear: "2005",
+            wave: Wave.TOA_HORDIKA,
+            characters: [BionicleCharacter.KOPAKA],
+          }),
+          setFixture({
+            catalogNumber: "1051",
+            name: "Two New Characters",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+            minifigures: [
+              { character: BionicleCharacter.TAHU, variation: "alpha" },
+              { character: BionicleCharacter.GALI, variation: "alpha" },
+            ],
+          }),
+          setFixture({
+            catalogNumber: "1052",
+            name: "One New Character",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+            characters: [BionicleCharacter.TAHU],
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1050"]),
+          }),
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const twoCharacterCandidate = result.find(
+          (item) => item.set.catalogNumber === "1051",
+        );
+        const oneCharacterCandidate = result.find(
+          (item) => item.set.catalogNumber === "1052",
+        );
+
+        expect(
+          twoCharacterCandidate?.reasons.filter((reason) =>
+            reason.startsWith("Discover "),
+          ).length,
+        ).toBe(2);
+        expect(
+          (twoCharacterCandidate?.score ?? 0) -
+            (oneCharacterCandidate?.score ?? 0),
+        ).toBe(5);
+      });
+
+      it("adds G1 completion with weight 150 when one set remains", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1060",
+            name: "Owned G1",
+            releaseYear: "2004",
+            wave: Wave.METRUAN,
+          }),
+          setFixture({
+            catalogNumber: "1061",
+            name: "Candidate G1",
+            releaseYear: "2005",
+            wave: Wave.RAHAGA,
+          }),
+          setFixture({
+            catalogNumber: "1062",
+            name: "Non G1 Candidate",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1060"]),
+          }),
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const g1Candidate = result.find(
+          (item) => item.set.catalogNumber === "1061",
+        );
+        const nonG1Candidate = result.find(
+          (item) => item.set.catalogNumber === "1062",
+        );
+
+        expect(g1Candidate?.reasons.join(" ")).toContain("left to complete G1");
+        expect((g1Candidate?.score ?? 0) - (nonG1Candidate?.score ?? 0)).toBe(
+          150,
+        );
+      });
+
+      it("does not apply generation completion when more than 10 sets are missing", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1065",
+            name: "Owned G1",
+            releaseYear: "2005",
+            wave: Wave.TOA_HORDIKA,
+          }),
+          ...Array.from({ length: 11 }, (_, index) =>
+            setFixture({
+              catalogNumber: `${1066 + index}`,
+              name: `G1 Candidate ${index + 1}`,
+              releaseYear: "2006",
+              wave: Wave.PIRAKA,
+            }),
+          ),
+        ];
+
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1065"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            characterCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 150,
+            generationDiscovery: 0,
+            averageRating: 0,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find((item) => item.set.catalogNumber === "1066");
+
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("complete G1")),
+        ).toBe(false);
+        expect(candidate?.score).toBe(0);
+      });
+
+      it("adds G1 discovery only when user has no G1 sets", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1070",
+            name: "Owned G2",
+            releaseYear: "2015",
+            wave: Wave.TOA_MASTERS,
+          }),
+          setFixture({
+            catalogNumber: "1071",
+            name: "Candidate G1",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1070"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            characterCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 20,
+            averageRating: 0,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1071",
+        );
+
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("Check out G1")),
+        ).toBe(true);
+        expect(candidate?.score).toBe(20);
+      });
+
+      it("does not add G1 or G2 scoring for non-generation years", async () => {
+        const sets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1080",
+            name: "Owned G1",
+            releaseYear: "2006",
+            wave: Wave.PIRAKA,
+          }),
+          setFixture({
+            catalogNumber: "1081",
+            name: "Candidate 2012",
+            releaseYear: "2012",
+            wave: Wave.MISCELLANEOUS,
+          }),
+        ];
+        const service = recommendationsServiceMock({
+          setsRepository: new SetsRepository(sets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1080"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            characterCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 150,
+            generationDiscovery: 20,
+            averageRating: 0,
+          },
+        });
+
+        const result = await service.getRecommendations("user-1");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1081",
+        );
+
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("complete G1")),
+        ).toBe(false);
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("Check out G1")),
+        ).toBe(false);
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("complete G2")),
+        ).toBe(false);
+        expect(
+          candidate?.reasons.some((reason) => reason.includes("Check out G2")),
+        ).toBe(false);
+        expect(candidate?.score).toBe(0);
+      });
+
+      it("adds G2 completion and G2 discovery as expected", async () => {
+        const g2CompletionSets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1090",
+            name: "Owned G2",
+            releaseYear: "2015",
+            wave: Wave.TOA_MASTERS,
+          }),
+          setFixture({
+            catalogNumber: "1091",
+            name: "Candidate G2",
+            releaseYear: "2016",
+            wave: Wave.TOA_UNITERS,
+          }),
+        ];
+        const completionService = recommendationsServiceMock({
+          setsRepository: new SetsRepository(g2CompletionSets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1090"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            characterCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 150,
+            generationDiscovery: 0,
+            averageRating: 0,
+          },
+        });
+
+        const completionResult =
+          await completionService.getRecommendations("user-1");
+        const completionCandidate = completionResult.find(
+          (item) => item.set.catalogNumber === "1091",
+        );
+        expect(completionCandidate?.reasons.join(" ")).toContain(
+          "left to complete G2",
+        );
+        expect(completionCandidate?.score).toBe(150);
+
+        const g2DiscoverySets: BionicleSet[] = [
+          setFixture({
+            catalogNumber: "1092",
+            name: "Owned G1",
+            releaseYear: "2006",
+            wave: Wave.TOA_INIKA,
+          }),
+          setFixture({
+            catalogNumber: "1093",
+            name: "Candidate G2 Discovery",
+            releaseYear: "2016",
+            wave: Wave.SHADOW_HORDE,
+          }),
+        ];
+        const discoveryService = recommendationsServiceMock({
+          setsRepository: new SetsRepository(g2DiscoverySets),
+          userCollectionRepository: userCollectionRepositoryMock({
+            getUserCollection: vi.fn().mockResolvedValue(["1092"]),
+          }),
+          recommendationWeights: {
+            wishlist: 0,
+            yearCompletion: 0,
+            waveCompletion: 0,
+            characterCompletion: 0,
+            discoveryYear: 0,
+            discoveryWave: 0,
+            discoveryCharacter: 0,
+            generationCompletion: 0,
+            generationDiscovery: 20,
+            averageRating: 0,
+          },
+        });
+
+        const discoveryResult =
+          await discoveryService.getRecommendations("user-1");
+        const discoveryCandidate = discoveryResult.find(
+          (item) => item.set.catalogNumber === "1093",
+        );
+        expect(
+          discoveryCandidate?.reasons.some((reason) =>
+            reason.includes("Check out G2"),
+          ),
+        ).toBe(true);
+        expect(discoveryCandidate?.score).toBe(20);
+      });
     });
   });
 });

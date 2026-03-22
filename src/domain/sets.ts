@@ -134,16 +134,36 @@ export enum BionicleCharacter {
   UMARAK = "Umarak",
 }
 
-export interface BionicleSet {
+export type BionicleMinifigure = {
+  character: BionicleCharacter;
+  variation?: string;
+};
+
+type BionicleSetBase = {
   catalogNumber: string;
   name: string;
   releaseYear: string;
   setType: SetType;
   imageName: string;
   wave: Wave;
-  characters?: BionicleCharacter[];
-  minifigures?: {
-    character: BionicleCharacter;
-    variation?: string;
-  }[];
-}
+};
+
+type BionicleSetWithCharacters = BionicleSetBase & {
+  characters: BionicleCharacter[];
+  minifigures?: never;
+};
+
+type BionicleSetWithMinifigures = BionicleSetBase & {
+  characters?: never;
+  minifigures: BionicleMinifigure[];
+};
+
+type BionicleSetWithoutCharacterData = BionicleSetBase & {
+  characters?: undefined;
+  minifigures?: undefined;
+};
+
+export type BionicleSet =
+  | BionicleSetWithCharacters
+  | BionicleSetWithMinifigures
+  | BionicleSetWithoutCharacterData;
