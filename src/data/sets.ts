@@ -474,7 +474,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8550.jpg",
+    imageName: "8550.png",
     characters: [BionicleCharacter.GAHLOK],
   },
   {
@@ -483,7 +483,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8551.jpg",
+    imageName: "8551.png",
     characters: [BionicleCharacter.KOHRAK],
   },
   {
@@ -492,7 +492,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8552.jpg",
+    imageName: "8552.png",
     characters: [BionicleCharacter.LEHVAK],
   },
   {
@@ -501,7 +501,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8553.jpg",
+    imageName: "8553.png",
     characters: [BionicleCharacter.PAHRAK],
   },
   {
@@ -510,7 +510,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8554.jpg",
+    imageName: "8554.png",
     characters: [BionicleCharacter.TAHNOK],
   },
   {
@@ -519,8 +519,8 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
-    imageName: "8555.jpg",
-    characters: [BionicleCharacter.Nuhvok],
+    imageName: "8555.png",
+    characters: [BionicleCharacter.NUHVOK],
   },
   {
     catalogNumber: "8556",
@@ -553,7 +553,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8560.jpg",
+    imageName: "8560.png",
     characters: [BionicleCharacter.PAHRAK],
   },
   {
@@ -562,8 +562,8 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8561.jpg",
-    characters: [BionicleCharacter.Nuhvok],
+    imageName: "8561.png",
+    characters: [BionicleCharacter.NUHVOK],
   },
   {
     catalogNumber: "8562",
@@ -571,7 +571,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8562.jpg",
+    imageName: "8562.png",
     characters: [BionicleCharacter.GAHLOK],
   },
   {
@@ -580,7 +580,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8563.jpg",
+    imageName: "8563.png",
     characters: [BionicleCharacter.TAHNOK],
   },
   {
@@ -589,7 +589,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8564.jpg",
+    imageName: "8564.png",
     characters: [BionicleCharacter.LEHVAK],
   },
   {
@@ -598,7 +598,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
-    imageName: "8565.jpg",
+    imageName: "8565.png",
     characters: [BionicleCharacter.KOHRAK],
   },
   {
@@ -662,7 +662,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8573.jpg",
-    characters: [BionicleCharacter.Nuhvok],
+    characters: [BionicleCharacter.NUHVOK],
   },
   {
     catalogNumber: "8574",

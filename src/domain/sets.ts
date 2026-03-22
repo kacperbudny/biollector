@@ -112,7 +112,7 @@ export enum BionicleCharacter {
   LEHVAK = "Lehvak",
   PAHRAK = "Pahrak",
   TAHNOK = "Tahnok",
-  Nuhvok = "Nuhvok",
+  NUHVOK = "Nuhvok",
   NUPARU = "Nuparu",
   HAHLI = "Hahli",
   MAKUTA = "Makuta",

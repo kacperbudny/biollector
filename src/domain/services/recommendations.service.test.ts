@@ -177,7 +177,9 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
       const candidate = result.find((item) => item.set.catalogNumber === "321");
 
       expect(
-        candidate?.reasons.some((reason) => reason.includes("complete Rahkshi")),
+        candidate?.reasons.some((reason) =>
+          reason.includes("complete Rahkshi"),
+        ),
       ).toBe(false);
     });
 
@@ -931,7 +933,9 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1025", "1026", "1027"]),
+            getUserCollection: vi
+              .fn()
+              .mockResolvedValue(["1025", "1026", "1027"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -948,7 +952,9 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         });
 
         const result = await service.getRecommendations("user-1");
-        const candidate = result.find((item) => item.set.catalogNumber === "1028");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1028",
+        );
 
         expect(candidate).toBeDefined();
         expect(
@@ -1060,7 +1066,9 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         });
 
         const result = await service.getRecommendations("user-1");
-        const candidate = result.find((item) => item.set.catalogNumber === "1038");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1038",
+        );
 
         expect(
           candidate?.reasons.some((reason) =>
@@ -1317,7 +1325,9 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         });
 
         const result = await service.getRecommendations("user-1");
-        const candidate = result.find((item) => item.set.catalogNumber === "1066");
+        const candidate = result.find(
+          (item) => item.set.catalogNumber === "1066",
+        );
 
         expect(
           candidate?.reasons.some((reason) => reason.includes("complete G1")),

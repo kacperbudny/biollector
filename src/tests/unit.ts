@@ -5,8 +5,8 @@ import type { UserCollectionRepositoryPort } from "@/data/repositories/user-coll
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 import { bionicleSets } from "@/data/sets";
 import {
-  type RecommendationWeights,
   RecommendationsService,
+  type RecommendationWeights,
 } from "@/domain/services/recommendations.service";
 
 export function userCollectionRepositoryMock(
