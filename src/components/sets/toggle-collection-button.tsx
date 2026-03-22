@@ -2,8 +2,7 @@
 
 import { ArchiveBoxIcon } from "@heroicons/react/24/outline";
 import { ArchiveBoxIcon as ArchiveBoxIconSolid } from "@heroicons/react/24/solid";
-import { Button } from "@heroui/button";
-import { addToast } from "@heroui/toast";
+import { Button, toast } from "@heroui/react";
 import { useUser } from "@stackframe/stack";
 import { useAction } from "next-safe-action/hooks";
 import { toggleCollection } from "@/actions/user-collection.actions";
@@ -21,10 +20,8 @@ export function ToggleCollectionButton({
   const user = useUser();
   const { execute, isPending } = useAction(toggleCollection, {
     onError: ({ error }) => {
-      addToast({
-        title: "Error",
+      toast.danger("Error", {
         description: getActionErrorMessage(error),
-        color: "danger",
       });
     },
   });
@@ -42,10 +39,9 @@ export function ToggleCollectionButton({
     <Button
       isIconOnly
       size="sm"
-      variant="flat"
+      variant="tertiary"
       className="absolute right-2 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
       aria-label={label}
-      title={label}
       isDisabled={!isSignedIn || isPending}
       onPress={handleClick}
     >

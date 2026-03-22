@@ -2,8 +2,7 @@
 
 import { LockClosedIcon, StarIcon } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
-import { addToast } from "@heroui/toast";
-import { Tooltip } from "@heroui/tooltip";
+import { Tooltip, toast } from "@heroui/react";
 import { useUser } from "@stackframe/stack";
 import { useOptimisticAction } from "next-safe-action/hooks";
 import { setRating } from "@/actions/set-rating.actions";
@@ -27,48 +26,44 @@ export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
       currentState: userRating,
       updateFn: (_state, input) => input.rating,
       onError: ({ error }) =>
-        addToast({
-          title: "Error",
+        toast.danger("Error", {
           description: getActionErrorMessage(error),
-          color: "danger",
         }),
     },
   );
 
   return (
     <fieldset className="border-0 p-0" aria-label="Rating">
-      <Tooltip
-        content={
+      <Tooltip delay={300} isDisabled={isSignedIn}>
+        <Tooltip.Trigger>
+          <div
+            className={cn(
+              "set-rating-stars relative flex items-center gap-0.5 overflow-hidden",
+              isExecuting && "set-rating-shimmer",
+            )}
+          >
+            {Array.from({ length: MAX_RATING }, (_, i) => {
+              const value = i + 1;
+              return (
+                <RatingStar
+                  key={value}
+                  value={value}
+                  filled={
+                    optimisticState !== undefined && value <= optimisticState
+                  }
+                  disabled={!isSignedIn || isExecuting}
+                  onClick={() => execute({ setNumber, rating: value })}
+                />
+              );
+            })}
+          </div>
+        </Tooltip.Trigger>
+        <Tooltip.Content placement="top" className="max-w-xs">
           <span className="inline-flex items-center gap-1.5">
             <LockClosedIcon className="h-3.5 w-3.5 shrink-0" aria-hidden />
             Sign in to rate
           </span>
-        }
-        placement="top"
-        delay={300}
-        isDisabled={isSignedIn}
-      >
-        <div
-          className={cn(
-            "set-rating-stars relative flex items-center gap-0.5 overflow-hidden",
-            isExecuting && "set-rating-shimmer",
-          )}
-        >
-          {Array.from({ length: MAX_RATING }, (_, i) => {
-            const value = i + 1;
-            return (
-              <RatingStar
-                key={value}
-                value={value}
-                filled={
-                  optimisticState !== undefined && value <= optimisticState
-                }
-                disabled={!isSignedIn || isExecuting}
-                onClick={() => execute({ setNumber, rating: value })}
-              />
-            );
-          })}
-        </div>
+        </Tooltip.Content>
       </Tooltip>
     </fieldset>
   );
@@ -87,7 +82,7 @@ function RatingStar({ value, filled, disabled, onClick }: RatingStarProps) {
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="touch-manipulation p-0.5 text-default-400 transition-colors disabled:cursor-default disabled:opacity-70"
+      className="touch-manipulation p-0.5 text-muted transition-colors disabled:cursor-default disabled:opacity-70"
       aria-label={`${value} star${value !== 1 ? "s" : ""}`}
       aria-pressed={filled}
     >

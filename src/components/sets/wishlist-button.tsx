@@ -2,8 +2,7 @@
 
 import { EyeIcon } from "@heroicons/react/24/outline";
 import { EyeIcon as EyeIconSolid } from "@heroicons/react/24/solid";
-import { Button } from "@heroui/button";
-import { addToast } from "@heroui/toast";
+import { Button, toast } from "@heroui/react";
 import { useUser } from "@stackframe/stack";
 import { useAction } from "next-safe-action/hooks";
 import { setWishlist } from "@/actions/user-wishlist.actions";
@@ -19,10 +18,8 @@ export function WishlistButton({ setNumber, wishlisted }: WishlistButtonProps) {
   const user = useUser();
   const { execute, isPending } = useAction(setWishlist, {
     onError: ({ error }) => {
-      addToast({
-        title: "Error",
+      toast.danger("Error", {
         description: getActionErrorMessage(error),
-        color: "danger",
       });
     },
   });
@@ -43,10 +40,9 @@ export function WishlistButton({ setNumber, wishlisted }: WishlistButtonProps) {
     <Button
       isIconOnly
       size="sm"
-      variant="flat"
+      variant="tertiary"
       className="absolute left-2 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
       aria-label={label}
-      title={label}
       isDisabled={!isSignedIn || isPending}
       onPress={handleClick}
     >

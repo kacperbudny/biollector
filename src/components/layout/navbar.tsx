@@ -1,10 +1,4 @@
-import { Divider } from "@heroui/divider";
-import {
-  Navbar as HeroUINavbar,
-  NavbarBrand,
-  NavbarContent,
-  NavbarItem,
-} from "@heroui/navbar";
+import { Separator } from "@heroui/react";
 import { UserButton } from "@stackframe/stack";
 import Image from "next/image";
 import Link from "next/link";
@@ -16,76 +10,77 @@ export async function Navbar() {
   const isSignedIn = !!user;
 
   return (
-    <HeroUINavbar isBordered maxWidth="xl">
-      <NavbarBrand className="h-full">
-        <Link href="/" className="flex h-full items-center">
-          <Image
-            src={logo}
-            alt="Biollector logo"
-            className="h-full w-auto p-3"
-            quality={100}
-          />
-        </Link>
-      </NavbarBrand>
-      {/* TODO: active state */}
-      <NavbarContent justify="center">
-        <NavbarItem>
-          <Link
-            href="/"
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            Home
+    <nav className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6">
+        <div className="flex h-full min-w-0 shrink-0 items-center">
+          <Link href="/" className="flex h-full items-center">
+            <Image
+              src={logo}
+              alt="Biollector logo"
+              className="h-full w-auto p-3"
+              quality={100}
+            />
           </Link>
-        </NavbarItem>
+        </div>
 
-        <Divider orientation="vertical" className="h-4" />
+        <ul className="flex min-w-0 flex-1 items-center justify-center gap-1">
+          <li>
+            <Link
+              href="/"
+              className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
+            >
+              Home
+            </Link>
+          </li>
 
-        <NavbarItem>
-          <Link
-            href="/sets"
-            className="text-foreground hover:text-primary transition-colors"
-          >
-            Sets
-          </Link>
-        </NavbarItem>
+          <Separator orientation="vertical" className="h-4" />
 
-        {isSignedIn && (
-          <>
-            <Divider orientation="vertical" className="h-4" />
-            <NavbarItem>
-              <Link
-                href="/collection"
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                Collection
-              </Link>
-            </NavbarItem>
-            <Divider orientation="vertical" className="h-4" />
-            <NavbarItem>
-              <Link
-                href="/wishlist"
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                Wishlist
-              </Link>
-            </NavbarItem>
-            <Divider orientation="vertical" className="h-4" />
-            <NavbarItem>
-              <Link
-                href="/recommendations"
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                Recommendations
-              </Link>
-            </NavbarItem>
-          </>
-        )}
-      </NavbarContent>
-      <NavbarContent justify="end">
-        <NavbarItem>
+          <li>
+            <Link
+              href="/sets"
+              className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
+            >
+              Sets
+            </Link>
+          </li>
+
+          {isSignedIn && (
+            <>
+              <Separator orientation="vertical" className="h-4" />
+              <li>
+                <Link
+                  href="/collection"
+                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
+                >
+                  Collection
+                </Link>
+              </li>
+              <Separator orientation="vertical" className="h-4" />
+              <li>
+                <Link
+                  href="/wishlist"
+                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
+                >
+                  Wishlist
+                </Link>
+              </li>
+              <Separator orientation="vertical" className="h-4" />
+              <li>
+                <Link
+                  href="/recommendations"
+                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
+                >
+                  Recommendations
+                </Link>
+              </li>
+            </>
+          )}
+        </ul>
+
+        <div className="flex shrink-0 items-center">
           <UserButton />
-        </NavbarItem>
-      </NavbarContent>
-    </HeroUINavbar>
+        </div>
+      </div>
+    </nav>
   );
 }

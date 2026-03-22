@@ -37,7 +37,7 @@ function YearSection({
           {year}
           {isComplete && (
             <CheckCircleIcon
-              className="h-5 w-5 shrink-0 text-success-600"
+              className="h-5 w-5 shrink-0 text-green-600"
               aria-hidden
             />
           )}
@@ -70,7 +70,7 @@ function WaveSection({
           {wave}
           {isComplete && (
             <CheckCircleIcon
-              className="h-5 w-5 shrink-0 text-success-600"
+              className="h-5 w-5 shrink-0 text-green-600"
               aria-hidden
             />
           )}

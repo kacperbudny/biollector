@@ -17,7 +17,7 @@ export function ExampleContentSection({
       <div className="space-y-3">
         <EyebrowHeadline>Example Content</EyebrowHeadline>
         <SectionHeading>See what is inside the archive</SectionHeading>
-        <p className="text-default-600">
+        <p className="text-muted">
           Browse a quick sample of the database and see which sets are getting
           the strongest ratings.
         </p>
@@ -50,11 +50,11 @@ function SetsShowcase({
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div className="space-y-2">
           <h3 className="text-xl font-semibold">{title}</h3>
-          <p className="text-default-600">{description}</p>
+          <p className="text-muted">{description}</p>
         </div>
         <Link
           href="/sets"
-          className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-primary-600"
+          className="inline-flex items-center gap-2 text-sm font-semibold text-accent transition-colors hover:text-accent/90"
         >
           View all sets
           <ArrowRightIcon className="h-4 w-4" />

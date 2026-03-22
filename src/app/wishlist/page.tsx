@@ -40,9 +40,9 @@ export default async function WishlistPage() {
 
 function WishlistEmpty() {
   return (
-    <p className="text-default-500">
+    <p className="text-muted">
       Your wishlist is empty. Add sets from the{" "}
-      <Link href="/sets" className="text-primary hover:underline">
+      <Link href="/sets" className="text-accent hover:underline">
         Sets
       </Link>{" "}
       page.
