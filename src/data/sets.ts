@@ -1,4 +1,9 @@
-import { type BionicleSet, SetType, Wave } from "@/domain/sets";
+import {
+  BionicleCharacter,
+  type BionicleSet,
+  SetType,
+  Wave,
+} from "@/domain/sets";
 
 export const bionicleSets = [
   {
@@ -8,6 +13,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
     imageName: "1388.webp",
+    characters: [BionicleCharacter.HEWKII],
   },
   {
     catalogNumber: "1389",
@@ -24,6 +30,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
     imageName: "1390.webp",
+    characters: [BionicleCharacter.MACKU],
   },
   {
     catalogNumber: "1391",
@@ -32,6 +39,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
     imageName: "1391.webp",
+    characters: [BionicleCharacter.JALLER],
   },
   {
     catalogNumber: "1392",
@@ -40,6 +48,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
     imageName: "1392.png",
+    characters: [BionicleCharacter.KONGU],
   },
   {
     catalogNumber: "1393",
@@ -48,6 +57,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TOHUNGA,
     imageName: "1393.webp",
+    characters: [BionicleCharacter.MATORO],
   },
   {
     catalogNumber: "1441",
@@ -88,6 +98,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.RAHAGA,
     imageName: "4877.jpg",
+    characters: [BionicleCharacter.NORIK],
   },
   {
     catalogNumber: "4878",
@@ -104,6 +115,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.RAHAGA,
     imageName: "4879.jpg",
+    characters: [BionicleCharacter.IRUINI],
   },
   {
     catalogNumber: "6126",
@@ -152,6 +164,7 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PROMOTIONAL,
     imageName: "6936.jpg",
+    minifigures: [{ character: BionicleCharacter.HAKANN }],
   },
   {
     catalogNumber: "6937",
@@ -160,6 +173,10 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PROMOTIONAL,
     imageName: "6937.jpg",
+    minifigures: [
+      { character: BionicleCharacter.KONGU, variation: "INIKA" },
+      { character: BionicleCharacter.THOK },
+    ],
   },
   {
     catalogNumber: "6944",
@@ -192,6 +209,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.STARS,
     imageName: "7116.jpg",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "7117",
@@ -200,6 +218,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.STARS,
     imageName: "7117.jpg",
+    characters: [BionicleCharacter.GRESH],
   },
   {
     catalogNumber: "7135",
@@ -208,6 +227,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.STARS,
     imageName: "7135.jpg",
+    characters: [BionicleCharacter.TAKUA],
   },
   {
     catalogNumber: "7136",
@@ -216,6 +236,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.STARS,
     imageName: "7136.jpg",
+    characters: [BionicleCharacter.SKRALL],
   },
   {
     catalogNumber: "7137",
@@ -235,11 +256,12 @@ export const bionicleSets = [
   },
   {
     catalogNumber: "7216",
-    name: "Gold Good Guy ",
+    name: "Gold Good Guy",
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.PROMOTIONAL,
     imageName: "7216.jpg",
+    characters: [BionicleCharacter.LHIKAN],
   },
   {
     catalogNumber: "7217",
@@ -296,6 +318,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8531.png",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "8532",
@@ -304,6 +327,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8532.png",
+    characters: [BionicleCharacter.ONUA],
   },
   {
     catalogNumber: "8533",
@@ -312,6 +336,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8533.webp",
+    characters: [BionicleCharacter.GALI],
   },
   {
     catalogNumber: "8534",
@@ -320,6 +345,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8534.png",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "8535",
@@ -328,6 +354,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8535.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "8536",
@@ -336,6 +363,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MATA,
     imageName: "8536.webp",
+    characters: [BionicleCharacter.KOPAKA],
   },
   {
     catalogNumber: "8537",
@@ -368,6 +396,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8540.webp",
+    characters: [BionicleCharacter.VAKAMA],
   },
   {
     catalogNumber: "8541",
@@ -376,6 +405,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8541.webp",
+    characters: [BionicleCharacter.MATAU],
   },
   {
     catalogNumber: "8542",
@@ -384,6 +414,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8542.webp",
+    characters: [BionicleCharacter.ONEWA],
   },
   {
     catalogNumber: "8543",
@@ -392,6 +423,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8543.webp",
+    characters: [BionicleCharacter.NOKAMA],
   },
   {
     catalogNumber: "8544",
@@ -400,6 +432,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8544.webp",
+    characters: [BionicleCharacter.NUJU],
   },
   {
     catalogNumber: "8545",
@@ -408,6 +441,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.TURAGA,
     imageName: "8545.webp",
+    characters: [BionicleCharacter.WHENUA],
   },
   {
     catalogNumber: "8546",
@@ -416,6 +450,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.PROMOTIONAL,
     imageName: "8546.jpg",
+    characters: [BionicleCharacter.HAFU],
   },
   {
     catalogNumber: "8548",
@@ -440,6 +475,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8550.jpg",
+    characters: [BionicleCharacter.GAHLOK],
   },
   {
     catalogNumber: "8551",
@@ -448,6 +484,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8551.jpg",
+    characters: [BionicleCharacter.KOHRAK],
   },
   {
     catalogNumber: "8552",
@@ -456,6 +493,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8552.jpg",
+    characters: [BionicleCharacter.LEHVAK],
   },
   {
     catalogNumber: "8553",
@@ -464,6 +502,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8553.jpg",
+    characters: [BionicleCharacter.PAHRAK],
   },
   {
     catalogNumber: "8554",
@@ -472,6 +511,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8554.jpg",
+    characters: [BionicleCharacter.TAHNOK],
   },
   {
     catalogNumber: "8555",
@@ -480,6 +520,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.BOHROK_VA,
     imageName: "8555.jpg",
+    characters: [BionicleCharacter.Nuhvok],
   },
   {
     catalogNumber: "8556",
@@ -488,6 +529,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8556.jpg",
+    characters: [BionicleCharacter.NUPARU],
   },
   {
     catalogNumber: "8557",
@@ -512,6 +554,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8560.jpg",
+    characters: [BionicleCharacter.PAHRAK],
   },
   {
     catalogNumber: "8561",
@@ -520,6 +563,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8561.jpg",
+    characters: [BionicleCharacter.Nuhvok],
   },
   {
     catalogNumber: "8562",
@@ -528,6 +572,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8562.jpg",
+    characters: [BionicleCharacter.GAHLOK],
   },
   {
     catalogNumber: "8563",
@@ -536,6 +581,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8563.jpg",
+    characters: [BionicleCharacter.TAHNOK],
   },
   {
     catalogNumber: "8564",
@@ -544,6 +590,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8564.jpg",
+    characters: [BionicleCharacter.LEHVAK],
   },
   {
     catalogNumber: "8565",
@@ -552,6 +599,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK,
     imageName: "8565.jpg",
+    characters: [BionicleCharacter.KOHRAK],
   },
   {
     catalogNumber: "8566",
@@ -560,6 +608,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8566.jpg",
+    characters: [BionicleCharacter.ONUA],
   },
   {
     catalogNumber: "8567",
@@ -568,6 +617,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8567.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "8568",
@@ -576,6 +626,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8568.jpg",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "8570",
@@ -584,6 +635,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8570.jpg",
+    characters: [BionicleCharacter.GALI],
   },
   {
     catalogNumber: "8571",
@@ -592,6 +644,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8571.jpg",
+    characters: [BionicleCharacter.KOPAKA],
   },
   {
     catalogNumber: "8572",
@@ -600,6 +653,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_NUVA,
     imageName: "8572.jpg",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "8573",
@@ -608,6 +662,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8573.jpg",
+    characters: [BionicleCharacter.Nuhvok],
   },
   {
     catalogNumber: "8574",
@@ -616,6 +671,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8574.jpg",
+    characters: [BionicleCharacter.TAHNOK],
   },
   {
     catalogNumber: "8575",
@@ -624,6 +680,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8575.jpg",
+    characters: [BionicleCharacter.KOHRAK],
   },
   {
     catalogNumber: "8576",
@@ -632,6 +689,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8576.jpg",
+    characters: [BionicleCharacter.LEHVAK],
   },
   {
     catalogNumber: "8577",
@@ -640,6 +698,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8577.jpg",
+    characters: [BionicleCharacter.PAHRAK],
   },
   {
     catalogNumber: "8578",
@@ -648,6 +707,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
     imageName: "8578.jpg",
+    characters: [BionicleCharacter.GAHLOK],
   },
   {
     catalogNumber: "8581",
@@ -664,6 +724,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
     imageName: "8582.jpg",
+    characters: [BionicleCharacter.MATORO],
   },
   {
     catalogNumber: "8583",
@@ -672,6 +733,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
     imageName: "8583.jpg",
+    characters: [BionicleCharacter.HAHLI],
   },
   {
     catalogNumber: "8584",
@@ -680,6 +742,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
     imageName: "8584.jpg",
+    characters: [BionicleCharacter.HEWKII],
   },
   {
     catalogNumber: "8585",
@@ -688,6 +751,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
     imageName: "8585.jpg",
+    characters: [BionicleCharacter.HAFU],
   },
   {
     catalogNumber: "8586",
@@ -696,6 +760,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
     imageName: "8586.jpg",
+    characters: [BionicleCharacter.MACKU],
   },
   {
     catalogNumber: "8587",
@@ -752,6 +817,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8593.jpg",
+    characters: [BionicleCharacter.MAKUTA],
   },
   {
     catalogNumber: "8594",
@@ -760,6 +826,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8594.jpg",
+    characters: [BionicleCharacter.JALLER],
   },
   {
     catalogNumber: "8595",
@@ -768,6 +835,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8595.jpg",
+    characters: [BionicleCharacter.TAKUA],
   },
   {
     catalogNumber: "8596",
@@ -776,6 +844,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8596.jpg",
+    characters: [BionicleCharacter.TAKUA],
   },
   {
     catalogNumber: "8601",
@@ -784,6 +853,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8601.jpg",
+    characters: [BionicleCharacter.VAKAMA],
   },
   {
     catalogNumber: "8602",
@@ -792,6 +862,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8602.jpg",
+    characters: [BionicleCharacter.NOKAMA],
   },
   {
     catalogNumber: "8603",
@@ -800,6 +871,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8603.jpg",
+    characters: [BionicleCharacter.WHENUA],
   },
   {
     catalogNumber: "8604",
@@ -808,6 +880,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8604.jpg",
+    characters: [BionicleCharacter.ONEWA],
   },
   {
     catalogNumber: "8605",
@@ -816,6 +889,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8605.jpg",
+    characters: [BionicleCharacter.MATAU],
   },
   {
     catalogNumber: "8606",
@@ -824,6 +898,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
     imageName: "8606.jpg",
+    characters: [BionicleCharacter.NUJU],
   },
   {
     catalogNumber: "8607",
@@ -928,6 +1003,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8621.jpg",
+    characters: [BionicleCharacter.MAKUTA],
   },
   {
     catalogNumber: "8622",
@@ -952,6 +1028,16 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8624.jpg",
+    minifigures: [
+      { character: BionicleCharacter.HAKANN },
+      { character: BionicleCharacter.THOK },
+      { character: BionicleCharacter.REIDAK },
+      { character: BionicleCharacter.ZAKTAN },
+      { character: BionicleCharacter.HAHLI, variation: "INIKA" },
+      { character: BionicleCharacter.HEWKII, variation: "INIKA" },
+      { character: BionicleCharacter.JALLER, variation: "INIKA" },
+      { character: BionicleCharacter.NUPARU, variation: "INIKA" },
+    ],
   },
   {
     catalogNumber: "8625",
@@ -976,6 +1062,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PHANTOKA,
     imageName: "8685.jpg",
+    characters: [BionicleCharacter.KOPAKA],
   },
   {
     catalogNumber: "8686",
@@ -984,6 +1071,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PHANTOKA,
     imageName: "8686.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "8687",
@@ -992,6 +1080,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PHANTOKA,
     imageName: "8687.jpg",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "8688",
@@ -1000,6 +1089,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.MISTIKA,
     imageName: "8688.jpg",
+    characters: [BionicleCharacter.GALI],
   },
   {
     catalogNumber: "8689",
@@ -1008,6 +1098,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.MISTIKA,
     imageName: "8689.jpg",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "8690",
@@ -1016,6 +1107,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.MISTIKA,
     imageName: "8690.jpg",
+    characters: [BionicleCharacter.ONUA],
   },
   {
     catalogNumber: "8691",
@@ -1024,6 +1116,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PHANTOKA,
     imageName: "8691.jpg",
+    characters: [BionicleCharacter.ANTROZ],
   },
   {
     catalogNumber: "8692",
@@ -1088,6 +1181,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8699.jpg",
+    characters: [BionicleCharacter.TAKUA],
   },
   {
     catalogNumber: "8721",
@@ -1144,6 +1238,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8727.png",
+    characters: [BionicleCharacter.JALLER],
   },
   {
     catalogNumber: "8728",
@@ -1152,6 +1247,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8728.jpg",
+    characters: [BionicleCharacter.HAHLI],
   },
   {
     catalogNumber: "8729",
@@ -1160,6 +1256,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8729.jpg",
+    characters: [BionicleCharacter.NUPARU],
   },
   {
     catalogNumber: "8730",
@@ -1168,6 +1265,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8730.jpg",
+    characters: [BionicleCharacter.HEWKII],
   },
   {
     catalogNumber: "8731",
@@ -1176,6 +1274,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8731.jpg",
+    characters: [BionicleCharacter.KONGU],
   },
   {
     catalogNumber: "8732",
@@ -1184,6 +1283,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
     imageName: "8732.jpg",
+    characters: [BionicleCharacter.MATORO],
   },
   {
     catalogNumber: "8733",
@@ -1208,6 +1308,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8736.jpg",
+    characters: [BionicleCharacter.VAKAMA],
   },
   {
     catalogNumber: "8737",
@@ -1216,6 +1317,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8737.jpg",
+    characters: [BionicleCharacter.NOKAMA],
   },
   {
     catalogNumber: "8738",
@@ -1224,6 +1326,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8738.jpg",
+    characters: [BionicleCharacter.WHENUA],
   },
   {
     catalogNumber: "8739",
@@ -1232,6 +1335,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8739.jpg",
+    characters: [BionicleCharacter.ONEWA],
   },
   {
     catalogNumber: "8740",
@@ -1240,6 +1344,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8740.jpg",
+    characters: [BionicleCharacter.MATAU],
   },
   {
     catalogNumber: "8741",
@@ -1248,6 +1353,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HORDIKA,
     imageName: "8741.jpg",
+    characters: [BionicleCharacter.NUJU],
   },
   {
     catalogNumber: "8742",
@@ -1320,6 +1426,14 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8757.jpg",
+    minifigures: [
+      { character: BionicleCharacter.VAKAMA },
+      { character: BionicleCharacter.NOKAMA },
+      { character: BionicleCharacter.WHENUA },
+      { character: BionicleCharacter.ONEWA },
+      { character: BionicleCharacter.MATAU },
+      { character: BionicleCharacter.NUJU },
+    ],
   },
   {
     catalogNumber: "8758",
@@ -1328,6 +1442,14 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8758.jpg",
+    minifigures: [
+      { character: BionicleCharacter.VAKAMA },
+      { character: BionicleCharacter.NOKAMA },
+      { character: BionicleCharacter.WHENUA },
+      { character: BionicleCharacter.ONEWA },
+      { character: BionicleCharacter.MATAU },
+      { character: BionicleCharacter.NUJU },
+    ],
   },
   {
     catalogNumber: "8759",
@@ -1336,6 +1458,14 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8759.jpg",
+    minifigures: [
+      { character: BionicleCharacter.VAKAMA },
+      { character: BionicleCharacter.NOKAMA },
+      { character: BionicleCharacter.WHENUA },
+      { character: BionicleCharacter.ONEWA },
+      { character: BionicleCharacter.MATAU },
+      { character: BionicleCharacter.NUJU },
+    ],
   },
   {
     catalogNumber: "8761",
@@ -1352,6 +1482,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HAGAH,
     imageName: "8762.jpg",
+    characters: [BionicleCharacter.IRUINI],
   },
   {
     catalogNumber: "8763",
@@ -1360,6 +1491,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_HAGAH,
     imageName: "8763.jpg",
+    characters: [BionicleCharacter.NORIK],
   },
   {
     catalogNumber: "8764",
@@ -1368,6 +1500,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8764.jpg",
+    characters: [BionicleCharacter.VEZON],
   },
   {
     catalogNumber: "8769",
@@ -1376,6 +1509,14 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8769.jpg",
+    minifigures: [
+      { character: BionicleCharacter.VAKAMA },
+      { character: BionicleCharacter.NOKAMA },
+      { character: BionicleCharacter.WHENUA },
+      { character: BionicleCharacter.ONEWA },
+      { character: BionicleCharacter.MATAU },
+      { character: BionicleCharacter.NUJU },
+    ],
   },
   {
     catalogNumber: "8811",
@@ -1384,6 +1525,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8811.jpg",
+    characters: [BionicleCharacter.LHIKAN],
   },
   {
     catalogNumber: "8892",
@@ -1392,6 +1534,12 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8892.jpg",
+    minifigures: [
+      { character: BionicleCharacter.REIDAK },
+      { character: BionicleCharacter.THOK },
+      { character: BionicleCharacter.JALLER, variation: "INIKA" },
+      { character: BionicleCharacter.KONGU, variation: "INIKA" },
+    ],
   },
   {
     catalogNumber: "8893",
@@ -1400,6 +1548,16 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8893.jpg",
+    minifigures: [
+      { character: BionicleCharacter.AVAK },
+      { character: BionicleCharacter.HAKANN },
+      { character: BionicleCharacter.VEZOK },
+      { character: BionicleCharacter.ZAKTAN, variation: "INIKA" },
+      { character: BionicleCharacter.HAHLI, variation: "INIKA" },
+      { character: BionicleCharacter.HEWKII, variation: "INIKA" },
+      { character: BionicleCharacter.NUPARU, variation: "INIKA" },
+      { character: BionicleCharacter.MATORO, variation: "INIKA" },
+    ],
   },
   {
     catalogNumber: "8894",
@@ -1408,6 +1566,20 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8894.jpg",
+    minifigures: [
+      { character: BionicleCharacter.AVAK },
+      { character: BionicleCharacter.HAKANN },
+      { character: BionicleCharacter.REIDAK },
+      { character: BionicleCharacter.THOK },
+      { character: BionicleCharacter.VEZOK },
+      { character: BionicleCharacter.ZAKTAN },
+      { character: BionicleCharacter.HAHLI, variation: "INIKA" },
+      { character: BionicleCharacter.HEWKII, variation: "INIKA" },
+      { character: BionicleCharacter.JALLER, variation: "INIKA" },
+      { character: BionicleCharacter.NUPARU, variation: "INIKA" },
+      { character: BionicleCharacter.MATORO, variation: "INIKA" },
+      { character: BionicleCharacter.KONGU, variation: "INIKA" },
+    ],
   },
   {
     catalogNumber: "8900",
@@ -1416,6 +1588,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8900.jpg",
+    characters: [BionicleCharacter.REIDAK],
   },
   {
     catalogNumber: "8901",
@@ -1424,6 +1597,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8901.jpg",
+    characters: [BionicleCharacter.HAKANN],
   },
   {
     catalogNumber: "8902",
@@ -1432,6 +1606,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8902.jpg",
+    characters: [BionicleCharacter.VEZOK],
   },
   {
     catalogNumber: "8903",
@@ -1440,6 +1615,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8903.jpg",
+    characters: [BionicleCharacter.ZAKTAN],
   },
   {
     catalogNumber: "8904",
@@ -1448,6 +1624,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8904.jpg",
+    characters: [BionicleCharacter.AVAK],
   },
   {
     catalogNumber: "8905",
@@ -1456,6 +1633,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.PIRAKA,
     imageName: "8905.jpg",
+    characters: [BionicleCharacter.THOK],
   },
   {
     catalogNumber: "8910",
@@ -1464,6 +1642,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8910.jpg",
+    characters: [BionicleCharacter.KONGU],
   },
   {
     catalogNumber: "8911",
@@ -1472,6 +1651,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8911.jpg",
+    characters: [BionicleCharacter.JALLER],
   },
   {
     catalogNumber: "8912",
@@ -1480,6 +1660,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8912.jpg",
+    characters: [BionicleCharacter.HEWKII],
   },
   {
     catalogNumber: "8913",
@@ -1488,6 +1669,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8913.jpg",
+    characters: [BionicleCharacter.NUPARU],
   },
   {
     catalogNumber: "8914",
@@ -1496,6 +1678,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8914.jpg",
+    characters: [BionicleCharacter.HAHLI],
   },
   {
     catalogNumber: "8915",
@@ -1504,6 +1687,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MAHRI,
     imageName: "8915.jpg",
+    characters: [BionicleCharacter.MATORO],
   },
   {
     catalogNumber: "8916",
@@ -1512,6 +1696,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8916.jpg",
+    characters: [BionicleCharacter.TAKADOX],
   },
   {
     catalogNumber: "8917",
@@ -1520,6 +1705,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8917.jpg",
+    characters: [BionicleCharacter.KALMAH],
   },
   {
     catalogNumber: "8918",
@@ -1528,6 +1714,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8918.jpg",
+    characters: [BionicleCharacter.CARAPAR],
   },
   {
     catalogNumber: "8919",
@@ -1536,6 +1723,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8919.jpg",
+    characters: [BionicleCharacter.MANTAX],
   },
   {
     catalogNumber: "8920",
@@ -1544,6 +1732,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8920.jpg",
+    characters: [BionicleCharacter.EHLEK],
   },
   {
     catalogNumber: "8921",
@@ -1552,6 +1741,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.BARRAKI,
     imageName: "8921.jpg",
+    characters: [BionicleCharacter.PRIDAK],
   },
   {
     catalogNumber: "8922",
@@ -1568,6 +1758,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8923.jpg",
+    characters: [BionicleCharacter.DEFILAK],
   },
   {
     catalogNumber: "8924",
@@ -1576,14 +1767,21 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8924.jpg",
+    characters: [BionicleCharacter.MAKUTA],
   },
   {
     catalogNumber: "8925",
-    name: "Barraki Deepsea Patrol ",
+    name: "Barraki Deepsea Patrol",
     releaseYear: "2007",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8925.jpg",
+    minifigures: [
+      { character: BionicleCharacter.KALMAH, variation: "bio016" },
+      { character: BionicleCharacter.MANTAX, variation: "bio015a" },
+      { character: BionicleCharacter.TAKADOX, variation: "bio013" },
+      { character: BionicleCharacter.HEWKII, variation: "bio018" },
+    ],
   },
   {
     catalogNumber: "8926",
@@ -1592,14 +1790,34 @@ export const bionicleSets = [
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8926.jpg",
+    minifigures: [
+      { character: BionicleCharacter.EHLEK, variation: "bio026" },
+      { character: BionicleCharacter.PRIDAK, variation: "bio014a" },
+      { character: BionicleCharacter.TAKADOX, variation: "bio023" },
+      { character: BionicleCharacter.HEWKII, variation: "bio024" },
+      { character: BionicleCharacter.JALLER, variation: "bio019" },
+      { character: BionicleCharacter.NUPARU, variation: "bio022" },
+    ],
   },
   {
     catalogNumber: "8927",
-    name: "Toa Terrain Crawler ",
+    name: "Toa Terrain Crawler",
     releaseYear: "2007",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
     imageName: "8927.jpg",
+    minifigures: [
+      { character: BionicleCharacter.KALMAH, variation: "bio016" },
+      { character: BionicleCharacter.MANTAX, variation: "bio015" },
+      { character: BionicleCharacter.PRIDAK, variation: "bio014" },
+      { character: BionicleCharacter.TAKADOX, variation: "bio013" },
+      { character: BionicleCharacter.HEWKII, variation: "bio018" },
+      { character: BionicleCharacter.JALLER, variation: "bio019" },
+      { character: BionicleCharacter.NUPARU, variation: "bio022" },
+      { character: BionicleCharacter.MATORO, variation: "bio017" },
+      { character: BionicleCharacter.KONGU, variation: "bio020" },
+      { character: BionicleCharacter.HAHLI, variation: "bio021" },
+    ],
   },
   {
     catalogNumber: "8929",
@@ -1608,6 +1826,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MAHRITORAN,
     imageName: "8929.jpg",
+    characters: [BionicleCharacter.DEFILAK],
   },
   {
     catalogNumber: "8930",
@@ -1664,6 +1883,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.BATTLE_VEHICLES,
     imageName: "8941.jpg",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "8942",
@@ -1672,6 +1892,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.BATTLE_VEHICLES,
     imageName: "8942.jpg",
+    characters: [BionicleCharacter.ANTROZ],
   },
   {
     catalogNumber: "8943",
@@ -1680,6 +1901,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.BATTLE_VEHICLES,
     imageName: "8943.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "8944",
@@ -1808,6 +2030,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.GLATORIAN,
     imageName: "8978.jpg",
+    characters: [BionicleCharacter.SKRALL],
   },
   {
     catalogNumber: "8979",
@@ -1824,6 +2047,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.GLATORIAN,
     imageName: "8980.jpg",
+    characters: [BionicleCharacter.GRESH],
   },
   {
     catalogNumber: "8981",
@@ -1896,6 +2120,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.GLATORIAN_LEGENDS,
     imageName: "8989.jpg",
+    characters: [BionicleCharacter.MATA_NUI],
   },
   {
     catalogNumber: "8990",
@@ -1960,6 +2185,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8998.jpg",
+    characters: [BionicleCharacter.MATA_NUI],
   },
   {
     catalogNumber: "10023",
@@ -1976,6 +2202,7 @@ export const bionicleSets = [
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
     imageName: "10201.jpg",
+    characters: [BionicleCharacter.TAKUA, BionicleCharacter.MAKUTA],
   },
   {
     catalogNumber: "10202",
@@ -1984,6 +2211,7 @@ export const bionicleSets = [
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
     imageName: "10202.jpg",
+    characters: [BionicleCharacter.MAKUTA],
   },
   {
     catalogNumber: "10203",
@@ -2000,6 +2228,7 @@ export const bionicleSets = [
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
     imageName: "10204.jpg",
+    characters: [BionicleCharacter.VEZON],
   },
   {
     catalogNumber: "20005",
@@ -2072,6 +2301,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70784.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "70785",
@@ -2080,6 +2310,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70785.jpg",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "70786",
@@ -2088,6 +2319,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70786.jpg",
+    characters: [BionicleCharacter.GALI],
   },
   {
     catalogNumber: "70787",
@@ -2096,6 +2328,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70787.jpg",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "70788",
@@ -2104,6 +2337,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70788.jpg",
+    characters: [BionicleCharacter.KOPAKA],
   },
   {
     catalogNumber: "70789",
@@ -2112,6 +2346,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_MASTERS,
     imageName: "70789.jpg",
+    characters: [BionicleCharacter.ONUA],
   },
   {
     catalogNumber: "70790",
@@ -2160,6 +2395,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "70795.jpg",
+    characters: [BionicleCharacter.EKIMU],
   },
   {
     catalogNumber: "71300",
@@ -2208,6 +2444,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_UNITERS,
     imageName: "71305.jpg",
+    characters: [BionicleCharacter.LEWA],
   },
   {
     catalogNumber: "71306",
@@ -2216,6 +2453,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_UNITERS,
     imageName: "71306.jpg",
+    characters: [BionicleCharacter.POHATU],
   },
   {
     catalogNumber: "71307",
@@ -2224,6 +2462,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TOA_UNITERS,
     imageName: "71307.jpg",
+    characters: [BionicleCharacter.GALI],
   },
   {
     catalogNumber: "71308",
@@ -2232,6 +2471,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TOA_UNITERS,
     imageName: "71308.jpg",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "71309",
@@ -2240,6 +2480,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TOA_UNITERS,
     imageName: "71309.jpg",
+    characters: [BionicleCharacter.ONUA],
   },
   {
     catalogNumber: "71310",
@@ -2248,6 +2489,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.SHADOW_HORDE,
     imageName: "71310.jpg",
+    characters: [BionicleCharacter.UMARAK],
   },
   {
     catalogNumber: "71311",
@@ -2256,6 +2498,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TOA_UNITERS,
     imageName: "71311.jpg",
+    characters: [BionicleCharacter.KOPAKA],
   },
   {
     catalogNumber: "71312",
@@ -2264,6 +2507,7 @@ export const bionicleSets = [
     setType: SetType.CANISTER,
     wave: Wave.TITANS,
     imageName: "71312.jpg",
+    characters: [BionicleCharacter.EKIMU],
   },
   {
     catalogNumber: "71313",
@@ -2320,6 +2564,7 @@ export const bionicleSets = [
     setType: SetType.SPECIAL,
     wave: Wave.MISCELLANEOUS,
     imageName: "11021.png",
+    characters: [BionicleCharacter.TAHU],
   },
   {
     catalogNumber: "40581",
@@ -2328,5 +2573,6 @@ export const bionicleSets = [
     setType: SetType.SPECIAL,
     wave: Wave.PROMOTIONAL,
     imageName: "40581.jpg",
+    characters: [BionicleCharacter.TAHU, BionicleCharacter.TAKUA],
   },
 ] satisfies BionicleSet[];

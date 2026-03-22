@@ -80,6 +80,60 @@ export enum Wave {
   MISCELLANEOUS = "Miscellaneous",
 }
 
+export enum BionicleCharacter {
+  HEWKII = "Hewkii",
+  MACKU = "Macku",
+  JALLER = "Jaller",
+  KONGU = "Kongu",
+  MATORO = "Matoro",
+  NORIK = "Norik",
+  IRUINI = "Iruini",
+  HAKANN = "Hakann",
+  THOK = "Thok",
+  TAHU = "Tahu",
+  GRESH = "Gresh",
+  TAKUA = "Takua",
+  SKRALL = "Skrall",
+  LHIKAN = "Lhikan",
+  POHATU = "Pohatu",
+  ONUA = "Onua",
+  GALI = "Gali",
+  LEWA = "Lewa",
+  KOPAKA = "Kopaka",
+  VAKAMA = "Vakama",
+  NOKAMA = "Nokama",
+  WHENUA = "Whenua",
+  MATAU = "Matau",
+  ONEWA = "Onewa",
+  NUJU = "Nuju",
+  HAFU = "Hafu",
+  GAHLOK = "Gahlok",
+  KOHRAK = "Kohrak",
+  LEHVAK = "Lehvak",
+  PAHRAK = "Pahrak",
+  TAHNOK = "Tahnok",
+  Nuhvok = "Nuhvok",
+  NUPARU = "Nuparu",
+  HAHLI = "Hahli",
+  MAKUTA = "Makuta",
+  REIDAK = "Reidak",
+  ZAKTAN = "Zaktan",
+  VEZON = "Vezon",
+  AVAK = "Avak",
+  VEZOK = "Vezok",
+  DEFILAK = "Defilak",
+  KALMAH = "Kalmah",
+  TAKADOX = "Takadox",
+  EHLEK = "Ehlek",
+  PRIDAK = "Pridak",
+  MANTAX = "Mantax",
+  CARAPAR = "Carapar",
+  ANTROZ = "Antroz",
+  MATA_NUI = "Mata Nui",
+  EKIMU = "Ekimu",
+  UMARAK = "Umarak",
+}
+
 export interface BionicleSet {
   catalogNumber: string;
   name: string;
@@ -87,4 +141,9 @@ export interface BionicleSet {
   setType: SetType;
   imageName: string;
   wave: Wave;
+  characters?: BionicleCharacter[];
+  minifigures?: {
+    character: BionicleCharacter;
+    variation?: string;
+  }[];
 }
