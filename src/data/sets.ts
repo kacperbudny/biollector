@@ -1758,7 +1758,7 @@ export const bionicleSets = [
     setType: SetType.LARGE,
     wave: Wave.TITANS,
     imageName: "8923.jpg",
-    characters: [BionicleCharacter.DEFILAK],
+    characters: [BionicleCharacter.DEKAR],
   },
   {
     catalogNumber: "8924",
@@ -1826,7 +1826,6 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MAHRITORAN,
     imageName: "8929.jpg",
-    characters: [BionicleCharacter.DEFILAK],
   },
   {
     catalogNumber: "8930",
@@ -1835,6 +1834,7 @@ export const bionicleSets = [
     setType: SetType.SMALL,
     wave: Wave.MAHRITORAN,
     imageName: "8930.jpg",
+    characters: [BionicleCharacter.DEKAR],
   },
   {
     catalogNumber: "8931",

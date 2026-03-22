@@ -121,7 +121,7 @@ export enum BionicleCharacter {
   VEZON = "Vezon",
   AVAK = "Avak",
   VEZOK = "Vezok",
-  DEFILAK = "Defilak",
+  DEKAR = "Dekar",
   KALMAH = "Kalmah",
   TAKADOX = "Takadox",
   EHLEK = "Ehlek",
