@@ -1,8 +1,14 @@
 "use client";
 
-import { Bars3Icon } from "@heroicons/react/24/outline";
-import { Drawer, Separator, useOverlayState } from "@heroui/react";
-import { UserButton } from "@stackframe/stack";
+import {
+  ArrowRightEndOnRectangleIcon,
+  ArrowRightStartOnRectangleIcon,
+  Bars3Icon,
+  Cog6ToothIcon,
+  UserPlusIcon,
+} from "@heroicons/react/24/outline";
+import { Button, Drawer, Separator, useOverlayState } from "@heroui/react";
+import { useStackApp, useUser } from "@stackframe/stack";
 import { Fragment } from "react";
 import { NavLink, visibleNavItems } from "@/components/layout/navbar-links";
 import { cn } from "@/styles/cn";
@@ -52,14 +58,89 @@ export function NavbarMobileMenu({
                 </nav>
               </Drawer.Body>
               <Drawer.Footer className="border-t border-border pt-4">
-                <div className="flex justify-center">
-                  <UserButton />
+                <div className="w-full rounded-xl border border-border bg-default/50 p-2">
+                  <MobileUserActions onDone={() => overlayState.close()} />
                 </div>
               </Drawer.Footer>
             </Drawer.Dialog>
           </Drawer.Content>
         </Drawer.Backdrop>
       </Drawer>
+    </div>
+  );
+}
+
+function MobileUserActions({ onDone }: { onDone: () => void }) {
+  const app = useStackApp();
+  const user = useUser();
+
+  async function handleAccountSettings() {
+    onDone();
+    await app.redirectToAccountSettings();
+  }
+
+  async function handleSignIn() {
+    onDone();
+    await app.redirectToSignIn();
+  }
+
+  async function handleSignUp() {
+    onDone();
+    await app.redirectToSignUp();
+  }
+
+  async function handleSignOut() {
+    onDone();
+    await user?.signOut();
+  }
+
+  if (user) {
+    return (
+      <div className="space-y-2">
+        <div className="px-1 py-1">
+          <p className="truncate text-sm font-semibold text-foreground">
+            {user.displayName ?? "Signed in"}
+          </p>
+          <p className="truncate text-xs text-muted">{user.primaryEmail}</p>
+        </div>
+        <Button
+          variant="tertiary"
+          className="w-full justify-start"
+          onPress={handleAccountSettings}
+        >
+          <Cog6ToothIcon className="h-4 w-4" />
+          Account settings
+        </Button>
+        <Button
+          variant="tertiary"
+          className="w-full justify-start text-danger"
+          onPress={handleSignOut}
+        >
+          <ArrowRightEndOnRectangleIcon className="h-4 w-4" />
+          Sign out
+        </Button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-2">
+      <Button
+        variant="tertiary"
+        className="w-full justify-start bg-accent text-white hover:bg-accent/90"
+        onPress={handleSignIn}
+      >
+        <ArrowRightStartOnRectangleIcon className="h-4 w-4" />
+        Sign in
+      </Button>
+      <Button
+        variant="tertiary"
+        className="w-full justify-start"
+        onPress={handleSignUp}
+      >
+        <UserPlusIcon className="h-4 w-4" />
+        Sign up
+      </Button>
     </div>
   );
 }
