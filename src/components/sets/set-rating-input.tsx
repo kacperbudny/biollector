@@ -82,14 +82,14 @@ function RatingStar({ value, filled, disabled, onClick }: RatingStarProps) {
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className="touch-manipulation p-0.5 text-muted transition-colors disabled:cursor-default disabled:opacity-70"
+      className="touch-manipulation p-1 text-muted transition-colors disabled:cursor-default disabled:opacity-70 md:p-0.5"
       aria-label={`${value} star${value !== 1 ? "s" : ""}`}
       aria-pressed={filled}
     >
       {filled ? (
-        <StarIconSolid className="h-4 w-4 text-warning" />
+        <StarIconSolid className="h-5 w-5 text-warning md:h-4 md:w-4" />
       ) : (
-        <StarIcon className="h-4 w-4" />
+        <StarIcon className="h-5 w-5 md:h-4 md:w-4" />
       )}
     </button>
   );

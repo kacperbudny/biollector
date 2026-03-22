@@ -41,15 +41,15 @@ export function WishlistButton({ setNumber, wishlisted }: WishlistButtonProps) {
       isIconOnly
       size="sm"
       variant="tertiary"
-      className="absolute left-2 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
+      className="absolute left-2 top-2 z-10 min-h-10 min-w-10 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70 md:min-h-8 md:min-w-8"
       aria-label={label}
       isDisabled={!isSignedIn || isPending}
       onPress={handleClick}
     >
       {wishlisted ? (
-        <EyeIconSolid className="h-5 w-5" />
+        <EyeIconSolid className="h-6 w-6 md:h-5 md:w-5" />
       ) : (
-        <EyeIcon className="h-5 w-5" />
+        <EyeIcon className="h-6 w-6 md:h-5 md:w-5" />
       )}
     </Button>
   );

@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
-import { MutedText } from "@/components/typography/text";
 import { userWishlistService } from "@/dependency-injection";
 
 export const metadata: Metadata = {
@@ -23,11 +22,10 @@ export default async function WishlistPage() {
 
   return (
     <>
-      <PageTitle>
+      <PageTitle
+        subtitle={`(${wishlistCount} set${wishlistCount !== 1 ? "s" : ""})`}
+      >
         Wishlist
-        <MutedText>
-          ({wishlistCount} set{wishlistCount !== 1 ? "s" : ""})
-        </MutedText>
       </PageTitle>
       {wishlistCount > 0 ? (
         <SetsList viewModel={viewModel} />

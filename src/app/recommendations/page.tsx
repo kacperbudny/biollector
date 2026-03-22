@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { Tooltip } from "@heroui/react";
+import { Popover } from "@heroui/react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -7,7 +7,6 @@ import { createLoader, parseAsBoolean } from "nuqs/server";
 import { stackServerApp } from "@/auth/server";
 import { SetCard } from "@/components/sets/set-card";
 import { PageTitle } from "@/components/typography/headings";
-import { MutedText } from "@/components/typography/text";
 import { recommendationsService } from "@/dependency-injection";
 import type { RecommendationViewModel } from "@/domain/view-models/recommendation.view-model";
 
@@ -42,12 +41,8 @@ export default async function RecommendationsPage({
 
   return (
     <>
-      <PageTitle>
+      <PageTitle subtitle={`(${recommendations.length} sets)`}>
         Recommendations
-        <MutedText>
-          (Top {recommendations.length} set
-          {recommendations.length !== 1 ? "s" : ""})
-        </MutedText>
       </PageTitle>
       {recommendations.length > 0 ? (
         <RecommendationsGrid
@@ -72,22 +67,8 @@ function RecommendationsGrid({
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
       {recommendations.map((recommendation) => (
         <div key={recommendation.set.catalogNumber}>
-          <div className="flex items-center justify-between gap-2">
-            <Tooltip delay={200}>
-              <Tooltip.Trigger>
-                <button
-                  type="button"
-                  className="inline-flex items-center gap-1 text-xs text-muted transition-colors hover:text-accent"
-                  aria-label="Show recommendation reasons"
-                >
-                  <InformationCircleIcon className="h-4 w-4" />
-                  Why this?
-                </button>
-              </Tooltip.Trigger>
-              <Tooltip.Content placement="top">
-                <RecommendationTooltip reasons={recommendation.reasons} />
-              </Tooltip.Content>
-            </Tooltip>
+          <div className="flex items-center justify-between gap-2 pb-1.5">
+            <RecommendationReasonsPopover reasons={recommendation.reasons} />
             {showScore ? (
               <span className="truncate text-xs text-muted">
                 Score: {recommendation.score.toFixed(1)}
@@ -103,18 +84,32 @@ function RecommendationsGrid({
   );
 }
 
-function RecommendationTooltip({ reasons }: { reasons: string[] }) {
+function RecommendationReasonsPopover({ reasons }: { reasons: string[] }) {
   return (
-    <div className="max-w-xs space-y-1 py-1">
-      <p className="text-xs font-semibold">Recommended because:</p>
-      <ul className="list-disc pl-4">
-        {reasons.map((reason) => (
-          <li key={reason} className="text-xs">
-            {reason}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <Popover>
+      <Popover.Trigger
+        aria-label="Show recommendation reasons"
+        className="inline-flex items-center gap-1 rounded-md text-xs text-muted transition-colors hover:text-accent"
+      >
+        <InformationCircleIcon className="h-4 w-4 shrink-0" />
+        Why this?
+      </Popover.Trigger>
+      <Popover.Content placement="top" offset={8} className="max-w-xs">
+        <Popover.Arrow />
+        <Popover.Dialog>
+          <Popover.Heading className="text-xs font-semibold">
+            Recommended because:
+          </Popover.Heading>
+          <ul className="list-disc pl-6">
+            {reasons.map((reason) => (
+              <li key={reason} className="text-xs">
+                {reason}
+              </li>
+            ))}
+          </ul>
+        </Popover.Dialog>
+      </Popover.Content>
+    </Popover>
   );
 }
 

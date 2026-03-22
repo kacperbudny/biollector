@@ -2251,7 +2251,7 @@ export const bionicleSets = [
   },
   {
     catalogNumber: "71311",
-    name: "Kopaka and Melum - Unity set",
+    name: "Kopaka and Melum",
     releaseYear: "2016",
     setType: SetType.LARGE,
     wave: Wave.TOA_UNITERS,
