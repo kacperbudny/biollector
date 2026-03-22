@@ -7,8 +7,7 @@ export function PageTitle({
 }: PropsWithChildren<{ subtitle?: string }>) {
   return (
     <h1 className="mb-6 text-3xl font-bold md:text-4xl">
-      {children}{" "}
-      {subtitle && <MutedText className="ml-0 md:ml-2">{subtitle}</MutedText>}
+      {children} {subtitle && <MutedText>{subtitle}</MutedText>}
     </h1>
   );
 }

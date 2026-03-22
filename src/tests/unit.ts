@@ -4,7 +4,10 @@ import { SetsRepository } from "@/data/repositories/sets.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 import { bionicleSets } from "@/data/sets";
-import { RecommendationsService } from "@/domain/services/recommendations.service";
+import {
+  RecommendationsService,
+  type RecommendationWeights,
+} from "@/domain/services/recommendations.service";
 
 export function userCollectionRepositoryMock(
   overrides?: Partial<UserCollectionRepositoryPort>,
@@ -48,6 +51,7 @@ export function recommendationsServiceMock(
     userCollectionRepository: UserCollectionRepositoryPort;
     setRatingRepository: SetRatingRepositoryPort;
     userWishlistRepository: UserWishlistRepositoryPort;
+    recommendationWeights: RecommendationWeights;
   }>,
 ) {
   return new RecommendationsService(
@@ -55,5 +59,6 @@ export function recommendationsServiceMock(
     overrides?.userCollectionRepository ?? userCollectionRepositoryMock(),
     overrides?.setRatingRepository ?? setRatingRepositoryMock(),
     overrides?.userWishlistRepository ?? userWishlistRepositoryMock(),
+    overrides?.recommendationWeights,
   );
 }

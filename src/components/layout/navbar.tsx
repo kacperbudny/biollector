@@ -22,6 +22,7 @@ export async function Navbar() {
               alt="Biollector logo"
               className="h-full w-auto p-3"
               quality={100}
+              loading="eager"
             />
           </Link>
         </div>

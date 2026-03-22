@@ -1,7 +1,7 @@
 import type { BionicleSet, SetType, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 
-export class SetViewModel implements BionicleSet {
+export class SetViewModel {
   constructor(
     public readonly catalogNumber: string,
     public readonly name: string,
@@ -9,6 +9,8 @@ export class SetViewModel implements BionicleSet {
     public readonly setType: SetType,
     public readonly imageName: string,
     public readonly wave: Wave,
+    public readonly characters: BionicleSet["characters"],
+    public readonly minifigures: BionicleSet["minifigures"],
     public readonly isInCollection: boolean,
     public readonly wishlisted: boolean,
     public readonly notInterested: boolean,
@@ -37,6 +39,8 @@ export class SetViewModel implements BionicleSet {
       set.setType,
       set.imageName,
       set.wave,
+      set.characters,
+      set.minifigures,
       collectionSetNumbers.includes(set.catalogNumber),
       scale === UserWishlistScale.WISHLISTED,
       scale === UserWishlistScale.NOT_INTERESTED,
