@@ -16,7 +16,7 @@ type SetCardProps = {
 
 export function SetCard({ set, wave }: SetCardProps) {
   return (
-    <Card className="gap-0 overflow-hidden border border-border p-0 transition-transform hover:scale-105">
+    <Card className="gap-0 overflow-hidden border border-border p-0 md:transition-transform [@media(hover:hover)]:md:hover:scale-105">
       <Card.Header className="shrink-0 p-0">
         <div className="relative aspect-square min-h-[120px] w-full bg-default">
           <Image
@@ -67,14 +67,14 @@ function AverageRatingChip({ averageRating }: { averageRating?: number }) {
       variant="soft"
       className={cn(
         "absolute right-2 bottom-2 z-10 bg-black/50 text-white backdrop-blur-sm",
-        "border-0",
+        "border-0 px-2.5 py-1.5 text-sm md:px-1.5 md:py-0.5 md:text-xs",
       )}
       role="img"
       aria-label={
         averageRating ? `Average rating ${averageRating}` : "No ratings yet"
       }
     >
-      <StarIcon className="h-3.5 w-3.5 text-warning" />
+      <StarIcon className="h-4 w-4 text-warning md:h-3.5 md:w-3.5" />
       {averageRating ? averageRating.toFixed(1) : "–"}
     </Chip>
   );

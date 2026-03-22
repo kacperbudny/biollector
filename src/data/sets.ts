@@ -343,7 +343,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.LARGE,
     wave: Wave.RAHI,
-    imageName: "8537.jpg",
+    imageName: "8537.png",
   },
   {
     catalogNumber: "8538",
@@ -351,7 +351,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.LARGE,
     wave: Wave.RAHI,
-    imageName: "8538.jpg",
+    imageName: "8538.png",
   },
   {
     catalogNumber: "8539",
@@ -359,7 +359,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.LARGE,
     wave: Wave.RAHI,
-    imageName: "8539.jpg",
+    imageName: "8539.png",
   },
   {
     catalogNumber: "8540",
@@ -423,7 +423,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.LARGE,
     wave: Wave.RAHI,
-    imageName: "8548.jpg",
+    imageName: "8548.png",
   },
   {
     catalogNumber: "8549",
@@ -431,7 +431,7 @@ export const bionicleSets = [
     releaseYear: "2001",
     setType: SetType.LARGE,
     wave: Wave.RAHI,
-    imageName: "8549.jpg",
+    imageName: "8549.png",
   },
   {
     catalogNumber: "8550",
@@ -2251,7 +2251,7 @@ export const bionicleSets = [
   },
   {
     catalogNumber: "71311",
-    name: "Kopaka and Melum - Unity set",
+    name: "Kopaka and Melum",
     releaseYear: "2016",
     setType: SetType.LARGE,
     wave: Wave.TOA_UNITERS,

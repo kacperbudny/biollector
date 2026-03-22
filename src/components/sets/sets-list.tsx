@@ -45,6 +45,7 @@ function YearSection({
 
         {collectionCount && (
           <MutedText>
+            {" "}
             ({collectionCount} of {totalCount} sets)
           </MutedText>
         )}
@@ -78,6 +79,7 @@ function WaveSection({
 
         {collectionCount && (
           <MutedText>
+            {" "}
             ({collectionCount} of {totalCount} sets)
           </MutedText>
         )}

@@ -1,8 +1,13 @@
 import type { PropsWithChildren } from "react";
 import { cn } from "@/styles/cn";
 
-export function MutedText({ children }: PropsWithChildren) {
-  return <span className="ml-2 font-normal text-muted">{children}</span>;
+export function MutedText({
+  children,
+  className,
+}: PropsWithChildren<{ className?: string }>) {
+  return (
+    <span className={cn("font-normal text-muted", className)}>{children}</span>
+  );
 }
 
 export function EyebrowHeadline({

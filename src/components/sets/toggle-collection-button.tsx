@@ -40,15 +40,15 @@ export function ToggleCollectionButton({
       isIconOnly
       size="sm"
       variant="tertiary"
-      className="absolute right-2 top-2 z-10 min-w-8 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70"
+      className="absolute right-2 top-2 z-10 min-h-10 min-w-10 bg-black/50 text-white backdrop-blur-sm hover:bg-black/70 md:min-h-8 md:min-w-8"
       aria-label={label}
       isDisabled={!isSignedIn || isPending}
       onPress={handleClick}
     >
       {isInCollection ? (
-        <ArchiveBoxIconSolid className="h-5 w-5" />
+        <ArchiveBoxIconSolid className="h-6 w-6 md:h-5 md:w-5" />
       ) : (
-        <ArchiveBoxIcon className="h-5 w-5" />
+        <ArchiveBoxIcon className="h-6 w-6 md:h-5 md:w-5" />
       )}
     </Button>
   );

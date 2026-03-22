@@ -4,10 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/assets/logo.png";
 import { stackServerApp } from "@/auth/server";
+import { NavLink, visibleNavItems } from "@/components/layout/navbar-links";
+import { NavbarMobileMenu } from "@/components/layout/navbar-mobile-menu";
 
 export async function Navbar() {
   const user = await stackServerApp.getUser();
   const isSignedIn = !!user;
+  const navItems = visibleNavItems(isSignedIn);
 
   return (
     <nav className="sticky top-0 z-40 w-full border-b border-border bg-background/80 backdrop-blur-md">
@@ -23,63 +26,27 @@ export async function Navbar() {
           </Link>
         </div>
 
-        <ul className="flex min-w-0 flex-1 items-center justify-center gap-1">
-          <li>
-            <Link
-              href="/"
-              className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
-            >
-              Home
-            </Link>
-          </li>
-
-          <Separator orientation="vertical" className="h-4" />
-
-          <li>
-            <Link
-              href="/sets"
-              className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
-            >
-              Sets
-            </Link>
-          </li>
-
-          {isSignedIn && (
-            <>
-              <Separator orientation="vertical" className="h-4" />
-              <li>
-                <Link
-                  href="/collection"
-                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
-                >
-                  Collection
-                </Link>
-              </li>
-              <Separator orientation="vertical" className="h-4" />
-              <li>
-                <Link
-                  href="/wishlist"
-                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
-                >
-                  Wishlist
-                </Link>
-              </li>
-              <Separator orientation="vertical" className="h-4" />
-              <li>
-                <Link
-                  href="/recommendations"
-                  className="rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent"
-                >
-                  Recommendations
-                </Link>
-              </li>
-            </>
-          )}
+        <ul className="hidden min-w-0 flex-1 list-none items-center justify-center gap-1 md:flex">
+          {navItems.map((item, index) => (
+            <li key={item.href} className="flex items-center gap-1">
+              {index > 0 && (
+                <Separator
+                  orientation="vertical"
+                  className="h-4 self-center shrink-0"
+                />
+              )}
+              <NavLink href={item.href} variant="desktop">
+                {item.label}
+              </NavLink>
+            </li>
+          ))}
         </ul>
 
-        <div className="flex shrink-0 items-center">
+        <div className="hidden shrink-0 items-center md:flex">
           <UserButton />
         </div>
+
+        <NavbarMobileMenu isSignedIn={isSignedIn} className="md:hidden" />
       </div>
     </nav>
   );
