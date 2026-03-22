@@ -1,6 +1,5 @@
 import { StarIcon } from "@heroicons/react/24/solid";
-import { Card, CardBody, CardHeader } from "@heroui/card";
-import { Chip } from "@heroui/chip";
+import { Card, Chip } from "@heroui/react";
 import Image from "next/image";
 import { NotInterestedButton } from "@/components/sets/not-interested-button";
 import { SetRatingInput } from "@/components/sets/set-rating-input";
@@ -17,17 +16,17 @@ type SetCardProps = {
 
 export function SetCard({ set, wave }: SetCardProps) {
   return (
-    <Card
-      isPressable={false}
-      className="overflow-hidden transition-transform hover:scale-105"
-    >
-      <CardHeader className="p-0">
-        <div className="relative aspect-square min-h-[120px] w-full bg-default-100">
+    <Card className="gap-0 overflow-hidden border border-border p-0 transition-transform hover:scale-105">
+      <Card.Header className="shrink-0 p-0">
+        <div className="relative aspect-square min-h-[120px] w-full bg-default">
           <Image
             src={`/sets/${set.imageName}`}
             alt={set.name}
             fill
-            className={cn("object-cover", set.notInterested && "grayscale")}
+            className={cn(
+              "object-cover object-center",
+              set.notInterested && "grayscale",
+            )}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
           />
           <WishlistButton
@@ -44,18 +43,18 @@ export function SetCard({ set, wave }: SetCardProps) {
           />
           <AverageRatingChip averageRating={set.averageRating} />
         </div>
-      </CardHeader>
-      <CardBody className="px-3 py-2">
-        <h3 className="mb-1 text-sm font-semibold">{set.name}</h3>
-        <p className="text-xs font-semibold mb-1">{set.catalogNumber}</p>
-        <p className="text-xs text-default-500 mb-1">
+      </Card.Header>
+      <Card.Content className="bg-surface px-3 pb-3 pt-2.5">
+        <h3 className="text-sm font-semibold">{set.name}</h3>
+        <p className="text-xs font-semibold">{set.catalogNumber}</p>
+        <p className="text-xs text-muted">
           {set.releaseYear} • {wave}
         </p>
         <SetRatingInput
           setNumber={set.catalogNumber}
           userRating={set.userRating}
         />
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -65,17 +64,17 @@ function AverageRatingChip({ averageRating }: { averageRating?: number }) {
     <Chip
       size="sm"
       color="warning"
-      variant="flat"
-      startContent={<StarIcon className="h-3.5 w-3.5 text-warning" />}
+      variant="soft"
       className={cn(
         "absolute right-2 bottom-2 z-10 bg-black/50 text-white backdrop-blur-sm",
-        "border-0 [--chip-label:var(--color-white)]",
+        "border-0",
       )}
       role="img"
       aria-label={
         averageRating ? `Average rating ${averageRating}` : "No ratings yet"
       }
     >
+      <StarIcon className="h-3.5 w-3.5 text-warning" />
       {averageRating ? averageRating.toFixed(1) : "–"}
     </Chip>
   );

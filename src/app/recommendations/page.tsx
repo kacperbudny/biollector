@@ -1,5 +1,5 @@
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { Tooltip } from "@heroui/tooltip";
+import { Tooltip } from "@heroui/react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -71,26 +71,25 @@ function RecommendationsGrid({
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5">
       {recommendations.map((recommendation) => (
-        <div key={recommendation.set.catalogNumber} className="space-y-2">
+        <div key={recommendation.set.catalogNumber}>
           <div className="flex items-center justify-between gap-2">
-            <Tooltip
-              placement="top"
-              delay={200}
-              content={
+            <Tooltip delay={200}>
+              <Tooltip.Trigger>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-1 text-xs text-muted transition-colors hover:text-accent"
+                  aria-label="Show recommendation reasons"
+                >
+                  <InformationCircleIcon className="h-4 w-4" />
+                  Why this?
+                </button>
+              </Tooltip.Trigger>
+              <Tooltip.Content placement="top">
                 <RecommendationTooltip reasons={recommendation.reasons} />
-              }
-            >
-              <button
-                type="button"
-                className="inline-flex items-center gap-1 text-xs text-default-500 transition-colors hover:text-primary"
-                aria-label="Show recommendation reasons"
-              >
-                <InformationCircleIcon className="h-4 w-4" />
-                Why this?
-              </button>
+              </Tooltip.Content>
             </Tooltip>
             {showScore ? (
-              <span className="truncate text-xs text-default-500">
+              <span className="truncate text-xs text-muted">
                 Score: {recommendation.score.toFixed(1)}
               </span>
             ) : (
@@ -121,13 +120,13 @@ function RecommendationTooltip({ reasons }: { reasons: string[] }) {
 
 function RecommendationsEmpty() {
   return (
-    <p className="text-default-500">
+    <p className="text-muted">
       We have no recommendations yet. Add sets to your{" "}
-      <Link href="/collection" className="text-primary hover:underline">
+      <Link href="/collection" className="text-accent hover:underline">
         collection
       </Link>{" "}
       or update your{" "}
-      <Link href="/wishlist" className="text-primary hover:underline">
+      <Link href="/wishlist" className="text-accent hover:underline">
         wishlist
       </Link>{" "}
       to improve recommendations.

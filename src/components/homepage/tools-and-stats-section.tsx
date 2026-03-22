@@ -1,4 +1,4 @@
-import { Card, CardBody } from "@heroui/card";
+import { Card } from "@heroui/react";
 import type { ReactNode } from "react";
 import { SectionHeading } from "@/components/typography/headings";
 import { EyebrowHeadline } from "@/components/typography/text";
@@ -26,12 +26,12 @@ export function ToolsAndStatsSection({
 
 function CollectionPreviewCard() {
   return (
-    <Card className="border border-default-200 bg-linear-to-br from-default-50 to-background shadow-sm">
-      <CardBody className="space-y-8 p-6 sm:p-8">
+    <Card className="border border-slate-200/90 bg-white shadow-sm">
+      <Card.Content className="space-y-8 p-4">
         <div className="space-y-3">
           <EyebrowHeadline>Collection Tools Preview</EyebrowHeadline>
           <SectionHeading>Your personal collection at a glance</SectionHeading>
-          <p className="max-w-2xl text-default-600">
+          <p className="max-w-2xl text-muted">
             See the collection tools at your disposal: progress, priorities, and
             your favorite sets in one place.
           </p>
@@ -55,9 +55,9 @@ function CollectionPreviewCard() {
           />
         </div>
 
-        <div className="rounded-3xl border border-default-200 bg-background p-5">
+        <div className="rounded-3xl border border-border bg-background p-5">
           <h3 className="font-semibold">What this helps you do</h3>
-          <div className="mt-4 space-y-3 text-sm text-default-600">
+          <div className="mt-4 space-y-3 text-sm text-muted">
             <PreviewListRow>
               See how much of a wave or year you already own.
             </PreviewListRow>
@@ -69,7 +69,7 @@ function CollectionPreviewCard() {
             </PreviewListRow>
           </div>
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -84,10 +84,10 @@ function DatabaseStatsCard({
   ratingsCount: number;
 }) {
   return (
-    <Card className="border border-default-200 bg-foreground text-background shadow-sm">
-      <CardBody className="space-y-8 p-6 sm:p-8">
+    <Card className="border border-border bg-foreground text-background shadow-sm">
+      <Card.Content className="space-y-8 p-4">
         <div className="space-y-3">
-          <EyebrowHeadline className="text-primary-300">
+          <EyebrowHeadline className="text-blue-400">
             Database Stats
           </EyebrowHeadline>
           <SectionHeading>
@@ -117,7 +117,7 @@ function DatabaseStatsCard({
             description="Community scores submitted so far"
           />
         </div>
-      </CardBody>
+      </Card.Content>
     </Card>
   );
 }
@@ -132,17 +132,17 @@ function PreviewStat({
   description: string;
 }) {
   return (
-    <div className="rounded-3xl border border-default-200 bg-background p-5">
-      <p className="text-sm text-default-500">{title}</p>
+    <div className="rounded-3xl border border-border bg-background p-5">
+      <p className="text-sm text-muted">{title}</p>
       <p className="mt-2 text-3xl font-bold">{value}</p>
-      <p className="mt-2 text-sm text-default-600">{description}</p>
+      <p className="mt-2 text-sm text-muted">{description}</p>
     </div>
   );
 }
 
 function PreviewListRow({ children }: { children: ReactNode }) {
   return (
-    <div className="rounded-2xl border border-default-200 bg-default-50 px-4 py-3">
+    <div className="rounded-2xl border border-border bg-gray-50 px-4 py-3">
       {children}
     </div>
   );
