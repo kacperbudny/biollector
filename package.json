@@ -13,6 +13,7 @@
     "test": "vitest run -c vitest.all.config.ts",
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
+    "typegen": "next typegen",
     "typecheck": "tsc --noEmit",
     "migrate": "kysely migrate:latest",
     "migrate:make": "kysely migrate:make",
