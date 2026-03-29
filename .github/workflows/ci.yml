@@ -32,6 +32,9 @@ jobs:
       - name: Docker available (Testcontainers / integration tests)
         run: docker info
 
+      - name: Next.js typegen
+        run: pnpm typegen
+
       - name: Typecheck
         run: pnpm typecheck
 
