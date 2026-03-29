@@ -528,7 +528,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8556.jpg",
+    imageName: "8556.png",
     characters: [BionicleCharacter.NUPARU],
   },
   {
@@ -537,7 +537,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8557.jpg",
+    imageName: "8557.png",
   },
   {
     catalogNumber: "8558",
@@ -545,7 +545,7 @@ export const bionicleSets = [
     releaseYear: "2002",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8558.jpg",
+    imageName: "8558.png",
   },
   {
     catalogNumber: "8560",
