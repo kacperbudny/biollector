@@ -33,6 +33,8 @@ jobs:
         run: docker info
 
       - name: Typecheck
+        env:
+          SKIP_ENV_VALIDATION: "1"
         run: pnpm typegen && pnpm typecheck
 
       - name: Lint
