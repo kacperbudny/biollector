@@ -8,6 +8,7 @@ import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetsService } from "@/domain/services/sets.service";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
 import { UserWishlistService } from "@/domain/services/user-wishlist.service";
+import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { getTestDb } from "@/tests/db";
 
 export const integrationSetsRepository = new SetsRepository(bionicleSets);
@@ -31,12 +32,18 @@ export function getIntegrationSetRatingService(): SetRatingService {
   );
 }
 
-export function getIntegrationSetsService(): SetsService {
-  return new SetsService(
-    integrationSetsRepository,
+export function getIntegrationSetViewModelContextLoader(): SetViewModelContextLoader {
+  return new SetViewModelContextLoader(
     getIntegrationUserCollectionRepository(),
     getIntegrationSetRatingRepository(),
     getIntegrationUserWishlistRepository(),
+  );
+}
+
+export function getIntegrationSetsService(): SetsService {
+  return new SetsService(
+    integrationSetsRepository,
+    getIntegrationSetViewModelContextLoader(),
   );
 }
 
@@ -44,8 +51,7 @@ export function getIntegrationUserCollectionService(): UserCollectionService {
   return new UserCollectionService(
     getIntegrationUserCollectionRepository(),
     integrationSetsRepository,
-    getIntegrationSetRatingRepository(),
-    getIntegrationUserWishlistRepository(),
+    getIntegrationSetViewModelContextLoader(),
   );
 }
 
@@ -53,16 +59,13 @@ export function getIntegrationUserWishlistService(): UserWishlistService {
   return new UserWishlistService(
     integrationSetsRepository,
     getIntegrationUserWishlistRepository(),
-    getIntegrationUserCollectionRepository(),
-    getIntegrationSetRatingRepository(),
+    getIntegrationSetViewModelContextLoader(),
   );
 }
 
 export function getIntegrationRecommendationsService(): RecommendationsService {
   return new RecommendationsService(
     integrationSetsRepository,
-    getIntegrationUserCollectionRepository(),
-    getIntegrationSetRatingRepository(),
-    getIntegrationUserWishlistRepository(),
+    getIntegrationSetViewModelContextLoader(),
   );
 }

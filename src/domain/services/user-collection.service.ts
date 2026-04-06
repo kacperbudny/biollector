@@ -1,7 +1,6 @@
-import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { SetsRepository } from "@/data/repositories/sets.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
-import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
+import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
@@ -9,8 +8,7 @@ export class UserCollectionService {
   constructor(
     private readonly collectionRepository: UserCollectionRepositoryPort,
     private readonly setsRepository: SetsRepository,
-    private readonly setRatingRepository: SetRatingRepositoryPort,
-    private readonly wishlistRepository: UserWishlistRepositoryPort,
+    private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
   async getCollectionsCount(): Promise<number> {
@@ -39,28 +37,22 @@ export class UserCollectionService {
   }
 
   async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
-    const [userSetsNumbers, ratingsBySet, averageRatings, wishlistState] =
-      await Promise.all([
-        this.collectionRepository.getUserCollection(userId),
-        this.setRatingRepository.getUserRatings(userId),
-        this.setRatingRepository.getAverageRatings(),
-        this.wishlistRepository.getWishlistState(userId),
-      ]);
+    const ctx = await this.setViewModelContextLoader.load({ userId });
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
     const userSets: SetViewModel[] = [];
 
-    for (const num of userSetsNumbers) {
+    for (const num of ctx.collectionSetNumbers) {
       const set = byNumber.get(num);
       if (set) {
         userSets.push(
           SetViewModel.fromBionicleSet({
             set,
-            collectionSetNumbers: userSetsNumbers,
-            ratingsBySet,
-            averageRatings,
-            wishlistState,
+            collectionSetNumbers: ctx.collectionSetNumbers,
+            userRatings: ctx.userRatingsBySet,
+            averageRatings: ctx.averageRatingsBySet,
+            userWishlistState: ctx.userWishlistStateBySet,
           }),
         );
       }

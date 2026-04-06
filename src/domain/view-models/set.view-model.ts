@@ -21,17 +21,17 @@ export class SetViewModel {
   static fromBionicleSet({
     set,
     collectionSetNumbers,
-    ratingsBySet,
+    userRatings,
     averageRatings,
-    wishlistState,
+    userWishlistState,
   }: {
     set: BionicleSet;
     collectionSetNumbers: string[];
-    ratingsBySet: Record<string, number>;
+    userRatings: Record<string, number>;
     averageRatings: Record<string, number>;
-    wishlistState: Record<string, number>;
+    userWishlistState: Record<string, number>;
   }): SetViewModel {
-    const scale = wishlistState[set.catalogNumber];
+    const scale = userWishlistState[set.catalogNumber];
     return new SetViewModel(
       set.catalogNumber,
       set.name,
@@ -44,7 +44,7 @@ export class SetViewModel {
       collectionSetNumbers.includes(set.catalogNumber),
       scale === UserWishlistScale.WISHLISTED,
       scale === UserWishlistScale.NOT_INTERESTED,
-      ratingsBySet[set.catalogNumber],
+      userRatings[set.catalogNumber],
       averageRatings[set.catalogNumber],
     );
   }

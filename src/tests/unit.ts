@@ -8,6 +8,7 @@ import {
   RecommendationsService,
   type RecommendationWeights,
 } from "@/domain/services/recommendations.service";
+import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
 export function userCollectionRepositoryMock(
   overrides?: Partial<UserCollectionRepositoryPort>,
@@ -45,20 +46,39 @@ export function setRatingRepositoryMock(
   };
 }
 
+export function setViewModelContextLoaderMock(overrides?: {
+  userCollection?: Partial<UserCollectionRepositoryPort>;
+  setRating?: Partial<SetRatingRepositoryPort>;
+  wishlist?: Partial<UserWishlistRepositoryPort>;
+}): SetViewModelContextLoader {
+  return new SetViewModelContextLoader(
+    userCollectionRepositoryMock(overrides?.userCollection),
+    setRatingRepositoryMock(overrides?.setRating),
+    userWishlistRepositoryMock(overrides?.wishlist),
+  );
+}
+
 export function recommendationsServiceMock(
   overrides?: Partial<{
     setsRepository: SetsRepository;
     userCollectionRepository: UserCollectionRepositoryPort;
     setRatingRepository: SetRatingRepositoryPort;
     userWishlistRepository: UserWishlistRepositoryPort;
+    setViewModelContextLoader: SetViewModelContextLoader;
     recommendationWeights: RecommendationWeights;
   }>,
 ) {
+  const loader =
+    overrides?.setViewModelContextLoader ??
+    new SetViewModelContextLoader(
+      overrides?.userCollectionRepository ?? userCollectionRepositoryMock(),
+      overrides?.setRatingRepository ?? setRatingRepositoryMock(),
+      overrides?.userWishlistRepository ?? userWishlistRepositoryMock(),
+    );
+
   return new RecommendationsService(
     overrides?.setsRepository ?? new SetsRepository(bionicleSets),
-    overrides?.userCollectionRepository ?? userCollectionRepositoryMock(),
-    overrides?.setRatingRepository ?? setRatingRepositoryMock(),
-    overrides?.userWishlistRepository ?? userWishlistRepositoryMock(),
+    loader,
     overrides?.recommendationWeights,
   );
 }

@@ -10,11 +10,7 @@ import {
   getIntegrationSetRatingService,
   getIntegrationSetsService,
 } from "@/tests/integration";
-import {
-  setRatingRepositoryMock,
-  userCollectionRepositoryMock,
-  userWishlistRepositoryMock,
-} from "@/tests/unit";
+import { setViewModelContextLoaderMock } from "@/tests/unit";
 
 describe(`@Unit ${SetsService.name}`, () => {
   describe(`${SetsService.prototype.getSetsListViewModel.name}`, () => {
@@ -35,9 +31,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock(),
-        setRatingRepositoryMock(),
-        userWishlistRepositoryMock(),
+        setViewModelContextLoaderMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -62,9 +56,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock(),
-        setRatingRepositoryMock(),
-        userWishlistRepositoryMock(),
+        setViewModelContextLoaderMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -84,9 +76,7 @@ describe(`@Unit ${SetsService.name}`, () => {
     it("returns empty array when repository returns no sets", async () => {
       const service = new SetsService(
         new SetsRepository([]),
-        userCollectionRepositoryMock(),
-        setRatingRepositoryMock(),
-        userWishlistRepositoryMock(),
+        setViewModelContextLoaderMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -111,13 +101,14 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["1"]),
+        setViewModelContextLoaderMock({
+          userCollection: {
+            getUserCollection: vi.fn().mockResolvedValue(["1"]),
+          },
+          setRating: {
+            getUserRatings: vi.fn().mockResolvedValue({}),
+          },
         }),
-        setRatingRepositoryMock({
-          getUserRatings: vi.fn().mockResolvedValue({}),
-        }),
-        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel("user-123");
@@ -148,13 +139,14 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue([]),
+        setViewModelContextLoaderMock({
+          userCollection: {
+            getUserCollection: vi.fn().mockResolvedValue([]),
+          },
+          setRating: {
+            getUserRatings: vi.fn().mockResolvedValue({ "1": 4 }),
+          },
         }),
-        setRatingRepositoryMock({
-          getUserRatings: vi.fn().mockResolvedValue({ "1": 4 }),
-        }),
-        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel("user-123");
@@ -179,9 +171,7 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock(),
-        setRatingRepositoryMock(),
-        userWishlistRepositoryMock(),
+        setViewModelContextLoaderMock(),
       );
 
       const result = await service.getSetsListViewModel();
@@ -209,11 +199,11 @@ describe(`@Unit ${SetsService.name}`, () => {
       ];
       const service = new SetsService(
         new SetsRepository(sets),
-        userCollectionRepositoryMock(),
-        setRatingRepositoryMock({
-          getAverageRatings: vi.fn().mockResolvedValue({ "1": 4.2 }),
+        setViewModelContextLoaderMock({
+          setRating: {
+            getAverageRatings: vi.fn().mockResolvedValue({ "1": 4.2 }),
+          },
         }),
-        userWishlistRepositoryMock(),
       );
 
       const result = await service.getSetsListViewModel();
