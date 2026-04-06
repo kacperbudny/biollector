@@ -15,6 +15,7 @@ import { setWishlist } from "@/actions/user-wishlist.actions";
 import { getActionErrorMessage } from "@/actions/utils";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
+import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/styles/cn";
 
 type WishlistScalePickerProps = {
@@ -34,6 +35,7 @@ export function WishlistScalePicker({
 }: WishlistScalePickerProps) {
   const user = useUser();
   const isSignedIn = !!user;
+  const isMobile = useIsMobile();
 
   const {
     execute,
@@ -55,18 +57,21 @@ export function WishlistScalePicker({
 
   return (
     <div className="group absolute left-2 top-2 z-10 flex">
-      <DesktopScalePicker
-        displayValue={displayValue}
-        isSignedIn={isSignedIn}
-        isExecuting={isExecuting}
-        selectWishlistValue={selectWishlistValue}
-      />
-      <MobileScalePopover
-        selectedValue={displayValue}
-        isSignedIn={isSignedIn}
-        isDisabled={!isSignedIn || isExecuting}
-        onClick={selectWishlistValue}
-      />
+      {isMobile ? (
+        <MobileScalePopover
+          selectedValue={displayValue}
+          isSignedIn={isSignedIn}
+          isDisabled={!isSignedIn || isExecuting}
+          onClick={selectWishlistValue}
+        />
+      ) : (
+        <DesktopScalePicker
+          displayValue={displayValue}
+          isSignedIn={isSignedIn}
+          isExecuting={isExecuting}
+          selectWishlistValue={selectWishlistValue}
+        />
+      )}
     </div>
   );
 }
@@ -95,7 +100,7 @@ function DesktopScalePicker({
         selectedValue={displayValue}
         isDisabled={!isSignedIn || isExecuting}
         variant="desktop"
-        className="hidden md:flex absolute -left-1 -top-1 opacity-0 pointer-events-none shadow-lg transition-opacity group-hover:opacity-100 group-hover:pointer-events-auto rounded-lg"
+        className="absolute -left-1 -top-1 flex opacity-0 pointer-events-none shadow-lg transition-opacity group-hover:opacity-100 group-hover:pointer-events-auto rounded-lg"
         onClick={selectWishlistValue}
       />
     </>
@@ -117,14 +122,14 @@ function DesktopCollapsedTrigger({
     <button
       type="button"
       className={cn(
-        "hidden md:inline-flex min-h-8 min-w-8 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70",
+        "inline-flex min-h-8 min-w-8 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70",
         "group-hover:opacity-0",
         isDisabled && "pointer-events-none opacity-60",
       )}
       aria-label={getTriggerLabel(value, isSignedIn)}
       disabled={isDisabled}
     >
-      <WishlistTriggerIcon value={value} />
+      <WishlistTriggerIcon size="desktop" value={value} />
     </button>
   );
 }
@@ -144,64 +149,40 @@ function MobileScalePopover({
 }: MobileScalePopoverProps) {
   const overlayState = useOverlayState();
 
-  if (isDisabled) {
-    return (
-      <div className="md:hidden">
-        <div
-          className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-full bg-black/50 text-white opacity-60 backdrop-blur-sm"
-          aria-hidden
-        >
-          <span className="inline-flex min-h-10 min-w-10 items-center justify-center rounded-full bg-transparent text-inherit">
-            <WishlistTriggerIcon value={selectedValue} />
-          </span>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="md:hidden">
-      <Popover isOpen={overlayState.isOpen} onOpenChange={overlayState.setOpen}>
-        <Popover.Trigger
-          className={cn(
-            "inline-flex min-h-10 min-w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm",
-            "cursor-pointer transition-colors hover:bg-black/70",
-          )}
-          aria-label={getTriggerLabel(selectedValue, isSignedIn)}
-          aria-haspopup="dialog"
-          aria-expanded={overlayState.isOpen}
-        >
-          <button
-            type="button"
-            className="inline-flex min-h-10 min-w-10 cursor-pointer items-center justify-center rounded-full bg-transparent text-inherit"
-            onClick={() => overlayState.toggle()}
-          >
-            <WishlistTriggerIcon value={selectedValue} />
-          </button>
-        </Popover.Trigger>
-        <Popover.Content
-          offset={-43}
-          placement="bottom"
-          shouldFlip={false}
-          className="ml-4.5"
-        >
-          <Popover.Dialog className="gap-0 p-0">
-            <Popover.Heading className="sr-only">
-              Wishlist priority
-            </Popover.Heading>
-            <ScalePanel
-              selectedValue={selectedValue}
-              isDisabled={isDisabled}
-              variant="mobile"
-              onClick={(selectedScale) => {
-                onClick(selectedScale);
-                overlayState.close();
-              }}
-            />
-          </Popover.Dialog>
-        </Popover.Content>
-      </Popover>
-    </div>
+    <Popover isOpen={overlayState.isOpen} onOpenChange={overlayState.setOpen}>
+      <Popover.Trigger
+        className={cn(
+          "inline-flex min-h-10 min-w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm",
+          "cursor-pointer transition-colors hover:bg-black/70",
+          isDisabled && "pointer-events-none opacity-60",
+        )}
+        aria-label={getTriggerLabel(selectedValue, isSignedIn)}
+      >
+        <WishlistTriggerIcon size="mobile" value={selectedValue} />
+      </Popover.Trigger>
+      <Popover.Content
+        offset={-43}
+        placement="bottom"
+        shouldFlip={false}
+        className="ml-4.5"
+      >
+        <Popover.Dialog className="gap-0 p-0">
+          <Popover.Heading className="sr-only">
+            Wishlist priority
+          </Popover.Heading>
+          <ScalePanel
+            selectedValue={selectedValue}
+            isDisabled={isDisabled}
+            variant="mobile"
+            onClick={(selectedScale) => {
+              onClick(selectedScale);
+              overlayState.close();
+            }}
+          />
+        </Popover.Dialog>
+      </Popover.Content>
+    </Popover>
   );
 }
 
@@ -290,18 +271,26 @@ function ScaleOptionButton({
   );
 }
 
-function WishlistTriggerIcon({ value }: { value: UserWishlistScale | null }) {
+function WishlistTriggerIcon({
+  value,
+  size,
+}: {
+  value: UserWishlistScale | null;
+  size: "desktop" | "mobile";
+}) {
+  const iconClass = size === "mobile" ? "h-6 w-6" : "h-5 w-5";
+
   if (value === null) {
-    return <EyeIcon className="h-6 w-6 md:h-5 md:w-5" />;
+    return <EyeIcon className={iconClass} />;
   }
 
   if (value === UserWishlistScale.NOT_INTERESTED) {
-    return <EyeSlashIconSolid className="h-6 w-6 md:h-5 md:w-5" />;
+    return <EyeSlashIconSolid className={iconClass} />;
   }
 
   return (
     <span className="relative inline-flex">
-      <EyeIconSolid className="h-6 w-6 md:h-5 md:w-5" />
+      <EyeIconSolid className={iconClass} />
       <span
         className="absolute -right-1 -bottom-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-accent px-0.5 text-[10px] font-bold leading-none text-white"
         aria-hidden
