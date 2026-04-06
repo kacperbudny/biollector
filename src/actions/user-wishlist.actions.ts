@@ -4,11 +4,11 @@ import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { authActionClient } from "@/actions/action-client";
 import { userWishlistService } from "@/dependency-injection";
-import { UserWishlistScale } from "@/domain/user-wishlist";
+import { userWishlistScaleSchema } from "@/domain/user-wishlist";
 
 const setWishlistSchema = z.object({
   setNumber: z.string().min(1, "Set number is required").trim(),
-  scale: z.enum(UserWishlistScale).nullable(),
+  scale: userWishlistScaleSchema.nullable(),
 });
 
 export const setWishlist = authActionClient

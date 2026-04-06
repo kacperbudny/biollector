@@ -3,10 +3,7 @@ import type {
   SetRatingRepositoryPort,
 } from "@/data/repositories/set-rating.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
-import type {
-  GetWishlistStateOptions,
-  UserWishlistRepositoryPort,
-} from "@/data/repositories/user-wishlist.repository";
+import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 
 type SetViewModelContext = {
   collectionSetNumbers: string[];
@@ -18,7 +15,6 @@ type SetViewModelContext = {
 type LoadSetViewModelContextOptions = {
   userId?: string;
   averageRatings?: GetAverageRatingsOptions;
-  wishlist?: GetWishlistStateOptions;
 };
 
 export class SetViewModelContextLoader {
@@ -53,10 +49,7 @@ export class SetViewModelContextLoader {
       this.userCollectionRepository.getUserCollection(options.userId),
       this.setRatingRepository.getUserRatings(options.userId),
       this.setRatingRepository.getAverageRatings(options.averageRatings),
-      this.userWishlistRepository.getWishlistState(
-        options.userId,
-        options.wishlist,
-      ),
+      this.userWishlistRepository.getWishlistState(options.userId),
     ]);
 
     return {

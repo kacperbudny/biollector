@@ -81,7 +81,7 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "201": UserWishlistScale.WISHLISTED,
+            "201": UserWishlistScale.MEDIUM,
           }),
         }),
       });
@@ -90,6 +90,41 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
 
       expect(result[0]?.set.catalogNumber).toBe("201");
       expect(result[0]?.reasons).toContain("On your wishlist");
+    });
+
+    it("ranks higher wishlist scale above lower when other signals match", async () => {
+      const sets: BionicleSet[] = [
+        setFixture({
+          catalogNumber: "210",
+          name: "Must have",
+          releaseYear: "2006",
+          wave: Wave.TOA_INIKA,
+        }),
+        setFixture({
+          catalogNumber: "211",
+          name: "Very low",
+          releaseYear: "2006",
+          wave: Wave.TOA_INIKA,
+        }),
+      ];
+      const service = recommendationsServiceMock({
+        setsRepository: new SetsRepository(sets),
+        userWishlistRepository: userWishlistRepositoryMock({
+          getWishlistState: vi.fn().mockResolvedValue({
+            "210": UserWishlistScale.MUST_HAVE,
+            "211": UserWishlistScale.VERY_LOW,
+          }),
+        }),
+      });
+
+      const result = await service.getRecommendations("user-1");
+
+      expect(result[0]?.set.catalogNumber).toBe("210");
+      expect(result[1]?.set.catalogNumber).toBe("211");
+      expect(result[0]?.reasons).toContain("Must-have on your wishlist");
+      expect(result[1]?.reasons).toContain("On your wishlist");
+      expect(result[0]?.score).toBeGreaterThan(result[1]?.score ?? 0);
+      expect((result[0]?.score ?? 0) - (result[1]?.score ?? 0)).toBe(80);
     });
 
     it("prefers one-left wave completion over two-left", async () => {
@@ -134,7 +169,7 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "301": UserWishlistScale.WISHLISTED,
+            "301": UserWishlistScale.MEDIUM,
           }),
         }),
       });
@@ -205,7 +240,7 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "401": UserWishlistScale.WISHLISTED,
+            "401": UserWishlistScale.MEDIUM,
           }),
         }),
       });
@@ -276,7 +311,7 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "501": UserWishlistScale.WISHLISTED,
+            "501": UserWishlistScale.MEDIUM,
           }),
         }),
       });
@@ -568,8 +603,8 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "701": UserWishlistScale.WISHLISTED,
-            "702": UserWishlistScale.WISHLISTED,
+            "701": UserWishlistScale.MEDIUM,
+            "702": UserWishlistScale.MEDIUM,
           }),
         }),
       });
@@ -607,11 +642,11 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
-            "810": UserWishlistScale.WISHLISTED,
-            "811": UserWishlistScale.WISHLISTED,
-            "812": UserWishlistScale.WISHLISTED,
-            "813": UserWishlistScale.WISHLISTED,
-            "814": UserWishlistScale.WISHLISTED,
+            "810": UserWishlistScale.MEDIUM,
+            "811": UserWishlistScale.MEDIUM,
+            "812": UserWishlistScale.MEDIUM,
+            "813": UserWishlistScale.MEDIUM,
+            "814": UserWishlistScale.MEDIUM,
           }),
         }),
         setRatingRepository: setRatingRepositoryMock({

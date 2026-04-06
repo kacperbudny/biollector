@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
-import { SetsList } from "@/components/sets/sets-list";
+import { WishlistSetsList } from "@/components/sets/wishlist-sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { userWishlistService } from "@/dependency-injection";
 
@@ -28,7 +28,7 @@ export default async function WishlistPage() {
         Wishlist
       </PageTitle>
       {wishlistCount > 0 ? (
-        <SetsList viewModel={viewModel} />
+        <WishlistSetsList viewModel={viewModel} />
       ) : (
         <WishlistEmpty />
       )}

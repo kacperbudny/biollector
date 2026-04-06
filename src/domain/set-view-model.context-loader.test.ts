@@ -53,7 +53,7 @@ describe(`@Integration ${SetViewModelContextLoader.name}`, () => {
     await userWishlistRepository.setWishlist(
       userId,
       setNumber,
-      UserWishlistScale.WISHLISTED,
+      UserWishlistScale.MEDIUM,
     );
 
     const ctx = await loader.load({ userId });
@@ -61,7 +61,7 @@ describe(`@Integration ${SetViewModelContextLoader.name}`, () => {
     expect(ctx.collectionSetNumbers).toEqual([setNumber]);
     expect(ctx.userRatingsBySet).toEqual({ [setNumber]: 5 });
     expect(ctx.userWishlistStateBySet).toEqual({
-      [setNumber]: UserWishlistScale.WISHLISTED,
+      [setNumber]: UserWishlistScale.MEDIUM,
     });
     expect(ctx.averageRatingsBySet).toEqual({ [setNumber]: 5 });
   });

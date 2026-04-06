@@ -1,16 +1,9 @@
 import type { Kysely } from "kysely";
 import type { DB } from "@/data/db/types";
-import { UserWishlistScale } from "@/domain/user-wishlist";
-
-export type GetWishlistStateOptions = {
-  wishlistedOnly?: boolean;
-};
+import type { UserWishlistScale } from "@/domain/user-wishlist";
 
 export type UserWishlistRepositoryPort = {
-  getWishlistState(
-    userId: string,
-    options?: GetWishlistStateOptions,
-  ): Promise<Record<string, number>>;
+  getWishlistState(userId: string): Promise<Record<string, number>>;
   deleteFromWishlist(userId: string, setNumber: string): Promise<void>;
   setWishlist(
     userId: string,
@@ -22,20 +15,13 @@ export type UserWishlistRepositoryPort = {
 export class UserWishlistRepository implements UserWishlistRepositoryPort {
   constructor(private readonly db: Kysely<DB>) {}
 
-  async getWishlistState(
-    userId: string,
-    options?: GetWishlistStateOptions,
-  ): Promise<Record<string, number>> {
-    let query = this.db
+  async getWishlistState(userId: string): Promise<Record<string, number>> {
+    const rows = await this.db
       .selectFrom("user_wishlist")
       .select(["set_number", "scale"])
-      .where("user_id", "=", userId);
+      .where("user_id", "=", userId)
+      .execute();
 
-    if (options?.wishlistedOnly) {
-      query = query.where("scale", "=", UserWishlistScale.WISHLISTED);
-    }
-
-    const rows = await query.execute();
     return Object.fromEntries(rows.map((r) => [r.set_number, r.scale]));
   }
 

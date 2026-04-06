@@ -101,7 +101,8 @@ export class RecommendationsService {
           return byScore;
         }
 
-        const byWishlist = Number(b.set.wishlisted) - Number(a.set.wishlisted);
+        const byWishlist =
+          (b.set.wishlistScale ?? 0) - (a.set.wishlistScale ?? 0);
         if (byWishlist !== 0) {
           return byWishlist;
         }
@@ -168,6 +169,17 @@ export class RecommendationsService {
     };
   }
 
+  private wishlistRecommendationReason(scale: UserWishlistScale): string {
+    switch (scale) {
+      case UserWishlistScale.MUST_HAVE:
+        return "Must-have on your wishlist";
+      case UserWishlistScale.HIGH:
+        return "High priority on your wishlist";
+      default:
+        return "On your wishlist";
+    }
+  }
+
   private scoreSet(
     set: SetViewModel,
     scopeCounts: ScopeCounts,
@@ -183,9 +195,12 @@ export class RecommendationsService {
     const yearTotal = scopeCounts.totalsByYear.get(set.releaseYear) ?? 0;
     const yearMissing = Math.max(0, yearTotal - yearOwned);
 
-    if (set.wishlisted) {
-      score += this.recommendationWeights.wishlist;
-      reasons.push("On your wishlist");
+    if (
+      set.wishlistScale !== null &&
+      set.wishlistScale !== UserWishlistScale.NOT_INTERESTED
+    ) {
+      score += this.recommendationWeights.wishlist * (set.wishlistScale / 5);
+      reasons.push(this.wishlistRecommendationReason(set.wishlistScale));
     }
 
     if (this.canApplyYearCompletion(yearOwned, yearMissing)) {

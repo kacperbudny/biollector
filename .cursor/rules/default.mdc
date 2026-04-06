@@ -18,6 +18,10 @@ alwaysApply: true
 # Types
 
 - Colocate types with where they originate. Don't use separate `types.ts` files.
+
+# Zod
+
+- Use the current Zod API for this repo’s installed major version (see `package.json`). For TypeScript enums use `z.enum(MyEnum)`; do **not** use deprecated `z.nativeEnum()`.
 - Rely on TypeScript inference when possible. Don't export helper-like types unnecessarily.
 - For view models with conversion logic, use a namespace merge: export the type and a namespace with the same name containing a static factory (e.g. `SetsListViewModel.fromSetViewModels(sets)`). Keep conversion out of services.
 

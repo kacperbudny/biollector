@@ -3,7 +3,7 @@ import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishli
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import type { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
+import { WishlistViewModel } from "@/domain/view-models/wishlist.view-model";
 
 export class UserWishlistService {
   constructor(
@@ -12,23 +12,22 @@ export class UserWishlistService {
     private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
-  async getWishlistViewModel(userId: string): Promise<SetsListViewModel> {
+  async getWishlistViewModel(userId: string): Promise<WishlistViewModel> {
     const ctx = await this.setViewModelContextLoader.load({
       userId,
-      wishlist: { wishlistedOnly: true },
     });
 
-    const wishlistedSetNumbers = Object.keys(ctx.userWishlistStateBySet);
+    const wishlistSetNumbers = Object.keys(ctx.userWishlistStateBySet);
 
-    const sets = this.setsRepository.getByCatalogNumbers(wishlistedSetNumbers);
+    const sets = this.setsRepository.getByCatalogNumbers(wishlistSetNumbers);
     const byNumber = new Map(sets.map((s) => [s.catalogNumber, s]));
 
-    const wishlistedSetViewModels: SetViewModel[] = [];
+    const setViewModels: SetViewModel[] = [];
 
-    for (const num of wishlistedSetNumbers) {
+    for (const num of wishlistSetNumbers) {
       const set = byNumber.get(num);
       if (set) {
-        wishlistedSetViewModels.push(
+        setViewModels.push(
           SetViewModel.fromBionicleSet({
             set,
             collectionSetNumbers: ctx.collectionSetNumbers,
@@ -40,7 +39,7 @@ export class UserWishlistService {
       }
     }
 
-    return SetsListViewModel.fromSetViewModels(wishlistedSetViewModels);
+    return WishlistViewModel.fromSetViewModels(setViewModels);
   }
 
   async setWishlist(
