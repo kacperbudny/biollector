@@ -53,6 +53,7 @@ alwaysApply: true
 # Services
 
 - Services should return the view model shape the UI needs. Avoid calling multiple services in a page when one can return the full view model (e.g. `getCollectionListViewModel` instead of flat list + separate grouping).
+- When the **same repository reads** are **repeated across services** to build a shared data bundle, extract them into an injectable **context loader** (see `.cursor/rules/testing.mdc` → *Context loaders*).
 
 # Components
 
