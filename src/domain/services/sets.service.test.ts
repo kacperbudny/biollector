@@ -105,9 +105,6 @@ describe(`@Unit ${SetsService.name}`, () => {
           userCollection: {
             getUserCollection: vi.fn().mockResolvedValue(["1"]),
           },
-          setRating: {
-            getUserRatings: vi.fn().mockResolvedValue({}),
-          },
         }),
       );
 
@@ -140,9 +137,6 @@ describe(`@Unit ${SetsService.name}`, () => {
       const service = new SetsService(
         new SetsRepository(sets),
         setViewModelContextLoaderMock({
-          userCollection: {
-            getUserCollection: vi.fn().mockResolvedValue([]),
-          },
           setRating: {
             getUserRatings: vi.fn().mockResolvedValue({ "1": 4 }),
           },

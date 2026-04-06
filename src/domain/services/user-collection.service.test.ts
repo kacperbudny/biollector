@@ -281,7 +281,6 @@ describe(`@Unit ${UserCollectionService.name}`, () => {
             getUserCollection: vi.fn().mockResolvedValue(["1", "2"]),
           },
           setRating: {
-            getUserRatings: vi.fn().mockResolvedValue({}),
             getAverageRatings: vi.fn().mockResolvedValue({
               "1": 4.5,
               "2": 3,
