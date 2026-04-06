@@ -65,7 +65,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SPECIAL,
     wave: Wave.PROMOTIONAL,
-    imageName: "1441.jpg",
+    imageName: "1441.webp",
   },
   {
     catalogNumber: "4868",
@@ -661,7 +661,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8573.jpg",
+    imageName: "8573.png",
     characters: [BionicleCharacter.NUHVOK],
   },
   {
@@ -670,7 +670,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8574.jpg",
+    imageName: "8574.png",
     characters: [BionicleCharacter.TAHNOK],
   },
   {
@@ -679,7 +679,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8575.jpg",
+    imageName: "8575.png",
     characters: [BionicleCharacter.KOHRAK],
   },
   {
@@ -688,7 +688,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8576.jpg",
+    imageName: "8576.png",
     characters: [BionicleCharacter.LEHVAK],
   },
   {
@@ -697,7 +697,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8577.jpg",
+    imageName: "8577.png",
     characters: [BionicleCharacter.PAHRAK],
   },
   {
@@ -706,7 +706,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.BOHROK_KAL,
-    imageName: "8578.jpg",
+    imageName: "8578.png",
     characters: [BionicleCharacter.GAHLOK],
   },
   {
@@ -768,7 +768,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8587.jpg",
+    imageName: "8587.png",
   },
   {
     catalogNumber: "8588",
@@ -776,7 +776,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8588.jpg",
+    imageName: "8588.png",
   },
   {
     catalogNumber: "8589",
@@ -784,7 +784,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8589.jpg",
+    imageName: "8589.png",
   },
   {
     catalogNumber: "8590",
@@ -792,7 +792,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8590.jpg",
+    imageName: "8590.png",
   },
   {
     catalogNumber: "8591",
@@ -800,7 +800,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8591.jpg",
+    imageName: "8591.png",
   },
   {
     catalogNumber: "8592",
@@ -808,7 +808,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.CANISTER,
     wave: Wave.RAHKSHI,
-    imageName: "8592.jpg",
+    imageName: "8592.png",
   },
   {
     catalogNumber: "8593",
@@ -816,7 +816,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8593.jpg",
+    imageName: "8593.png",
     characters: [BionicleCharacter.MAKUTA],
   },
   {
@@ -825,7 +825,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8594.jpg",
+    imageName: "8594.png",
     characters: [BionicleCharacter.JALLER],
   },
   {
@@ -834,7 +834,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8595.jpg",
+    imageName: "8595.png",
     characters: [BionicleCharacter.TAKUA],
   },
   {
@@ -843,7 +843,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8596.jpg",
+    imageName: "8596.png",
     characters: [BionicleCharacter.TAKUA],
   },
   {
@@ -2201,7 +2201,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
-    imageName: "10201.jpg",
+    imageName: "10201.png",
     characters: [BionicleCharacter.TAKUA, BionicleCharacter.MAKUTA],
   },
   {
