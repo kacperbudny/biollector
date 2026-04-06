@@ -715,7 +715,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8581.jpg",
+    imageName: "8581.png",
   },
   {
     catalogNumber: "8582",
@@ -723,7 +723,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8582.jpg",
+    imageName: "8582.png",
     characters: [BionicleCharacter.MATORO],
   },
   {
@@ -732,7 +732,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8583.jpg",
+    imageName: "8583.png",
     characters: [BionicleCharacter.HAHLI],
   },
   {
@@ -741,7 +741,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8584.jpg",
+    imageName: "8584.png",
     characters: [BionicleCharacter.HEWKII],
   },
   {
@@ -750,7 +750,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8585.jpg",
+    imageName: "8585.png",
     characters: [BionicleCharacter.HAFU],
   },
   {
@@ -759,7 +759,7 @@ export const bionicleSets = [
     releaseYear: "2003",
     setType: SetType.SMALL,
     wave: Wave.MOLTORAN,
-    imageName: "8586.jpg",
+    imageName: "8586.png",
     characters: [BionicleCharacter.MACKU],
   },
   {
