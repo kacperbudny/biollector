@@ -1,7 +1,22 @@
 import type { BionicleSet, SetType, Wave } from "@/domain/sets";
-import { UserWishlistScale } from "@/domain/user-wishlist";
+import {
+  UserWishlistScale,
+  userWishlistScaleSchema,
+} from "@/domain/user-wishlist";
 
 export class SetViewModel {
+  private static readonly WISHLIST_SCALE_LABELS: Record<
+    UserWishlistScale,
+    string
+  > = {
+    [UserWishlistScale.NOT_INTERESTED]: "Not interested",
+    [UserWishlistScale.VERY_LOW]: "Very low priority",
+    [UserWishlistScale.LOW]: "Low priority",
+    [UserWishlistScale.MEDIUM]: "Medium priority",
+    [UserWishlistScale.HIGH]: "High priority",
+    [UserWishlistScale.MUST_HAVE]: "Must have",
+  };
+
   constructor(
     public readonly catalogNumber: string,
     public readonly name: string,
@@ -12,11 +27,29 @@ export class SetViewModel {
     public readonly characters: BionicleSet["characters"],
     public readonly minifigures: BionicleSet["minifigures"],
     public readonly isInCollection: boolean,
-    public readonly wishlisted: boolean,
-    public readonly notInterested: boolean,
+    public readonly wishlistScale: UserWishlistScale | null,
     public readonly userRating?: number,
     public readonly averageRating?: number,
-  ) {}
+  ) {
+    if (wishlistScale !== null) {
+      userWishlistScaleSchema.parse(wishlistScale);
+    }
+  }
+
+  static getWishlistScaleLabel(scale: UserWishlistScale): string {
+    return SetViewModel.WISHLIST_SCALE_LABELS[scale];
+  }
+
+  get wishlisted(): boolean {
+    return (
+      this.wishlistScale !== null &&
+      this.wishlistScale !== UserWishlistScale.NOT_INTERESTED
+    );
+  }
+
+  get notInterested(): boolean {
+    return this.wishlistScale === UserWishlistScale.NOT_INTERESTED;
+  }
 
   static fromBionicleSet({
     set,
@@ -31,7 +64,6 @@ export class SetViewModel {
     averageRatings: Record<string, number>;
     userWishlistState: Record<string, number>;
   }): SetViewModel {
-    const scale = userWishlistState[set.catalogNumber];
     return new SetViewModel(
       set.catalogNumber,
       set.name,
@@ -42,8 +74,7 @@ export class SetViewModel {
       set.characters,
       set.minifigures,
       collectionSetNumbers.includes(set.catalogNumber),
-      scale === UserWishlistScale.WISHLISTED,
-      scale === UserWishlistScale.NOT_INTERESTED,
+      userWishlistState[set.catalogNumber] ?? null,
       userRatings[set.catalogNumber],
       averageRatings[set.catalogNumber],
     );

@@ -26,17 +26,17 @@ describe(`@Integration ${UserWishlistService.name}`, () => {
       await wishlistService.setWishlist(
         "user-123",
         "8534",
-        UserWishlistScale.WISHLISTED,
+        UserWishlistScale.MEDIUM,
       );
       const state = await wishlistRepository.getWishlistState("user-123");
-      expect(state["8534"]).toBe(UserWishlistScale.WISHLISTED);
+      expect(state["8534"]).toBe(UserWishlistScale.MEDIUM);
     });
 
     it("removes wishlisted set", async () => {
       await wishlistService.setWishlist(
         "user-123",
         "8534",
-        UserWishlistScale.WISHLISTED,
+        UserWishlistScale.MEDIUM,
       );
       await wishlistService.setWishlist("user-123", "8534", null);
       const state = await wishlistRepository.getWishlistState("user-123");
@@ -48,11 +48,11 @@ describe(`@Integration ${UserWishlistService.name}`, () => {
         await wishlistService.setWishlist(
           "user-123",
           "8534",
-          UserWishlistScale.WISHLISTED,
+          UserWishlistScale.MEDIUM,
         );
         const vm = await wishlistService.getWishlistViewModel("user-123");
-        const catalogNumbers = vm.data.flatMap((y) =>
-          y.waves.flatMap((w) => w.sets.map((s) => s.catalogNumber)),
+        const catalogNumbers = vm.sections.flatMap((section) =>
+          section.sets.map((s) => s.catalogNumber),
         );
         expect(catalogNumbers).toContain("8534");
       });

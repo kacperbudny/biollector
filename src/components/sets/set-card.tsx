@@ -1,10 +1,9 @@
 import { StarIcon } from "@heroicons/react/24/solid";
 import { Card, Chip } from "@heroui/react";
 import Image from "next/image";
-import { NotInterestedButton } from "@/components/sets/not-interested-button";
 import { SetRatingInput } from "@/components/sets/set-rating-input";
 import { ToggleCollectionButton } from "@/components/sets/toggle-collection-button";
-import { WishlistButton } from "@/components/sets/wishlist-button";
+import { WishlistScalePicker } from "@/components/sets/wishlist-scale-picker";
 import type { Wave } from "@/domain/sets";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import { cn } from "@/styles/cn";
@@ -29,13 +28,9 @@ export function SetCard({ set, wave }: SetCardProps) {
             )}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
           />
-          <WishlistButton
+          <WishlistScalePicker
             setNumber={set.catalogNumber}
-            wishlisted={set.wishlisted}
-          />
-          <NotInterestedButton
-            setNumber={set.catalogNumber}
-            notInterested={set.notInterested}
+            wishlistScale={set.wishlistScale}
           />
           <ToggleCollectionButton
             setNumber={set.catalogNumber}
