@@ -1,7 +1,6 @@
-import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { SetsRepository } from "@/data/repositories/sets.repository";
-import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
+import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import type { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
@@ -10,22 +9,16 @@ export class UserWishlistService {
   constructor(
     private readonly setsRepository: SetsRepository,
     private readonly wishlistRepository: UserWishlistRepositoryPort,
-    private readonly collectionRepository: UserCollectionRepositoryPort,
-    private readonly setRatingRepository: SetRatingRepositoryPort,
+    private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
   async getWishlistViewModel(userId: string): Promise<SetsListViewModel> {
-    const [wishlistState, collectionSetNumbers, ratingsBySet, averageRatings] =
-      await Promise.all([
-        this.wishlistRepository.getWishlistState(userId, {
-          wishlistedOnly: true,
-        }),
-        this.collectionRepository.getUserCollection(userId),
-        this.setRatingRepository.getUserRatings(userId),
-        this.setRatingRepository.getAverageRatings(),
-      ]);
+    const ctx = await this.setViewModelContextLoader.load({
+      userId,
+      wishlist: { wishlistedOnly: true },
+    });
 
-    const wishlistedSetNumbers = Object.keys(wishlistState);
+    const wishlistedSetNumbers = Object.keys(ctx.userWishlistStateBySet);
 
     const sets = this.setsRepository.getByCatalogNumbers(wishlistedSetNumbers);
     const byNumber = new Map(sets.map((s) => [s.catalogNumber, s]));
@@ -38,10 +31,10 @@ export class UserWishlistService {
         wishlistedSetViewModels.push(
           SetViewModel.fromBionicleSet({
             set,
-            collectionSetNumbers,
-            ratingsBySet,
-            averageRatings,
-            wishlistState,
+            collectionSetNumbers: ctx.collectionSetNumbers,
+            userRatings: ctx.userRatingsBySet,
+            averageRatings: ctx.averageRatingsBySet,
+            userWishlistState: ctx.userWishlistStateBySet,
           }),
         );
       }

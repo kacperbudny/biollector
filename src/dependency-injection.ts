@@ -9,6 +9,7 @@ import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetsService } from "@/domain/services/sets.service";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
 import { UserWishlistService } from "@/domain/services/user-wishlist.service";
+import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
 export const setsRepository = new SetsRepository(bionicleSets);
 
@@ -18,11 +19,15 @@ export const userWishlistRepository = new UserWishlistRepository(db);
 
 export const setRatingRepository = new SetRatingRepository(db);
 
-export const setsService = new SetsService(
-  setsRepository,
+export const setViewModelContextLoader = new SetViewModelContextLoader(
   userCollectionRepository,
   setRatingRepository,
   userWishlistRepository,
+);
+
+export const setsService = new SetsService(
+  setsRepository,
+  setViewModelContextLoader,
 );
 
 export const setRatingService = new SetRatingService(
@@ -33,20 +38,16 @@ export const setRatingService = new SetRatingService(
 export const userCollectionService = new UserCollectionService(
   userCollectionRepository,
   setsRepository,
-  setRatingRepository,
-  userWishlistRepository,
+  setViewModelContextLoader,
 );
 
 export const userWishlistService = new UserWishlistService(
   setsRepository,
   userWishlistRepository,
-  userCollectionRepository,
-  setRatingRepository,
+  setViewModelContextLoader,
 );
 
 export const recommendationsService = new RecommendationsService(
   setsRepository,
-  userCollectionRepository,
-  setRatingRepository,
-  userWishlistRepository,
+  setViewModelContextLoader,
 );

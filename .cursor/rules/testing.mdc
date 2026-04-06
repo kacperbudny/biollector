@@ -27,3 +27,9 @@ alwaysApply: true
 
 - **`src/tests/unit.ts`**: mocks (`*RepositoryMock`, etc.) and unit-test service factories; import from here for `@Unit` tests.
 - **`src/tests/fixtures.ts`**: shared fixtures (e.g. `setFixture`).
+
+# Context loaders (shared repository reads)
+
+- If **several services** repeat the **same sequence of repository calls** (often a `Promise.all`) to assemble a **bundle of data** used the same way (e.g. a “snapshot” for mapping to view models or scoring), **extract** that orchestration into a **small injectable class**—often named `*ContextLoader` with a method like `load(...)` returning a typed object. Keeps services focused on domain flow and gives tests one place to mock or integration-test the bundle.
+- **Unit tests**: add a **factory** in `src/tests/unit.ts` that builds the loader from repository mocks (with optional `Partial<Port>` overrides), same as other service factories.
+- **Integration tests**: add **`getIntegration…`** wiring in `src/tests/integration.ts` next to the other factories, and cover the **meaningful branches** of `load` (e.g. missing vs present user id, optional query options). Example in-repo: `set-view-model.context-loader` and its test file.

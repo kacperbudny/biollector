@@ -1,7 +1,5 @@
-import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { SetsRepository } from "@/data/repositories/sets.repository";
-import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
-import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
+import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import type { BionicleCharacter, BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { RecommendationViewModel } from "@/domain/view-models/recommendation.view-model";
@@ -61,9 +59,7 @@ type ScopeCounts = {
 export class RecommendationsService {
   constructor(
     private readonly setsRepository: SetsRepository,
-    private readonly userCollectionRepository: UserCollectionRepositoryPort,
-    private readonly setRatingRepository: SetRatingRepositoryPort,
-    private readonly userWishlistRepository: UserWishlistRepositoryPort,
+    private readonly setViewModelContextLoader: SetViewModelContextLoader,
     private readonly recommendationWeights: RecommendationWeights = DEFAULT_RECOMMENDATION_WEIGHTS,
   ) {}
 
@@ -72,22 +68,15 @@ export class RecommendationsService {
     userId: string,
     limit = 20, // TODO: pagination
   ): Promise<RecommendationViewModel[]> {
-    const [collectionSetNumbers, ratingsBySet, averageRatings, wishlistState] =
-      await Promise.all([
-        this.userCollectionRepository.getUserCollection(userId),
-        this.setRatingRepository.getUserRatings(userId),
-        this.setRatingRepository.getAverageRatings(),
-        this.userWishlistRepository.getWishlistState(userId),
-      ]);
-
+    const ctx = await this.setViewModelContextLoader.load({ userId });
     const allSets = this.setsRepository.getAll();
     const setViewModels = allSets.map((set) =>
       SetViewModel.fromBionicleSet({
         set,
-        collectionSetNumbers,
-        ratingsBySet,
-        averageRatings,
-        wishlistState,
+        collectionSetNumbers: ctx.collectionSetNumbers,
+        userRatings: ctx.userRatingsBySet,
+        averageRatings: ctx.averageRatingsBySet,
+        userWishlistState: ctx.userWishlistStateBySet,
       }),
     );
 
@@ -100,8 +89,8 @@ export class RecommendationsService {
 
     const scopeCounts = this.buildScopeCounts(
       allSets,
-      collectionSetNumbers,
-      wishlistState,
+      ctx.collectionSetNumbers,
+      ctx.userWishlistStateBySet,
     );
     const scored = candidates.map((set) => this.scoreSet(set, scopeCounts));
 
