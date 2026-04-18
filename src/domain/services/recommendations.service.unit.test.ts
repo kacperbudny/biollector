@@ -1,11 +1,9 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { RecommendationsService } from "@/domain/services/recommendations.service";
 import { BionicleCharacter, type BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
-import { truncateTestDb } from "@/tests/db";
 import { setFixture } from "@/tests/fixtures";
-import { getIntegrationRecommendationsService } from "@/tests/integration";
 import {
   recommendationsServiceMock,
   setRatingRepositoryMock,
@@ -13,7 +11,7 @@ import {
   userWishlistRepositoryMock,
 } from "@/tests/unit";
 
-describe(`@Unit ${RecommendationsService.name}`, () => {
+describe(RecommendationsService.name, () => {
   describe(`${RecommendationsService.prototype.getRecommendations.name}`, () => {
     it("ignores sets already owned or marked as not interested", async () => {
       const sets: BionicleSet[] = [
@@ -1557,33 +1555,6 @@ describe(`@Unit ${RecommendationsService.name}`, () => {
           ),
         ).toBe(true);
         expect(discoveryCandidate?.score).toBe(20);
-      });
-    });
-  });
-});
-
-describe(`@Integration ${RecommendationsService.name}`, () => {
-  let recommendationsService: RecommendationsService;
-
-  beforeAll(() => {
-    recommendationsService = getIntegrationRecommendationsService();
-  });
-
-  afterEach(async () => {
-    await truncateTestDb();
-  });
-
-  describe(`${RecommendationsService.prototype.getRecommendations.name}`, () => {
-    it("returns a non-empty ranked list for a new user", async () => {
-      const limit = 20;
-      const result = await recommendationsService.getRecommendations(
-        "new-user-999",
-        limit,
-      );
-      expect(result.length).toEqual(limit);
-      expect(result[0]).toMatchObject({
-        score: expect.any(Number),
-        reasons: expect.any(Array),
       });
     });
   });

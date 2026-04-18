@@ -12,7 +12,7 @@ import {
   getIntegrationUserWishlistRepository,
 } from "@/tests/integration";
 
-describe(`@Integration ${SetViewModelContextLoader.name}`, () => {
+describe(SetViewModelContextLoader.name, () => {
   let loader: SetViewModelContextLoader;
   let userCollectionRepository: UserCollectionRepository;
   let userWishlistRepository: UserWishlistRepository;

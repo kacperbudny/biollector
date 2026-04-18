@@ -51,9 +51,10 @@ pnpm dev
 
 Scripts:
 
-- **`pnpm test`** — full suite via `vitest.all.config.ts` (one run; starts Postgres with Testcontainers for DB-backed tests).
-- **`pnpm test:unit`** — workspace **unit** project only (`@Unit` in describe names).
-- **`pnpm test:integration`** — workspace **integration** project only (`@Integration` in describe names).
+- **`pnpm test`** — full suite (`vitest run`, workspace in `vitest.config.ts`: unit + integration + UI projects; Postgres via Testcontainers for integration tests).
+- **`pnpm test:unit`** — workspace **unit** project only (`*.unit.test.ts` files).
+- **`pnpm test:integration`** — workspace **integration** project only (`*.integration.test.ts` files).
+- **`pnpm test:ui`** — workspace **ui** project only (`*.ui.test.tsx` files).
 
 **Docker** must be available for `pnpm test` and `pnpm test:integration` (Testcontainers). On **WSL**, if `docker ps` fails with **permission denied**, add your user to the `docker` group (`sudo usermod -aG docker $USER`) and start a new shell session (or restart WSL). With **Docker Desktop**, enable WSL integration for your distro.
 
@@ -76,5 +77,5 @@ Scripts:
 - **Package Manager**: pnpm
 - **Auth solution**: Stack Auth
 - **Database**: Neon + Kysely
-- **Testing**: Vitest + testcontainers
+- **Testing**: Vitest + testcontainers + React Testing Library
 - **Validation**: zod

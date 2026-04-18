@@ -4,8 +4,9 @@ import { defineProject } from "vitest/config";
 export default defineProject({
   plugins: [tsconfigPaths()],
   test: {
-    name: "unit",
-    environment: "node",
-    include: ["**/*.unit.test.ts"],
+    name: "ui",
+    environment: "jsdom",
+    include: ["**/*.ui.test.tsx"],
+    setupFiles: ["./src/tests/vitest-rtl-setup.ts"],
   },
 });

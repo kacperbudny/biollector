@@ -8,7 +8,7 @@ import {
   getIntegrationUserWishlistService,
 } from "@/tests/integration";
 
-describe(`@Integration ${UserWishlistService.name}`, () => {
+describe(UserWishlistService.name, () => {
   let wishlistRepository: UserWishlistRepository;
   let wishlistService: UserWishlistService;
 

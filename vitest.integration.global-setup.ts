@@ -1,6 +1,9 @@
 import { PostgreSqlContainer } from "@testcontainers/postgresql";
+import { register as registerTsx } from "tsx/esm/api";
 import type { TestProject } from "vitest/node";
 import { migrateTestDb } from "./src/tests/db";
+
+registerTsx();
 
 const POSTGRES_IMAGE = "postgres:18-alpine";
 
