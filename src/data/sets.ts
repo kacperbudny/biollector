@@ -906,7 +906,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8607.jpg",
+    imageName: "8607.png",
   },
   {
     catalogNumber: "8608",
@@ -914,7 +914,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8608.jpg",
+    imageName: "8608.png",
   },
   {
     catalogNumber: "8609",
@@ -922,7 +922,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8609.jpg",
+    imageName: "8609.png",
   },
   {
     catalogNumber: "8610",
@@ -930,7 +930,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8610.jpg",
+    imageName: "8610.png",
   },
   {
     catalogNumber: "8611",
@@ -938,7 +938,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8611.jpg",
+    imageName: "8611.png",
   },
   {
     catalogNumber: "8612",
@@ -946,7 +946,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.SMALL,
     wave: Wave.METRUAN,
-    imageName: "8612.jpg",
+    imageName: "8612.png",
   },
   {
     catalogNumber: "8614",

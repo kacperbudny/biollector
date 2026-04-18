@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
-import { RecommendationsService } from "@/domain/services/recommendations.service";
+import {
+  RecommendationsService,
+  type RecommendationWeights,
+} from "@/domain/services/recommendations.service";
 import { BionicleCharacter, type BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { setFixture } from "@/tests/fixtures";
@@ -398,6 +401,21 @@ describe(RecommendationsService.name, () => {
 
     describe("average rating scoring", () => {
       it("ranks higher-rated set above lower-rated when only rating differs", async () => {
+        const highRating = 5;
+        const lowRating = 1;
+        const ratingOnlyWeights: RecommendationWeights = {
+          yearCompletion: 0,
+          wishlist: 0,
+          waveCompletion: 0,
+          characterCompletion: 0,
+          discoveryYear: 0,
+          discoveryWave: 0,
+          discoveryCharacter: 0,
+          generationCompletion: 0,
+          generationDiscovery: 0,
+          averageRating: 20,
+        };
+
         const sets: BionicleSet[] = [
           setFixture({
             catalogNumber: "610",
@@ -425,18 +443,18 @@ describe(RecommendationsService.name, () => {
           }),
           setRatingRepository: setRatingRepositoryMock({
             getAverageRatings: vi.fn().mockResolvedValue({
-              "611": 5,
-              "612": 1,
+              "611": highRating,
+              "612": lowRating,
             }),
           }),
+          recommendationWeights: ratingOnlyWeights,
         });
 
         const result = await service.getRecommendations("user-1", 10);
 
         expect(result[0]?.set.catalogNumber).toBe("611");
         expect(result[1]?.set.catalogNumber).toBe("612");
-        // Contribution (rating - 3) * 20: 5 → +40, 1 → -40; difference 80
-        expect((result[0]?.score ?? 0) - (result[1]?.score ?? 0)).toBe(80);
+        expect(result[0]?.score - result[1]?.score).toBe(80);
       });
 
       it("adds Community rating reason only when rating is above 3", async () => {

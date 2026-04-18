@@ -23,14 +23,14 @@ export type RecommendationWeights = {
 const DEFAULT_RECOMMENDATION_WEIGHTS: RecommendationWeights = {
   yearCompletion: 100,
   wishlist: 100,
-  waveCompletion: 60,
-  characterCompletion: 80,
+  waveCompletion: 80,
+  characterCompletion: 60,
   discoveryYear: 15,
   discoveryWave: 10,
   discoveryCharacter: 5,
   generationCompletion: 150,
   generationDiscovery: 20,
-  averageRating: 20,
+  averageRating: 40,
 };
 
 type CharacterScopeCounts = {
