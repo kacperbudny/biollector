@@ -30,7 +30,7 @@ export function SetCard({ set, wave }: SetCardProps) {
           />
           <WishlistScalePicker
             setNumber={set.catalogNumber}
-            wishlistScale={set.wishlistScale}
+            currentWishlistValue={set.wishlistScale}
           />
           <ToggleCollectionButton
             setNumber={set.catalogNumber}

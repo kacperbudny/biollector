@@ -20,7 +20,7 @@ import { cn } from "@/styles/cn";
 
 type WishlistScalePickerProps = {
   setNumber: string;
-  wishlistScale: UserWishlistScale | null;
+  currentWishlistValue: UserWishlistScale | null;
 };
 
 function getWishlistValuesDescending(): UserWishlistScale[] {
@@ -31,7 +31,7 @@ function getWishlistValuesDescending(): UserWishlistScale[] {
 
 export function WishlistScalePicker({
   setNumber,
-  wishlistScale,
+  currentWishlistValue,
 }: WishlistScalePickerProps) {
   const user = useUser();
   const isSignedIn = !!user;
@@ -42,7 +42,7 @@ export function WishlistScalePicker({
     optimisticState: displayValue,
     isExecuting,
   } = useOptimisticAction(setWishlist, {
-    currentState: wishlistScale,
+    currentState: currentWishlistValue,
     updateFn: (_state, input) => input.scale,
     onError: ({ error }) => {
       toast.danger("Error", {

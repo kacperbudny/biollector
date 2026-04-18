@@ -3,19 +3,28 @@ alwaysApply: true
 ---
 # Vitest layout
 
-- Root `vitest.config.ts` is a **workspace** with `vitest.unit.config.ts` and `vitest.integration.config.ts`.
-- **`pnpm test:unit`** → `vitest run --project unit`; **`pnpm test:integration`** → `vitest run --project integration`. Each project uses `testNamePattern` on describe names: `@Unit` / `@Integration` (see `@ts-expect-error` on `testNamePattern` in project configs; Vitest applies it at runtime).
-- **`pnpm test`** runs **`vitest.all.config.ts`**: one pass over all tests (no doubled skips from running unit + integration projects). It uses the same Postgres global setup as integration.
-- **`vitest.all.config.ts`** and **`vitest.integration.config.ts`** set **`maxWorkers: 1`** and **`maxConcurrency: 1`**: a single Testcontainers Postgres is shared; tests reset data with `truncateTestDb()` in `afterEach`, so parallel tests would race.
+- Root `vitest.config.ts` is a **workspace** with `vitest.unit.config.ts`, `vitest.integration.config.ts`, and **`vitest.ui.config.ts`**.
+- **File naming** (picks the Vitest project via `include`; no `testNamePattern`):
+  - **Unit**: `**/*.unit.test.ts` — in-memory / mocked services and repositories.
+  - **Integration**: `**/*.integration.test.ts` — Postgres + `getIntegration*` wiring from `src/tests/integration.ts`.
+  - **UI**: `**/*.ui.test.tsx` — React Testing Library + **jsdom** (see below).
+- **`pnpm test:unit`** / **`pnpm test:integration`** / **`pnpm test:ui`** run the matching project only.
+- **`pnpm test`** runs **`vitest run`** (default **`vitest.config.ts`** workspace: **unit**, **integration**, and **ui** projects). Each project **`include`**s only its glob, so every file runs in exactly one project (no duplicate runs, no `testNamePattern` skips). Integration uses Postgres **`globalSetup`** (`maxWorkers` / `maxConcurrency` **1**). The **ui** project sets **`environment: "jsdom"`** in **`vitest.ui.config.ts`**. **`jsdom`** is pinned to **24.x** (`package.json`): **jsdom 29** currently breaks Vitest’s test workers (`ERR_REQUIRE_ESM` from `html-encoding-sniffer` → `@exodus/bytes`). Revisit the pin when Vitest/jsdom fix that chain.
+- **`vitest.integration.config.ts`** sets **`maxWorkers: 1`** and **`maxConcurrency: 1`**: a single Testcontainers Postgres is shared; tests reset data with `truncateTestDb()` in `afterEach`, so parallel tests would race.
+
+# UI / component tests (React Testing Library)
+
+- **`vitest.ui.config.ts`**: **`environment: "jsdom"`**, **`include`**: `**/*.ui.test.tsx`, **`setupFiles`**: `src/tests/vitest-rtl-setup.ts`.
+- **Setup**: `src/tests/vitest-rtl-setup.ts` — `@testing-library/jest-dom/vitest` + **`cleanup`** in `afterEach` (referenced from **`vitest.ui.config.ts`** only).
+- Prefer **role / accessible name** queries matching real `aria-*` labels from the component.
 
 # Integration tests (database)
 
-- **Global setup**: `vitest.integration.global-setup.ts` starts Postgres (Testcontainers), runs migrations, and `project.provide("integrationDatabaseUrl", uri)` for workers.
+- **Global setup**: `vitest.integration.global-setup.ts` starts Postgres (Testcontainers), runs migrations, and `project.provide("integrationDatabaseUrl", uri)` for workers. It calls **`register()`** from **`tsx/esm/api`** so Kysely’s migration loader can `import()` `.ts` files without setting **`NODE_OPTIONS`** on the test script.
 - **`src/tests/db.ts`**: `getTestDb()` (lazy singleton using `inject("integrationDatabaseUrl")` from Vitest), `truncateTestDb()`, `migrateTestDb()` used from global setup.
 - **`src/tests/integration.ts`**: production-like wiring — `SetsRepository(bionicleSets)` plus real repositories on `getTestDb()`. Add **`getIntegration*`** factories here instead of ad-hoc wiring in each test file.
 - **Assertions**: prefer **repository methods** (e.g. `getUserRatings`) over raw Kysely queries in tests.
-- Tag integration suites with **`@Integration`** in the outer describe string, e.g. `` describe(`@Integration ${MyService.name}`, () => { ... }) ``.
-- Inside `@Integration` blocks: assign services/repos in **`beforeAll`**, not at module top level or in the `describe` callback body before hooks run (avoids calling `inject` / `getTestDb()` when the integration context is not active). Keep **`afterEach` → `truncateTestDb()`**.
+- Put integration specs in **`*.integration.test.ts`** files. Assign services/repos in **`beforeAll`**, not at module top level or in the `describe` callback body before hooks run (avoids calling `inject` / `getTestDb()` when the integration context is not active). Keep **`afterEach` → `truncateTestDb()`**.
 
 # Docker and Testcontainers (including WSL)
 
@@ -25,11 +34,11 @@ alwaysApply: true
 
 # Unit test helpers
 
-- **`src/tests/unit.ts`**: mocks (`*RepositoryMock`, etc.) and unit-test service factories; import from here for `@Unit` tests.
+- **`src/tests/unit.ts`**: mocks (`*RepositoryMock`, etc.) and unit-test service factories; import from here for **`*.unit.test.ts`** files.
 - **`src/tests/fixtures.ts`**: shared fixtures (e.g. `setFixture`).
 
 # Context loaders (shared repository reads)
 
 - If **several services** repeat the **same sequence of repository calls** (often a `Promise.all`) to assemble a **bundle of data** used the same way (e.g. a “snapshot” for mapping to view models or scoring), **extract** that orchestration into a **small injectable class**—often named `*ContextLoader` with a method like `load(...)` returning a typed object. Keeps services focused on domain flow and gives tests one place to mock or integration-test the bundle.
 - **Unit tests**: add a **factory** in `src/tests/unit.ts` that builds the loader from repository mocks (with optional `Partial<Port>` overrides), same as other service factories.
-- **Integration tests**: add **`getIntegration…`** wiring in `src/tests/integration.ts` next to the other factories, and cover the **meaningful branches** of `load` (e.g. missing vs present user id, optional query options). Example in-repo: `set-view-model.context-loader` and its test file.
+- **Integration tests**: add **`getIntegration…`** wiring in `src/tests/integration.ts` next to the other factories, and cover the **meaningful branches** of `load` (e.g. missing vs present user id, optional query options). Example in-repo: `set-view-model.context-loader.integration.test.ts`.
