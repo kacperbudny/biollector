@@ -1,4 +1,6 @@
+import { setInteractionModality } from "@react-aria/interactions";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setRating } from "@/actions/set-rating.actions";
 import { SetRatingInput } from "./set-rating-input";
@@ -35,7 +37,33 @@ describe(SetRatingInput.name, () => {
     }
   });
 
-  it("submits the chosen rating via the safe action when a star is clicked", async () => {
+  it("shows the sign-in tooltip when hovering stars while signed out", async () => {
+    useUserMock.mockReturnValue(null);
+    // React Aria tooltips only open on hover when getInteractionModality() is
+    // "pointer"; jsdom never runs the real pointer listeners that set it.
+    setInteractionModality("pointer");
+
+    const user = userEvent.setup({ pointerEventsCheck: 0 });
+    const { container } = render(<SetRatingInput setNumber={setNumber} />);
+
+    const tooltipTrigger = container.querySelector(
+      '[data-slot="tooltip-trigger"]',
+    );
+    expect(tooltipTrigger).toBeInstanceOf(HTMLElement);
+
+    await user.hover(tooltipTrigger as HTMLElement);
+
+    await waitFor(
+      () => {
+        expect(screen.getByText("Sign in to rate")).toBeInTheDocument();
+      },
+      { timeout: 2000 },
+    );
+
+    await user.unhover(tooltipTrigger as HTMLElement);
+  });
+
+  it("submits the chosen rating when a star is clicked", async () => {
     useUserMock.mockReturnValue({ id: "user-1" });
 
     render(<SetRatingInput setNumber={setNumber} />);

@@ -17,6 +17,7 @@ type SetRatingInputProps = {
 };
 
 export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
+  // TODO: refactor logic to a custom hook
   const user = useUser();
   const isSignedIn = !!user;
 
