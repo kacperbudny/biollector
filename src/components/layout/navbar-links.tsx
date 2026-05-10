@@ -1,24 +1,9 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { cn } from "@/styles/cn";
-
-export type NavMenuItem = {
-  href: string;
-  label: string;
-  requiresAuth: boolean;
-};
-
-export const NAV_MENU_ITEMS: NavMenuItem[] = [
-  { href: "/", label: "Home", requiresAuth: false },
-  { href: "/sets", label: "Sets", requiresAuth: false },
-  { href: "/collection", label: "Collection", requiresAuth: true },
-  { href: "/wishlist", label: "Wishlist", requiresAuth: true },
-  { href: "/recommendations", label: "Recommendations", requiresAuth: true },
-];
-
-export function visibleNavItems(isSignedIn: boolean): NavMenuItem[] {
-  return NAV_MENU_ITEMS.filter((item) => !item.requiresAuth || isSignedIn);
-}
 
 type NavLinkProps = {
   href: string;
@@ -35,19 +20,33 @@ export function NavLink({
   className,
   onNavigate,
 }: NavLinkProps) {
+  const pathname = usePathname();
+  const isCurrent = pathMatchesNavHref(pathname, href);
+
   return (
     <Link
       href={href}
       onClick={onNavigate}
+      aria-current={isCurrent ? "page" : undefined}
       className={cn(
         variant === "desktop" &&
-          "rounded-md px-3 py-2 text-foreground transition-colors hover:text-accent",
+          cn(
+            "rounded-full px-4 py-2 text-sm transition-colors hover:bg-foreground/10",
+            isCurrent ? "text-accent" : "text-foreground/50 hover:text-accent",
+          ),
         variant === "mobile" &&
-          "rounded-md px-3 py-3 text-base text-foreground transition-colors hover:bg-default hover:text-accent",
+          cn(
+            "rounded-md px-3 py-3 text-base transition-colors hover:bg-default",
+            isCurrent ? "text-accent" : "text-foreground hover:text-accent",
+          ),
         className,
       )}
     >
       {children}
     </Link>
   );
+}
+
+function pathMatchesNavHref(pathname: string, href: string): boolean {
+  return pathname === href || pathname.startsWith(`${href}/`);
 }
