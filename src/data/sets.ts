@@ -852,7 +852,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8601.jpg",
+    imageName: "8601.png",
     characters: [BionicleCharacter.VAKAMA],
   },
   {
@@ -861,7 +861,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8602.jpg",
+    imageName: "8602.png",
     characters: [BionicleCharacter.NOKAMA],
   },
   {
@@ -870,7 +870,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8603.jpg",
+    imageName: "8603.png",
     characters: [BionicleCharacter.WHENUA],
   },
   {
@@ -879,7 +879,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8604.jpg",
+    imageName: "8604.png",
     characters: [BionicleCharacter.ONEWA],
   },
   {
@@ -888,7 +888,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8605.jpg",
+    imageName: "8605.png",
     characters: [BionicleCharacter.MATAU],
   },
   {
@@ -897,7 +897,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.TOA_METRU,
-    imageName: "8606.jpg",
+    imageName: "8606.png",
     characters: [BionicleCharacter.NUJU],
   },
   {

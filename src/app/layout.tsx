@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "@/app/providers";
 import { Navbar } from "@/components/layout/navbar";
+import { cn } from "@/styles/cn";
 
 const font = Montserrat({
   subsets: ["latin"],
@@ -19,11 +20,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light" data-theme="light">
-      <body className={font.className}>
+    <html lang="en" className="dark" data-theme="dark">
+      <body className={cn(font.className, "bg-background text-foreground")}>
         <Providers>
           <Navbar />
-          <main className="container mx-auto max-w-7xl grow px-6 py-8">
+          <main className="container mx-auto max-w-[1440px] grow px-6 py-8">
             {children}
           </main>
         </Providers>

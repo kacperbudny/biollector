@@ -6,6 +6,8 @@ alwaysApply: true
 - Use HeroUI (previously NextUI) components whenever possible. You are allowed to install new HeroUI components. Prefer using HeroUI components over manually creating and styling new ones.
 - Use Tailwind for styling.
 - Use the `cn()` utility from `@/styles/cn` (clsx) for conditional or composed class names instead of template literals.
+- **Theme**: The product is **dark-only**. Keep `<html className="dark" data-theme="dark">` unless the product explicitly adds light mode. Prefer HeroUI semantic tokens (`bg-background`, `text-foreground`, `text-accent`, etc.) and `globals.css` for app-wide background—not ad hoc light palettes.
+- **Navbar**: Put nav menu data and `visibleNavItems` in `src/components/layout/navbar-menu.ts` (no `"use client"`). Keep interactive nav chrome (`NavLink` with `usePathname`, scroll-driven styles) in client components so Server Components can import the menu module without crossing the client boundary.
 
 # Project structure
 

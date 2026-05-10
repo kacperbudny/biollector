@@ -10,7 +10,8 @@ import {
 import { Button, Drawer, Separator, useOverlayState } from "@heroui/react";
 import { useStackApp, useUser } from "@stackframe/stack";
 import { Fragment } from "react";
-import { NavLink, visibleNavItems } from "@/components/layout/navbar-links";
+import { NavLink } from "@/components/layout/navbar-links";
+import { visibleNavItems } from "@/components/layout/navbar-menu";
 import { cn } from "@/styles/cn";
 
 type NavbarMobileMenuProps = {
