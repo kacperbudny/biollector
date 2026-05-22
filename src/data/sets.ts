@@ -2575,4 +2575,13 @@ export const bionicleSets = [
     imageName: "40581.jpg",
     characters: [BionicleCharacter.TAHU, BionicleCharacter.TAKUA],
   },
+  {
+    catalogNumber: "71052",
+    name: "Tahu CMF 29 Minifigure",
+    releaseYear: "2026",
+    setType: SetType.SPECIAL,
+    wave: Wave.MISCELLANEOUS,
+    imageName: "71052.jpg",
+    characters: [BionicleCharacter.TAHU],
+  },
 ] satisfies BionicleSet[];
