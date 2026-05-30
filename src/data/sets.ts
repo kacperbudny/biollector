@@ -954,7 +954,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8614.jpg",
+    imageName: "8614.png",
   },
   {
     catalogNumber: "8615",
@@ -962,7 +962,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8615.jpg",
+    imageName: "8615.png",
   },
   {
     catalogNumber: "8616",
@@ -970,7 +970,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8616.jpg",
+    imageName: "8616.png",
   },
   {
     catalogNumber: "8617",
@@ -978,7 +978,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8617.jpg",
+    imageName: "8617.png",
   },
   {
     catalogNumber: "8618",
@@ -986,7 +986,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8618.jpg",
+    imageName: "8618.png",
   },
   {
     catalogNumber: "8619",
@@ -994,7 +994,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.CANISTER,
     wave: Wave.VAHKI,
-    imageName: "8619.jpg",
+    imageName: "8619.png",
   },
   {
     catalogNumber: "8621",
@@ -1002,7 +1002,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8621.jpg",
+    imageName: "8621.png",
     characters: [BionicleCharacter.MAKUTA],
   },
   {
@@ -1011,7 +1011,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8622.jpg",
+    imageName: "8622.png",
   },
   {
     catalogNumber: "8623",
@@ -1019,7 +1019,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8623.jpg",
+    imageName: "8623.png",
   },
   {
     catalogNumber: "8624",
@@ -1524,7 +1524,7 @@ export const bionicleSets = [
     releaseYear: "2004",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8811.jpg",
+    imageName: "8811.png",
     characters: [BionicleCharacter.LHIKAN],
   },
   {
