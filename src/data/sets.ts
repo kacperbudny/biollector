@@ -1027,7 +1027,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8624.jpg",
+    imageName: "8624.png",
     minifigures: [
       { character: BionicleCharacter.HAKANN },
       { character: BionicleCharacter.THOK },
@@ -1045,7 +1045,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8625.jpg",
+    imageName: "8625.png",
   },
   {
     catalogNumber: "8626",
@@ -1053,7 +1053,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
-    imageName: "8626.jpg",
+    imageName: "8626.png",
   },
   {
     catalogNumber: "8685",
@@ -1246,7 +1246,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
-    imageName: "8728.jpg",
+    imageName: "8728.png",
     characters: [BionicleCharacter.HAHLI],
   },
   {
@@ -1255,7 +1255,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
-    imageName: "8729.jpg",
+    imageName: "8729.png",
     characters: [BionicleCharacter.NUPARU],
   },
   {
@@ -1264,7 +1264,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
-    imageName: "8730.jpg",
+    imageName: "8730.png",
     characters: [BionicleCharacter.HEWKII],
   },
   {
@@ -1273,7 +1273,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.CANISTER,
     wave: Wave.TOA_INIKA,
-    imageName: "8731.jpg",
+    imageName: "8731.png",
     characters: [BionicleCharacter.KONGU],
   },
   {
@@ -1291,7 +1291,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8733.jpg",
+    imageName: "8733.png",
   },
   {
     catalogNumber: "8734",
@@ -1299,7 +1299,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8734.jpg",
+    imageName: "8734.png",
   },
   {
     catalogNumber: "8736",
@@ -1499,7 +1499,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8764.jpg",
+    imageName: "8764.png",
     characters: [BionicleCharacter.VEZON],
   },
   {
@@ -1533,7 +1533,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8892.jpg",
+    imageName: "8892.png",
     minifigures: [
       { character: BionicleCharacter.REIDAK },
       { character: BionicleCharacter.THOK },
@@ -1547,7 +1547,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8893.jpg",
+    imageName: "8893.png",
     minifigures: [
       { character: BionicleCharacter.AVAK },
       { character: BionicleCharacter.HAKANN },
@@ -1565,7 +1565,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8894.jpg",
+    imageName: "8894.png",
     minifigures: [
       { character: BionicleCharacter.AVAK },
       { character: BionicleCharacter.HAKANN },
@@ -2227,7 +2227,7 @@ export const bionicleSets = [
     releaseYear: "2006",
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
-    imageName: "10204.jpg",
+    imageName: "10204.png",
     characters: [BionicleCharacter.VEZON],
   },
   {
