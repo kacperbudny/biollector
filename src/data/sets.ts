@@ -1425,7 +1425,7 @@ export const bionicleSets = [
     releaseYear: "2005",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8757.jpg",
+    imageName: "8757.png",
     minifigures: [
       { character: BionicleCharacter.VAKAMA },
       { character: BionicleCharacter.NOKAMA },
@@ -1441,7 +1441,7 @@ export const bionicleSets = [
     releaseYear: "2005",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8758.jpg",
+    imageName: "8758.png",
     minifigures: [
       { character: BionicleCharacter.VAKAMA },
       { character: BionicleCharacter.NOKAMA },
@@ -1457,7 +1457,7 @@ export const bionicleSets = [
     releaseYear: "2005",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8759.jpg",
+    imageName: "8759.png",
     minifigures: [
       { character: BionicleCharacter.VAKAMA },
       { character: BionicleCharacter.NOKAMA },
@@ -1508,7 +1508,7 @@ export const bionicleSets = [
     releaseYear: "2005",
     setType: SetType.PLAYSET,
     wave: Wave.PLAYSETS,
-    imageName: "8769.jpg",
+    imageName: "8769.png",
     minifigures: [
       { character: BionicleCharacter.VAKAMA },
       { character: BionicleCharacter.NOKAMA },
@@ -2219,7 +2219,7 @@ export const bionicleSets = [
     releaseYear: "2005",
     setType: SetType.COMBINER,
     wave: Wave.RELEASED_COMBINERS,
-    imageName: "10203.jpg",
+    imageName: "10203.png",
   },
   {
     catalogNumber: "10204",
