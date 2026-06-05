@@ -2063,7 +2063,7 @@ export const bionicleSets = [
     releaseYear: "2009",
     setType: SetType.CANISTER,
     wave: Wave.GLATORIAN,
-    imageName: "8982.jpg",
+    imageName: "8982.png",
   },
   {
     catalogNumber: "8983",
