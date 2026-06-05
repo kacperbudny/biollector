@@ -1,6 +1,13 @@
 ---
 alwaysApply: true
 ---
+# When to add tests
+
+- When implementing or changing features, **add tests in the same change** unless they would only assert the obvious.
+- **Unit** (`*.unit.test.ts`): services, view models, and other logic with mocked dependencies.
+- **Integration** (`*.integration.test.ts`): flows that hit Postgres via real repositories.
+- **UI** (`*.ui.test.tsx`): component behavior with React Testing Library.
+
 # Vitest layout
 
 - Root `vitest.config.ts` is a **workspace** with `vitest.unit.config.ts`, `vitest.integration.config.ts`, and **`vitest.ui.config.ts`**.

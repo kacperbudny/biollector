@@ -68,8 +68,13 @@ alwaysApply: true
 - Data fetching can happen inside the component that needs the data; the page renders the component and doesn't need to wire data.
 - Extract shared typography (PageTitle, SectionHeading, SubsectionHeading) to reusable components in `components/typography`.
 
+# Linting
+
+- **Always run the linter after making changes** and fix any reported issues before finishing. Use `pnpm lint` (Biome check) on touched files or the whole project; use `pnpm lint:fix` when auto-fixes apply.
+
 # Testing
 
+- **Always consider tests** when adding or changing behavior: add meaningful coverage alongside the feature, not as an afterthought. Use `*.unit.test.ts` for service/view-model logic with mocks, `*.integration.test.ts` for repository-backed flows, and `*.ui.test.tsx` for UI behavior. Skip tests only when they would trivially assert the obvious.
 - Unit mocks and helpers: `src/tests/unit.ts`; fixtures: `src/tests/fixtures.ts`. Integration wiring: `src/tests/integration.ts`; DB helpers: `src/tests/db.ts`. Vitest projects, Docker, and integration patterns: `.cursor/rules/testing.mdc`.
 - Mock repositories accept `Partial<RepositoryPort>` as overrides. Use plain `vi.fn()` by default; no default resolved values. Tests pass mock implementations explicitly (e.g. `getUserCollection: vi.fn().mockResolvedValue(["1"])`).
 

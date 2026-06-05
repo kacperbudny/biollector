@@ -1,12 +1,46 @@
 import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import type { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingEntity } from "@/domain/set-rating.entity";
+import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
+import { RatingsViewModel } from "@/domain/view-models/ratings.view-model";
+import { SetViewModel } from "@/domain/view-models/set.view-model";
 
 export class SetRatingService {
   constructor(
     private readonly setsRepository: SetsRepository,
     private readonly setRatingRepository: SetRatingRepositoryPort,
+    private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
+
+  async getRatingsViewModel(userId: string): Promise<RatingsViewModel> {
+    const ctx = await this.setViewModelContextLoader.load({
+      userId,
+    });
+
+    const ratedSetNumbers = Object.keys(ctx.userRatingsBySet);
+
+    const sets = this.setsRepository.getByCatalogNumbers(ratedSetNumbers);
+    const byNumber = new Map(sets.map((s) => [s.catalogNumber, s]));
+
+    const setViewModels: SetViewModel[] = [];
+
+    for (const num of ratedSetNumbers) {
+      const set = byNumber.get(num);
+      if (set) {
+        setViewModels.push(
+          SetViewModel.fromBionicleSet({
+            set,
+            collectionSetNumbers: ctx.collectionSetNumbers,
+            userRatings: ctx.userRatingsBySet,
+            averageRatings: ctx.averageRatingsBySet,
+            userWishlistState: ctx.userWishlistStateBySet,
+          }),
+        );
+      }
+    }
+
+    return RatingsViewModel.fromSetViewModels(setViewModels);
+  }
 
   async getTotalRatingsCount(): Promise<number> {
     return this.setRatingRepository.getTotalRatingsCount();

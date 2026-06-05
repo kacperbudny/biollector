@@ -37,4 +37,26 @@ describe(SetRatingService.name, () => {
       expect(ratings["8534"]).toBe(4);
     });
   });
+
+  describe(`${SetRatingService.prototype.getRatingsViewModel.name}`, () => {
+    it("returns rated sets for the user grouped by rating", async () => {
+      await setRatingService.setRating("user-123", "8534", 5);
+      await setRatingService.setRating("user-123", "1388", 4);
+
+      const vm = await setRatingService.getRatingsViewModel("user-123");
+
+      expect(vm.totalCount).toBe(2);
+      expect(vm.sections[0].rating).toBe(5);
+      expect(vm.sections[0].sets.map((s) => s.catalogNumber)).toContain("8534");
+      expect(vm.sections[1].rating).toBe(4);
+      expect(vm.sections[1].sets.map((s) => s.catalogNumber)).toContain("1388");
+    });
+
+    it("returns empty sections when user has no ratings", async () => {
+      const vm = await setRatingService.getRatingsViewModel("user-123");
+
+      expect(vm.totalCount).toBe(0);
+      expect(vm.sections).toHaveLength(0);
+    });
+  });
 });

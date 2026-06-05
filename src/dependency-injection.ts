@@ -33,6 +33,7 @@ export const setsService = new SetsService(
 export const setRatingService = new SetRatingService(
   setsRepository,
   setRatingRepository,
+  setViewModelContextLoader,
 );
 
 export const userCollectionService = new UserCollectionService(

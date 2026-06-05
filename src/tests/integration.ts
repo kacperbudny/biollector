@@ -29,6 +29,7 @@ export function getIntegrationSetRatingService(): SetRatingService {
   return new SetRatingService(
     integrationSetsRepository,
     getIntegrationSetRatingRepository(),
+    getIntegrationSetViewModelContextLoader(),
   );
 }
 
