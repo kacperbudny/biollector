@@ -2252,7 +2252,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70778.jpg",
+    imageName: "70778.png",
   },
   {
     catalogNumber: "70779",
@@ -2260,7 +2260,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70779.jpg",
+    imageName: "70779.png",
   },
   {
     catalogNumber: "70780",
@@ -2268,7 +2268,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70780.jpg",
+    imageName: "70780.png",
   },
   {
     catalogNumber: "70781",
@@ -2276,7 +2276,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70781.jpg",
+    imageName: "70781.png",
   },
   {
     catalogNumber: "70782",
@@ -2284,7 +2284,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70782.jpg",
+    imageName: "70782.png",
   },
   {
     catalogNumber: "70783",
@@ -2292,7 +2292,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.CANISTER,
     wave: Wave.PROTECTORS,
-    imageName: "70783.jpg",
+    imageName: "70783.png",
   },
   {
     catalogNumber: "70784",
@@ -2354,7 +2354,7 @@ export const bionicleSets = [
     releaseYear: "2015",
     setType: SetType.LARGE,
     wave: Wave.SKULL_ARMY,
-    imageName: "70790.jpg",
+    imageName: "70790.png",
   },
   {
     catalogNumber: "70791",
@@ -2547,7 +2547,7 @@ export const bionicleSets = [
     releaseYear: "2016",
     setType: SetType.SPECIAL,
     wave: Wave.PROMOTIONAL,
-    imageName: "601601.jpg",
+    imageName: "601601.png",
   },
   {
     catalogNumber: "601602",
