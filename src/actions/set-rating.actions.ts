@@ -21,6 +21,7 @@ export const setRating = authActionClient
 
     revalidatePath("/sets");
     revalidatePath("/collection");
+    revalidatePath("/ratings");
 
     return { success: true };
   });

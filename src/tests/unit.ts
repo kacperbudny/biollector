@@ -8,6 +8,7 @@ import {
   RecommendationsService,
   type RecommendationWeights,
 } from "@/domain/services/recommendations.service";
+import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
 export function userCollectionRepositoryMock(
@@ -44,6 +45,20 @@ export function setRatingRepositoryMock(
     getTotalRatingsCount: vi.fn().mockResolvedValue(0),
     ...overrides,
   };
+}
+
+export function setRatingServiceMock(
+  overrides?: Partial<{
+    setsRepository: SetsRepository;
+    setRatingRepository: SetRatingRepositoryPort;
+    setViewModelContextLoader: SetViewModelContextLoader;
+  }>,
+): SetRatingService {
+  return new SetRatingService(
+    overrides?.setsRepository ?? new SetsRepository(bionicleSets),
+    overrides?.setRatingRepository ?? setRatingRepositoryMock(),
+    overrides?.setViewModelContextLoader ?? setViewModelContextLoaderMock(),
+  );
 }
 
 export function setViewModelContextLoaderMock(overrides?: {
