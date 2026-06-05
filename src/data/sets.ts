@@ -1164,7 +1164,7 @@ export const bionicleSets = [
     releaseYear: "2008",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8697.jpg",
+    imageName: "8697.png",
   },
   {
     catalogNumber: "8698",
@@ -1957,7 +1957,7 @@ export const bionicleSets = [
     releaseYear: "2008",
     setType: SetType.CANISTER,
     wave: Wave.TITANS,
-    imageName: "8952.jpg",
+    imageName: "8952.png",
   },
   {
     catalogNumber: "8953",
@@ -1965,7 +1965,7 @@ export const bionicleSets = [
     releaseYear: "2008",
     setType: SetType.LARGE,
     wave: Wave.TITANS,
-    imageName: "8953.jpg",
+    imageName: "8953.png",
   },
   {
     catalogNumber: "8954",
@@ -2236,7 +2236,7 @@ export const bionicleSets = [
     releaseYear: "2008",
     setType: SetType.CANISTER,
     wave: Wave.PROMOTIONAL,
-    imageName: "20005.jpg",
+    imageName: "20005.webp",
   },
   {
     catalogNumber: "20012",
