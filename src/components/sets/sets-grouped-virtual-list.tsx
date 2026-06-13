@@ -158,8 +158,7 @@ export function SetsGroupedVirtualList({
   // on mount and on every resize so useWindowVirtualizer always has an
   // accurate offset even when the navbar/header height changes responsively.
   useLayoutEffect(() => {
-    const update = () =>
-      setScrollMargin(listRef.current?.offsetTop ?? 0);
+    const update = () => setScrollMargin(listRef.current?.offsetTop ?? 0);
     update();
     window.addEventListener("resize", update);
     return () => window.removeEventListener("resize", update);

@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo } from "react";
 import { parseAsString, useQueryState } from "nuqs";
+import { useMemo } from "react";
 import { SetSearchBar } from "@/components/sets/set-search-bar";
 import { SetsGroupedVirtualList } from "@/components/sets/sets-grouped-virtual-list";
 import { MutedText } from "@/components/typography/text";
