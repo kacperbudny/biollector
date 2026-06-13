@@ -3,7 +3,7 @@ import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishli
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import type { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { WishlistViewModel } from "@/domain/view-models/wishlist.view-model";
+import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
 
 export class UserWishlistService {
   constructor(
@@ -12,7 +12,7 @@ export class UserWishlistService {
     private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
-  async getWishlistViewModel(userId: string): Promise<WishlistViewModel> {
+  async getWishlistViewModel(userId: string): Promise<SetsGroupedViewModel> {
     const ctx = await this.setViewModelContextLoader.load({
       userId,
     });
@@ -28,7 +28,7 @@ export class UserWishlistService {
       const set = byNumber.get(num);
       if (set) {
         setViewModels.push(
-          SetViewModel.fromBionicleSet({
+          SetViewModel.build({
             set,
             collectionSetNumbers: ctx.collectionSetNumbers,
             userRatings: ctx.userRatingsBySet,
@@ -39,7 +39,7 @@ export class UserWishlistService {
       }
     }
 
-    return WishlistViewModel.fromSetViewModels(setViewModels);
+    return SetsGroupedViewModel.toWishlist(setViewModels);
   }
 
   async setWishlist(

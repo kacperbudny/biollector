@@ -2,8 +2,8 @@ import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.rep
 import type { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingEntity } from "@/domain/set-rating.entity";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
-import { RatingsViewModel } from "@/domain/view-models/ratings.view-model";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
+import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
 
 export class SetRatingService {
   constructor(
@@ -12,7 +12,7 @@ export class SetRatingService {
     private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
-  async getRatingsViewModel(userId: string): Promise<RatingsViewModel> {
+  async getRatingsViewModel(userId: string): Promise<SetsGroupedViewModel> {
     const ctx = await this.setViewModelContextLoader.load({
       userId,
     });
@@ -28,7 +28,7 @@ export class SetRatingService {
       const set = byNumber.get(num);
       if (set) {
         setViewModels.push(
-          SetViewModel.fromBionicleSet({
+          SetViewModel.build({
             set,
             collectionSetNumbers: ctx.collectionSetNumbers,
             userRatings: ctx.userRatingsBySet,
@@ -39,7 +39,7 @@ export class SetRatingService {
       }
     }
 
-    return RatingsViewModel.fromSetViewModels(setViewModels);
+    return SetsGroupedViewModel.toRatings(setViewModels);
   }
 
   async getTotalRatingsCount(): Promise<number> {

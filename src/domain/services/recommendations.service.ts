@@ -71,7 +71,7 @@ export class RecommendationsService {
     const ctx = await this.setViewModelContextLoader.load({ userId });
     const allSets = this.setsRepository.getAll();
     const setViewModels = allSets.map((set) =>
-      SetViewModel.fromBionicleSet({
+      SetViewModel.build({
         set,
         collectionSetNumbers: ctx.collectionSetNumbers,
         userRatings: ctx.userRatingsBySet,

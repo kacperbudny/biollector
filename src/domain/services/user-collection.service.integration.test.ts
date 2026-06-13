@@ -1,6 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import type { UserCollectionRepository } from "@/data/repositories/user-collection.repository";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
+import type { NestedSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { truncateTestDb } from "@/tests/db";
 import {
   getIntegrationUserCollectionRepository,
@@ -52,7 +53,9 @@ describe(UserCollectionService.name, () => {
       const vm =
         await userCollectionService.getCollectionListViewModel("user-123");
       expect(vm.collectionCount).toBe(1);
-      const collected = vm.data.flatMap((y) => y.waves.flatMap((w) => w.sets));
+      const collected = vm.sections.flatMap((s) =>
+        (s as NestedSetSection).groups.flatMap((g) => g.sets),
+      );
       expect(collected.map((s) => s.catalogNumber)).toEqual(["8534"]);
     });
   });

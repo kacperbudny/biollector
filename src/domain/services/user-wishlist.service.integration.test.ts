@@ -2,6 +2,7 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import type { UserWishlistRepository } from "@/data/repositories/user-wishlist.repository";
 import { UserWishlistService } from "@/domain/services/user-wishlist.service";
 import { UserWishlistScale } from "@/domain/user-wishlist";
+import type { FlatSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { truncateTestDb } from "@/tests/db";
 import {
   getIntegrationUserWishlistRepository,
@@ -52,7 +53,7 @@ describe(UserWishlistService.name, () => {
         );
         const vm = await wishlistService.getWishlistViewModel("user-123");
         const catalogNumbers = vm.sections.flatMap((section) =>
-          section.sets.map((s) => s.catalogNumber),
+          (section as FlatSetSection).sets.map((s) => s.catalogNumber),
         );
         expect(catalogNumbers).toContain("8534");
       });

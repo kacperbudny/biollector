@@ -27,6 +27,7 @@
     "@neondatabase/serverless": "^1.0.2",
     "@stackframe/stack": "^2.8.77",
     "@t3-oss/env-nextjs": "^0.13.10",
+    "@tanstack/react-virtual": "^3.14.2",
     "clsx": "^2.1.1",
     "dotenv": "^17.3.1",
     "kysely": "^0.28.14",

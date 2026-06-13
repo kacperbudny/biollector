@@ -4,54 +4,25 @@ import {
   userWishlistScaleSchema,
 } from "@/domain/user-wishlist";
 
-export class SetViewModel {
-  private static readonly WISHLIST_SCALE_LABELS: Record<
-    UserWishlistScale,
-    string
-  > = {
-    [UserWishlistScale.NOT_INTERESTED]: "Not interested",
-    [UserWishlistScale.VERY_LOW]: "Very low priority",
-    [UserWishlistScale.LOW]: "Low priority",
-    [UserWishlistScale.MEDIUM]: "Medium priority",
-    [UserWishlistScale.HIGH]: "High priority",
-    [UserWishlistScale.MUST_HAVE]: "Must have",
-  };
+export type SetViewModel = {
+  catalogNumber: string;
+  name: string;
+  releaseYear: string;
+  setType: SetType;
+  imageName: string;
+  wave: Wave;
+  characters: BionicleSet["characters"];
+  minifigures: BionicleSet["minifigures"];
+  isInCollection: boolean;
+  wishlistScale: UserWishlistScale | null;
+  wishlisted: boolean;
+  notInterested: boolean;
+  userRating?: number;
+  averageRating?: number;
+};
 
-  constructor(
-    public readonly catalogNumber: string,
-    public readonly name: string,
-    public readonly releaseYear: string,
-    public readonly setType: SetType,
-    public readonly imageName: string,
-    public readonly wave: Wave,
-    public readonly characters: BionicleSet["characters"],
-    public readonly minifigures: BionicleSet["minifigures"],
-    public readonly isInCollection: boolean,
-    public readonly wishlistScale: UserWishlistScale | null,
-    public readonly userRating?: number,
-    public readonly averageRating?: number,
-  ) {
-    if (wishlistScale !== null) {
-      userWishlistScaleSchema.parse(wishlistScale);
-    }
-  }
-
-  static getWishlistScaleLabel(scale: UserWishlistScale): string {
-    return SetViewModel.WISHLIST_SCALE_LABELS[scale];
-  }
-
-  get wishlisted(): boolean {
-    return (
-      this.wishlistScale !== null &&
-      this.wishlistScale !== UserWishlistScale.NOT_INTERESTED
-    );
-  }
-
-  get notInterested(): boolean {
-    return this.wishlistScale === UserWishlistScale.NOT_INTERESTED;
-  }
-
-  static fromBionicleSet({
+export namespace SetViewModel {
+  export function build({
     set,
     collectionSetNumbers,
     userRatings,
@@ -64,19 +35,30 @@ export class SetViewModel {
     averageRatings: Record<string, number>;
     userWishlistState: Record<string, number>;
   }): SetViewModel {
-    return new SetViewModel(
-      set.catalogNumber,
-      set.name,
-      set.releaseYear,
-      set.setType,
-      set.imageName,
-      set.wave,
-      set.characters,
-      set.minifigures,
-      collectionSetNumbers.includes(set.catalogNumber),
-      userWishlistState[set.catalogNumber] ?? null,
-      userRatings[set.catalogNumber],
-      averageRatings[set.catalogNumber],
-    );
+    const wishlistScale =
+      (userWishlistState[set.catalogNumber] as UserWishlistScale) ?? null;
+
+    if (wishlistScale !== null) {
+      userWishlistScaleSchema.parse(wishlistScale);
+    }
+
+    return {
+      catalogNumber: set.catalogNumber,
+      name: set.name,
+      releaseYear: set.releaseYear,
+      setType: set.setType,
+      imageName: set.imageName,
+      wave: set.wave,
+      characters: set.characters,
+      minifigures: set.minifigures,
+      isInCollection: collectionSetNumbers.includes(set.catalogNumber),
+      wishlistScale,
+      wishlisted:
+        wishlistScale !== null &&
+        wishlistScale !== UserWishlistScale.NOT_INTERESTED,
+      notInterested: wishlistScale === UserWishlistScale.NOT_INTERESTED,
+      userRating: userRatings[set.catalogNumber],
+      averageRating: averageRatings[set.catalogNumber],
+    };
   }
 }
