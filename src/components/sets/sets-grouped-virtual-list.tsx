@@ -215,8 +215,12 @@ function VirtualRowRenderer({
   row: VirtualRow;
   columns: number;
 }) {
-  if (row.kind === "section-header") { return <SectionHeader row={row} />; }
-  if (row.kind === "group-header") { return <GroupHeader row={row} />; }
+  if (row.kind === "section-header") {
+    return <SectionHeader row={row} />;
+  }
+  if (row.kind === "group-header") {
+    return <GroupHeader row={row} />;
+  }
   return <CardRow row={row} columns={columns} />;
 }
 
@@ -267,11 +271,7 @@ function GroupHeader({ row }: { row: VirtualGroupHeader }) {
 function CardRow({ row, columns }: { row: VirtualCardRow; columns: number }) {
   return (
     <div
-      className={cn(
-        "grid gap-4",
-        GRID_COLS_CLASS[columns],
-        row.bottomPadding,
-      )}
+      className={cn("grid gap-4", GRID_COLS_CLASS[columns], row.bottomPadding)}
     >
       {row.sets.map((set) => (
         <SetCard key={set.catalogNumber} set={set} wave={set.wave} />
