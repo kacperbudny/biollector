@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 # heroui-agents-md
 .heroui-docs/
+
+# pnpm local store (created when global store is unavailable)
+.pnpm-store/

@@ -1,13 +1,8 @@
 import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import {
-  FileMigrationProvider,
-  Kysely,
-  Migrator,
-  PostgresDialect,
-  sql,
-} from "kysely";
+import { Kysely, PostgresDialect, sql } from "kysely";
+import { FileMigrationProvider, Migrator } from "kysely/migration";
 import { Pool } from "pg";
 import { inject } from "vitest";
 import type { DB } from "@/data/db/types";

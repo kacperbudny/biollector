@@ -1,4 +1,3 @@
-import { setInteractionModality } from "@react-aria/interactions";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
@@ -40,8 +39,9 @@ describe(SetRatingInput.name, () => {
   it("shows the sign-in tooltip when hovering stars while signed out", async () => {
     useUserMock.mockReturnValue(null);
     // React Aria tooltips only open on hover when getInteractionModality() is
-    // "pointer"; jsdom never runs the real pointer listeners that set it.
-    setInteractionModality("pointer");
+    // "pointer". In NODE_ENV=test with PointerEvent available (jsdom 26+),
+    // react-aria listens to "pointermove" on document to set modality.
+    fireEvent.pointerMove(document, { pointerType: "mouse" });
 
     const user = userEvent.setup({ pointerEventsCheck: 0 });
     const { container } = render(<SetRatingInput setNumber={setNumber} />);
