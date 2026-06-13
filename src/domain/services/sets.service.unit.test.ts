@@ -2,6 +2,10 @@ import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetsService } from "@/domain/services/sets.service";
 import { type BionicleSet, Wave } from "@/domain/sets";
+import type {
+  NestedSetSection,
+  SetsGroupedViewModel,
+} from "@/domain/view-models/sets-grouped.view-model";
 import { setFixture } from "@/tests/fixtures";
 import { setViewModelContextLoaderMock } from "@/tests/unit";
 
@@ -29,7 +33,7 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result.data.map((r) => r.year)).toEqual(["2001", "2006"]);
+      expect(result.sections.map((s) => s.label)).toEqual(["2001", "2006"]);
     });
 
     it("groups sets by year and wave according to Wave enum order", async () => {
@@ -54,16 +58,18 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result.data).toHaveLength(1);
-      expect(result.data[0].year).toBe("2001");
-      expect(result.data[0].waves.map((w) => w.wave)).toEqual([
+      expect(result.sections).toHaveLength(1);
+      const section = result.sections[0] as NestedSetSection;
+      expect(section.label).toBe("2001");
+
+      expect(section.groups.map((g) => g.label)).toEqual([
         Wave.TOHUNGA,
         Wave.TOA_MATA,
       ]);
-      expect(result.data[0].waves[0].sets).toHaveLength(1);
-      expect(result.data[0].waves[0].sets[0].name).toBe("Tohunga");
-      expect(result.data[0].waves[1].sets).toHaveLength(1);
-      expect(result.data[0].waves[1].sets[0].name).toBe("Toa");
+      expect(section.groups[0].sets).toHaveLength(1);
+      expect(section.groups[0].sets[0].name).toBe("Tohunga");
+      expect(section.groups[1].sets).toHaveLength(1);
+      expect(section.groups[1].sets[0].name).toBe("Toa");
     });
 
     it("returns empty array when repository returns no sets", async () => {
@@ -74,7 +80,7 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel();
 
-      expect(result.data).toEqual([]);
+      expect(result.sections).toEqual([]);
     });
 
     it("properly marks sets in user collection", async () => {
@@ -103,11 +109,9 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel("user-123");
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
-      );
-      const set1 = allSets.find((s) => s.catalogNumber === "1");
-      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      const resultSets = flattenSets(result);
+      const set1 = resultSets.find((s) => s.catalogNumber === "1");
+      const set2 = resultSets.find((s) => s.catalogNumber === "2");
       expect(set1?.isInCollection).toBe(true);
       expect(set2?.isInCollection).toBe(false);
     });
@@ -138,11 +142,9 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel("user-123");
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
-      );
-      const set1 = allSets.find((s) => s.catalogNumber === "1");
-      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      const resultSets = flattenSets(result);
+      const set1 = resultSets.find((s) => s.catalogNumber === "1");
+      const set2 = resultSets.find((s) => s.catalogNumber === "2");
       expect(set1?.userRating).toBe(4);
       expect(set2?.userRating).toBeUndefined();
     });
@@ -163,10 +165,7 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel();
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
-      );
-      expect(allSets[0]?.userRating).toBeUndefined();
+      expect(flattenSets(result)[0]?.userRating).toBeUndefined();
     });
 
     it("includes average rating when getAverageRatings returns data", async () => {
@@ -195,13 +194,17 @@ describe(SetsService.name, () => {
 
       const result = await service.getSetsListViewModel();
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
-      );
-      const set1 = allSets.find((s) => s.catalogNumber === "1");
-      const set2 = allSets.find((s) => s.catalogNumber === "2");
+      const resultSets = flattenSets(result);
+      const set1 = resultSets.find((s) => s.catalogNumber === "1");
+      const set2 = resultSets.find((s) => s.catalogNumber === "2");
       expect(set1?.averageRating).toBe(4.2);
       expect(set2?.averageRating).toBeUndefined();
     });
   });
 });
+
+function flattenSets(result: SetsGroupedViewModel) {
+  return result.sections.flatMap((s) =>
+    (s as NestedSetSection).groups.flatMap((g) => g.sets),
+  );
+}

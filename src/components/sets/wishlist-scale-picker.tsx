@@ -13,8 +13,10 @@ import { useUser } from "@stackframe/stack";
 import { useOptimisticAction } from "next-safe-action/hooks";
 import { setWishlist } from "@/actions/user-wishlist.actions";
 import { getActionErrorMessage } from "@/actions/utils";
-import { UserWishlistScale } from "@/domain/user-wishlist";
-import { SetViewModel } from "@/domain/view-models/set.view-model";
+import {
+  getWishlistScaleLabel,
+  UserWishlistScale,
+} from "@/domain/user-wishlist";
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { cn } from "@/styles/cn";
 
@@ -249,7 +251,7 @@ function ScaleOptionButton({
           : "min-h-8 min-w-8 justify-center",
         isSelected && "bg-white/20",
       )}
-      aria-label={SetViewModel.getWishlistScaleLabel(value)}
+      aria-label={getWishlistScaleLabel(value)}
       disabled={isDisabled}
       onClick={() => onClick(value)}
     >
@@ -260,11 +262,11 @@ function ScaleOptionButton({
       />
       {isMobileVariant ? (
         <span className={cn("text-sm", isSelected && "font-semibold")}>
-          {SetViewModel.getWishlistScaleLabel(value)}
+          {getWishlistScaleLabel(value)}
         </span>
       ) : (
         <span className="z-20 pointer-events-none absolute left-full top-1/2 ml-2 -translate-y-1/2 whitespace-nowrap rounded-md bg-black/90 px-2 py-1 text-xs text-white opacity-0 transition-opacity group-hover/option:opacity-100">
-          {SetViewModel.getWishlistScaleLabel(value)}
+          {getWishlistScaleLabel(value)}
         </span>
       )}
     </button>
@@ -371,5 +373,5 @@ function getTriggerLabel(
     return "Add set to wishlist";
   }
 
-  return `Wishlist: ${SetViewModel.getWishlistScaleLabel(scale)}`;
+  return `Wishlist: ${getWishlistScaleLabel(scale)}`;
 }

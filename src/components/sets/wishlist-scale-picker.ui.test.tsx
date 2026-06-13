@@ -2,8 +2,10 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { setWishlist } from "@/actions/user-wishlist.actions";
-import { UserWishlistScale } from "@/domain/user-wishlist";
-import { SetViewModel } from "@/domain/view-models/set.view-model";
+import {
+  getWishlistScaleLabel,
+  UserWishlistScale,
+} from "@/domain/user-wishlist";
 import { WishlistScalePicker } from "./wishlist-scale-picker";
 
 const { setWishlistAction, useUserMock, useIsMobileMock } = vi.hoisted(() => ({
@@ -70,7 +72,7 @@ describe(WishlistScalePicker.name, () => {
 
     expect(
       screen.getByRole("button", {
-        name: `Wishlist: ${SetViewModel.getWishlistScaleLabel(UserWishlistScale.MEDIUM)}`,
+        name: `Wishlist: ${getWishlistScaleLabel(UserWishlistScale.MEDIUM)}`,
       }),
     ).toBeInTheDocument();
   });
@@ -85,7 +87,7 @@ describe(WishlistScalePicker.name, () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: SetViewModel.getWishlistScaleLabel(UserWishlistScale.HIGH),
+        name: getWishlistScaleLabel(UserWishlistScale.HIGH),
       }),
     );
 
@@ -110,7 +112,7 @@ describe(WishlistScalePicker.name, () => {
       screen.getByRole("button", { name: "Add set to wishlist" }),
     );
 
-    const lowLabel = SetViewModel.getWishlistScaleLabel(UserWishlistScale.LOW);
+    const lowLabel = getWishlistScaleLabel(UserWishlistScale.LOW);
     const lowButton = await screen.findByRole("button", { name: lowLabel });
     await user.click(lowButton);
 
@@ -135,7 +137,7 @@ describe(WishlistScalePicker.name, () => {
 
     fireEvent.click(
       screen.getByRole("button", {
-        name: SetViewModel.getWishlistScaleLabel(UserWishlistScale.MUST_HAVE),
+        name: getWishlistScaleLabel(UserWishlistScale.MUST_HAVE),
       }),
     );
 

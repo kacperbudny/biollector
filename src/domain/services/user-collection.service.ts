@@ -2,7 +2,7 @@ import type { SetsRepository } from "@/data/repositories/sets.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
+import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
 
 export class UserCollectionService {
   constructor(
@@ -36,7 +36,9 @@ export class UserCollectionService {
     await this.collectionRepository.insert(userId, setNumber);
   }
 
-  async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
+  async getCollectionListViewModel(
+    userId: string,
+  ): Promise<SetsGroupedViewModel> {
     const ctx = await this.setViewModelContextLoader.load({ userId });
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
@@ -47,7 +49,7 @@ export class UserCollectionService {
       const set = byNumber.get(num);
       if (set) {
         userSets.push(
-          SetViewModel.fromBionicleSet({
+          SetViewModel.build({
             set,
             collectionSetNumbers: ctx.collectionSetNumbers,
             userRatings: ctx.userRatingsBySet,
@@ -58,8 +60,6 @@ export class UserCollectionService {
       }
     }
 
-    return SetsListViewModel.fromSetViewModels(userSets).toCollectionViewModel(
-      allSets,
-    );
+    return SetsGroupedViewModel.toCollection(userSets, allSets);
   }
 }

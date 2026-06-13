@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
-import { RatingsSetsList } from "@/components/sets/ratings-sets-list";
+import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { setRatingService } from "@/dependency-injection";
 
@@ -27,11 +27,7 @@ export default async function RatingsPage() {
       >
         My ratings
       </PageTitle>
-      {ratingsCount > 0 ? (
-        <RatingsSetsList viewModel={viewModel} />
-      ) : (
-        <RatingsEmpty />
-      )}
+      {ratingsCount > 0 ? <SetsList viewModel={viewModel} /> : <RatingsEmpty />}
     </>
   );
 }

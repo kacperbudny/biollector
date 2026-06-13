@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { Wave } from "@/domain/sets";
+import type { FlatSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { setFixture } from "@/tests/fixtures";
 import {
   setRatingRepositoryMock,
@@ -40,12 +41,12 @@ describe(SetRatingService.name, () => {
 
       expect(vm.totalCount).toBe(2);
       expect(vm.sections).toHaveLength(2);
-      expect(vm.sections[0].rating).toBe(5);
-      expect(vm.sections[0].label).toBe("5 stars");
-      expect(vm.sections[0].sets.map((s) => s.catalogNumber)).toEqual(["8534"]);
-      expect(vm.sections[1].rating).toBe(4);
-      expect(vm.sections[1].label).toBe("4 stars");
-      expect(vm.sections[1].sets.map((s) => s.catalogNumber)).toEqual(["1388"]);
+
+      const [five, four] = vm.sections as FlatSetSection[];
+      expect(five.label).toBe("5 stars");
+      expect(four.label).toBe("4 stars");
+      expect(five.sets.map((s) => s.catalogNumber)).toEqual(["8534"]);
+      expect(four.sets.map((s) => s.catalogNumber)).toEqual(["1388"]);
     });
 
     it("returns empty view model when user has no ratings", async () => {

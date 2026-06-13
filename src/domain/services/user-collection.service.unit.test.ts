@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
 import { type BionicleSet, Wave } from "@/domain/sets";
+import type { NestedSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { setFixture } from "@/tests/fixtures";
 import {
   setViewModelContextLoaderMock,
@@ -124,20 +125,19 @@ describe(UserCollectionService.name, () => {
       );
 
       const result = await service.getCollectionListViewModel("user-123");
-      const [year2001, year2002] = result.data;
-      const [toaMata] = year2001.waves;
-      const [bohrokVa, toaNuva] = year2002.waves;
-
-      expect(result.data).toHaveLength(2);
+      expect(result.sections).toHaveLength(2);
       expect(result.totalCount).toBe(6);
       expect(result.collectionCount).toBe(4);
 
-      expect(year2001.year).toBe("2001");
-      expect(year2001.totalCount).toBe(3);
-      expect(year2001.collectionCount).toBe(2);
-      expect(year2001.waves).toHaveLength(1);
+      const [section2001, section2002] = result.sections as NestedSetSection[];
 
-      expect(toaMata.wave).toBe(Wave.TOA_MATA);
+      expect(section2001.label).toBe("2001");
+      expect(section2001.totalCount).toBe(3);
+      expect(section2001.collectionCount).toBe(2);
+      expect(section2001.groups).toHaveLength(1);
+
+      const toaMata = section2001.groups[0];
+      expect(toaMata.label).toBe(Wave.TOA_MATA);
       expect(toaMata.totalCount).toBe(3);
       expect(toaMata.collectionCount).toBe(2);
       expect(toaMata.isComplete).toBe(false);
@@ -145,19 +145,20 @@ describe(UserCollectionService.name, () => {
       expect(toaMata.sets.map((s) => s.catalogNumber)).toEqual(["1", "3"]);
       expect(toaMata.sets.every((s) => s.isInCollection)).toBe(true);
 
-      expect(year2002.year).toBe("2002");
-      expect(year2002.totalCount).toBe(3);
-      expect(year2002.collectionCount).toBe(2);
-      expect(year2002.waves).toHaveLength(2);
+      expect(section2002.label).toBe("2002");
+      expect(section2002.totalCount).toBe(3);
+      expect(section2002.collectionCount).toBe(2);
+      expect(section2002.groups).toHaveLength(2);
 
-      expect(bohrokVa.wave).toBe(Wave.BOHROK_VA);
+      const [bohrokVa, toaNuva] = section2002.groups;
+      expect(bohrokVa.label).toBe(Wave.BOHROK_VA);
       expect(bohrokVa.totalCount).toBe(1);
       expect(bohrokVa.collectionCount).toBe(1);
       expect(bohrokVa.isComplete).toBe(true);
       expect(bohrokVa.sets).toHaveLength(1);
       expect(bohrokVa.sets.map((s) => s.catalogNumber)).toEqual(["6"]);
 
-      expect(toaNuva.wave).toBe(Wave.TOA_NUVA);
+      expect(toaNuva.label).toBe(Wave.TOA_NUVA);
       expect(toaNuva.totalCount).toBe(2);
       expect(toaNuva.collectionCount).toBe(1);
       expect(toaNuva.isComplete).toBe(false);
@@ -184,7 +185,7 @@ describe(UserCollectionService.name, () => {
 
       expect(result.totalCount).toBe(1);
       expect(result.collectionCount).toBe(0);
-      expect(result.data).toHaveLength(0);
+      expect(result.sections).toHaveLength(0);
     });
 
     it("excludes set numbers not found in catalog", async () => {
@@ -208,9 +209,10 @@ describe(UserCollectionService.name, () => {
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      expect(result.data).toHaveLength(1);
-      expect(result.data[0].waves[0].sets).toHaveLength(1);
-      expect(result.data[0].waves[0].sets[0].catalogNumber).toBe("1");
+      expect(result.sections).toHaveLength(1);
+      const section = result.sections[0] as NestedSetSection;
+      expect(section.groups[0].sets).toHaveLength(1);
+      expect(section.groups[0].sets[0].catalogNumber).toBe("1");
     });
 
     it("includes user ratings on set view models", async () => {
@@ -243,8 +245,8 @@ describe(UserCollectionService.name, () => {
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
+      const allSets = result.sections.flatMap((s) =>
+        (s as NestedSetSection).groups.flatMap((g) => g.sets),
       );
       const set1 = allSets.find((s) => s.catalogNumber === "1");
       const set2 = allSets.find((s) => s.catalogNumber === "2");
@@ -285,8 +287,8 @@ describe(UserCollectionService.name, () => {
 
       const result = await service.getCollectionListViewModel("user-123");
 
-      const allSets = result.data.flatMap((y) =>
-        y.waves.flatMap((w) => w.sets),
+      const allSets = result.sections.flatMap((s) =>
+        (s as NestedSetSection).groups.flatMap((g) => g.sets),
       );
       const set1 = allSets.find((s) => s.catalogNumber === "1");
       const set2 = allSets.find((s) => s.catalogNumber === "2");
