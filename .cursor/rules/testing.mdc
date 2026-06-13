@@ -16,7 +16,7 @@ alwaysApply: true
   - **Integration**: `**/*.integration.test.ts` — Postgres + `getIntegration*` wiring from `src/tests/integration.ts`.
   - **UI**: `**/*.ui.test.tsx` — React Testing Library + **jsdom** (see below).
 - **`pnpm test:unit`** / **`pnpm test:integration`** / **`pnpm test:ui`** run the matching project only.
-- **`pnpm test`** runs **`vitest run`** (default **`vitest.config.ts`** workspace: **unit**, **integration**, and **ui** projects). Each project **`include`**s only its glob, so every file runs in exactly one project (no duplicate runs, no `testNamePattern` skips). Integration uses Postgres **`globalSetup`** (`maxWorkers` / `maxConcurrency` **1**). The **ui** project sets **`environment: "jsdom"`** in **`vitest.ui.config.ts`**. **`jsdom`** is pinned to **24.x** (`package.json`): **jsdom 29** currently breaks Vitest’s test workers (`ERR_REQUIRE_ESM` from `html-encoding-sniffer` → `@exodus/bytes`). Revisit the pin when Vitest/jsdom fix that chain.
+- **`pnpm test`** runs **`vitest run`** (default **`vitest.config.ts`** workspace: **unit**, **integration**, and **ui** projects). Each project **`include`**s only its glob, so every file runs in exactly one project (no duplicate runs, no `testNamePattern` skips). Integration uses Postgres **`globalSetup`** (`maxWorkers` / `maxConcurrency` **1**). The **ui** project sets **`environment: "jsdom"`** in **`vitest.ui.config.ts`**.
 - **`vitest.integration.config.ts`** sets **`maxWorkers: 1`** and **`maxConcurrency: 1`**: a single Testcontainers Postgres is shared; tests reset data with `truncateTestDb()` in `afterEach`, so parallel tests would race.
 
 # UI / component tests (React Testing Library)
