@@ -11,6 +11,7 @@ import {
 import { MutedText } from "@/components/typography/text";
 import type { SetViewModel } from "@/domain/view-models/set.view-model";
 import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import { cn } from "@/styles/cn";
 
 // TODO: get rid of this virtualization mess while implementing server-side filters.
 
@@ -199,6 +200,14 @@ export function SetsGroupedVirtualList({
   );
 }
 
+// Maps JS column count to its Tailwind grid-cols class (must match GRID_BREAKPOINTS).
+const GRID_COLS_CLASS: Record<number, string> = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  6: "grid-cols-6",
+};
+
 function VirtualRowRenderer({
   row,
   columns,
@@ -206,58 +215,63 @@ function VirtualRowRenderer({
   row: VirtualRow;
   columns: number;
 }) {
-  if (row.kind === "section-header") {
-    return (
-      <SectionHeading>
-        <span className="inline-flex items-center gap-2">
-          {row.label}
-          {row.isComplete && (
-            <CheckCircleIcon
-              className="h-5 w-5 shrink-0 text-green-600"
-              aria-hidden
-            />
-          )}
-        </span>
-        {row.collectionCount != null && (
-          <MutedText>
-            {" "}
-            ({row.collectionCount} of {row.totalCount} sets)
-          </MutedText>
-        )}
-      </SectionHeading>
-    );
-  }
+  if (row.kind === "section-header") { return <SectionHeader row={row} />; }
+  if (row.kind === "group-header") { return <GroupHeader row={row} />; }
+  return <CardRow row={row} columns={columns} />;
+}
 
-  if (row.kind === "group-header") {
-    return (
-      <SubsectionHeading>
-        <span className="inline-flex items-center gap-2">
-          {row.label}
-          {row.isComplete && (
-            <CheckCircleIcon
-              className="h-5 w-5 shrink-0 text-green-600"
-              aria-hidden
-            />
-          )}
-        </span>
-        {row.collectionCount != null && (
-          <MutedText>
-            {" "}
-            ({row.collectionCount} of {row.totalCount} sets)
-          </MutedText>
+function SectionHeader({ row }: { row: VirtualSectionHeader }) {
+  return (
+    <SectionHeading>
+      <span className="inline-flex items-center gap-2">
+        {row.label}
+        {row.isComplete && (
+          <CheckCircleIcon
+            className="h-5 w-5 shrink-0 text-green-600"
+            aria-hidden
+          />
         )}
-      </SubsectionHeading>
-    );
-  }
+      </span>
+      {row.collectionCount != null && (
+        <MutedText>
+          {" "}
+          ({row.collectionCount} of {row.totalCount} sets)
+        </MutedText>
+      )}
+    </SectionHeading>
+  );
+}
 
+function GroupHeader({ row }: { row: VirtualGroupHeader }) {
+  return (
+    <SubsectionHeading>
+      <span className="inline-flex items-center gap-2">
+        {row.label}
+        {row.isComplete && (
+          <CheckCircleIcon
+            className="h-5 w-5 shrink-0 text-green-600"
+            aria-hidden
+          />
+        )}
+      </span>
+      {row.collectionCount != null && (
+        <MutedText>
+          {" "}
+          ({row.collectionCount} of {row.totalCount} sets)
+        </MutedText>
+      )}
+    </SubsectionHeading>
+  );
+}
+
+function CardRow({ row, columns }: { row: VirtualCardRow; columns: number }) {
   return (
     <div
-      className={row.bottomPadding}
-      style={{
-        display: "grid",
-        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
-        gap: "1rem",
-      }}
+      className={cn(
+        "grid gap-4",
+        GRID_COLS_CLASS[columns],
+        row.bottomPadding,
+      )}
     >
       {row.sets.map((set) => (
         <SetCard key={set.catalogNumber} set={set} wave={set.wave} />
