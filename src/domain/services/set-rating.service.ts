@@ -4,6 +4,7 @@ import { SetRatingEntity } from "@/domain/set-rating.entity";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import { logger } from "@/lib/logger";
 
 export class SetRatingService {
   constructor(
@@ -60,5 +61,6 @@ export class SetRatingService {
     await this.setRatingRepository.setRating(
       SetRatingEntity.create({ userId, setNumber, rating }),
     );
+    logger.info("Set rating saved", { userId, setNumber, rating });
   }
 }

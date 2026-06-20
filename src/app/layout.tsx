@@ -1,4 +1,6 @@
 import "@/styles/globals.css";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { Providers } from "@/app/providers";
@@ -28,6 +30,8 @@ export default function RootLayout({
             {children}
           </main>
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

@@ -10,5 +10,8 @@ export default defineProject({
     maxWorkers: 1,
     maxConcurrency: 1,
     globalSetup: ["./vitest.integration.global-setup.ts"],
+    env: {
+      SKIP_ENV_VALIDATION: "1",
+    },
   },
 });

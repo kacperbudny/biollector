@@ -4,6 +4,7 @@ import type { BionicleCharacter, BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { RecommendationViewModel } from "@/domain/view-models/recommendation.view-model";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
+import { logger } from "@/lib/logger";
 
 const NO_VARIATION_KEY = "__NO_VARIATION__";
 
@@ -56,6 +57,7 @@ type ScopeCounts = {
 } & CharacterScopeCounts &
   GenerationScopeCounts;
 
+// TODO: this could probably be improved using something like a strategy pattern
 export class RecommendationsService {
   constructor(
     private readonly setsRepository: SetsRepository,
@@ -94,7 +96,7 @@ export class RecommendationsService {
     );
     const scored = candidates.map((set) => this.scoreSet(set, scopeCounts));
 
-    return scored
+    const results = scored
       .toSorted((a, b) => {
         const byScore = b.score - a.score;
         if (byScore !== 0) {
@@ -116,6 +118,9 @@ export class RecommendationsService {
         return a.set.catalogNumber.localeCompare(b.set.catalogNumber);
       })
       .slice(0, limit);
+
+    logger.debug("Recommendations computed", { userId, count: results.length });
+    return results;
   }
 
   private buildScopeCounts(
