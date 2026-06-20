@@ -28,6 +28,8 @@
     "@stackframe/stack": "^2.8.108",
     "@t3-oss/env-nextjs": "^0.13.11",
     "@tanstack/react-virtual": "^3.14.2",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "clsx": "^2.1.1",
     "dotenv": "^17.4.2",
     "kysely": "^0.29.2",

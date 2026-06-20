@@ -3,6 +3,7 @@ import type { UserCollectionRepositoryPort } from "@/data/repositories/user-coll
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import { logger } from "@/lib/logger";
 
 export class UserCollectionService {
   constructor(
@@ -27,13 +28,13 @@ export class UserCollectionService {
     );
 
     if (isInCollection) {
-      return await this.collectionRepository.deleteFromCollection(
-        userId,
-        setNumber,
-      );
+      await this.collectionRepository.deleteFromCollection(userId, setNumber);
+      logger.info("Set removed from collection", { userId, setNumber });
+      return;
     }
 
     await this.collectionRepository.insert(userId, setNumber);
+    logger.info("Set added to collection", { userId, setNumber });
   }
 
   async getCollectionListViewModel(

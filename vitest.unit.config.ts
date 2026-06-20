@@ -7,5 +7,8 @@ export default defineProject({
     name: "unit",
     environment: "node",
     include: ["**/*.unit.test.ts"],
+    env: {
+      SKIP_ENV_VALIDATION: "1",
+    },
   },
 });

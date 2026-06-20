@@ -4,6 +4,7 @@ import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-
 import type { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
 import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import { logger } from "@/lib/logger";
 
 export class UserWishlistService {
   constructor(
@@ -54,9 +55,11 @@ export class UserWishlistService {
 
     if (scale === null) {
       await this.wishlistRepository.deleteFromWishlist(userId, setNumber);
+      logger.info("Set removed from wishlist", { userId, setNumber });
       return;
     }
 
     await this.wishlistRepository.setWishlist(userId, setNumber, scale);
+    logger.info("Wishlist updated", { userId, setNumber, scale });
   }
 }
