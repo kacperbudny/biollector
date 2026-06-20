@@ -77,5 +77,5 @@ Scripts:
 - **Package Manager**: pnpm
 - **Auth solution**: Stack Auth
 - **Database**: Neon + Kysely
-- **Testing**: Vitest + testcontainers + React Testing Library
+- **Testing**: Vitest + testcontainers + React Testing Library + Playwright
 - **Validation**: zod
