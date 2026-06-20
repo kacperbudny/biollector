@@ -35,7 +35,9 @@ function makeLogger(
   resolveRequestId: () => Promise<string | undefined>,
 ): LoggerInstance {
   const emit = async (level: Level, message: string, data?: object) => {
-    if (LEVELS[level] < LEVELS[getMinLevel()]) {
+    const isSilent = process.env.NODE_ENV === "test";
+
+    if (LEVELS[level] < LEVELS[getMinLevel()] || isSilent) {
       return;
     }
 
