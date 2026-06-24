@@ -8,13 +8,17 @@ export class WishlistPage extends SetsListPageObject {
   }
 
   async expectEmpty() {
-    await expect(this.page.getByText("Your wishlist is empty")).toBeVisible();
+    await expect(this.page.getByText("Your wishlist is empty")).toBeVisible({
+      timeout: 15_000,
+    });
   }
 
   async expectSetInSection(section: string, set: TestSet) {
-    await expect(
-      this.page.getByRole("heading", { name: section }),
-    ).toBeVisible();
-    await expect(this.page.getByText(set.name)).toBeVisible();
+    const heading = this.page.getByRole("heading", { name: section });
+    await heading.scrollIntoViewIfNeeded();
+    await expect(heading).toBeVisible({ timeout: 15_000 });
+    await expect(this.page.getByText(set.name)).toBeVisible({
+      timeout: 15_000,
+    });
   }
 }

@@ -13,14 +13,19 @@ export class SetsListPageObject {
   async searchFor(set: TestSet) {
     const searchbox = this.page.getByRole("searchbox", { name: "Search sets" });
     await expect(searchbox).toBeVisible({ timeout: 10_000 });
+    await searchbox.click();
     await searchbox.fill(set.catalog);
+    await expect(searchbox).toHaveValue(set.catalog);
 
-    const heading = this.page.getByRole("heading", {
-      name: set.name,
-      level: 3,
+    await expect(this.page.getByText(/Showing \d+ of \d+ sets/)).toBeVisible({
+      timeout: 15_000,
     });
-    await expect(heading).toBeVisible({ timeout: 15_000 });
-    await heading.scrollIntoViewIfNeeded();
+
+    await expect(async () => {
+      const card = this.setCard(set);
+      await expect(card.locator()).toBeVisible();
+      await card.locator().scrollIntoViewIfNeeded();
+    }).toPass({ timeout: 15_000 });
   }
 
   async expectSetVisible(set: TestSet) {

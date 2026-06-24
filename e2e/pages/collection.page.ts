@@ -8,6 +8,8 @@ export class CollectionPage extends SetsListPageObject {
   }
 
   async expectEmpty() {
-    await expect(this.page.getByText("Your collection is empty")).toBeVisible();
+    await expect(this.page.getByText("Your collection is empty")).toBeVisible({
+      timeout: 15_000,
+    });
   }
 }

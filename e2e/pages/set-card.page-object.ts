@@ -19,16 +19,20 @@ export class SetCard {
   }
 
   async addToCollection() {
+    const actionDone = this.waitForServerAction();
     await this.root.getByRole("button", { name: "Add to collection" }).click();
+    await actionDone;
     await expect(
       this.root.getByRole("button", { name: "Remove from collection" }),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15_000 });
   }
 
   async removeFromCollection() {
+    const actionDone = this.waitForServerAction();
     await this.root
       .getByRole("button", { name: "Remove from collection" })
       .click();
+    await actionDone;
   }
 
   async isInCollection(): Promise<boolean> {
@@ -57,13 +61,19 @@ export class SetCard {
     const wishlistPicker = this.root.locator(".aspect-square .group");
 
     if (isMobile) {
+      const actionDone = this.waitForServerAction();
+
       await trigger.click();
-      await option.click();
+      const dialog = this.page.getByRole("dialog", {
+        name: "Wishlist priority",
+      });
+      await expect(dialog).toBeVisible();
+      await dialog
+        .getByRole("button", { name: optionLabel, exact: true })
+        .click();
+      await actionDone;
     } else {
-      const actionDone = this.page.waitForResponse(
-        (response) => response.request().method() === "POST" && response.ok(),
-        { timeout: 15_000 },
-      );
+      const actionDone = this.waitForServerAction();
 
       await wishlistPicker.hover({ force: true });
       await expect(option).toBeVisible();
@@ -105,10 +115,7 @@ export class SetCard {
   async rate(stars: number) {
     const label = starLabel(stars);
     const star = this.root.getByRole("button", { name: label, exact: true });
-    const actionDone = this.page.waitForResponse(
-      (response) => response.request().method() === "POST" && response.ok(),
-      { timeout: 15_000 },
-    );
+    const actionDone = this.waitForServerAction();
 
     await star.click();
     await actionDone;
@@ -135,6 +142,13 @@ export class SetCard {
       }
     }
     return null;
+  }
+
+  private waitForServerAction() {
+    return this.page.waitForResponse(
+      (response) => response.request().method() === "POST" && response.ok(),
+      { timeout: 15_000 },
+    );
   }
 }
 

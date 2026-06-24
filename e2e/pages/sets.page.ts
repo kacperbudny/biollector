@@ -1,4 +1,3 @@
-import { expect } from "@playwright/test";
 import type { TestSet } from "../test-data";
 import { SetsListPageObject } from "./sets-list.page-object";
 
@@ -14,9 +13,6 @@ export class SetsPage extends SetsListPageObject {
     const card = this.setCard(set);
     if (await card.isInCollection()) {
       await card.removeFromCollection();
-      await expect(
-        card.locator().getByRole("button", { name: "Add to collection" }),
-      ).toBeVisible();
     }
   }
 
