@@ -3,6 +3,11 @@ import dotenv from "dotenv";
 
 dotenv.config({ path: ".env.local" });
 
+const baseURL = process.env.PLAYWRIGHT_TEST_BASE_URL ?? "http://localhost:3000";
+const isRemoteBaseUrl = !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/.test(
+  baseURL,
+);
+
 export default defineConfig({
   testDir: "./e2e",
   // Shared test user + DB: run one test at a time across all browser projects.
@@ -12,8 +17,16 @@ export default defineConfig({
   workers: 1,
   reporter: "html",
   use: {
-    baseURL: process.env.PLAYWRIGHT_TEST_BASE_URL ?? "http://localhost:3000",
+    baseURL,
     trace: "on-first-retry",
+    ...(process.env.VERCEL_AUTOMATION_BYPASS_SECRET
+      ? {
+          extraHTTPHeaders: {
+            "x-vercel-protection-bypass":
+              process.env.VERCEL_AUTOMATION_BYPASS_SECRET,
+          },
+        }
+      : {}),
   },
   projects: [
     {
@@ -61,9 +74,13 @@ export default defineConfig({
       dependencies: ["setup"],
     },
   ],
-  webServer: {
-    command: "pnpm start",
-    url: "http://localhost:3000",
-    reuseExistingServer: !process.env.CI,
-  },
+  ...(isRemoteBaseUrl
+    ? {}
+    : {
+        webServer: {
+          command: "pnpm start",
+          url: "http://localhost:3000",
+          reuseExistingServer: !process.env.CI,
+        },
+      }),
 });
