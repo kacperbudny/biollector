@@ -1,4 +1,4 @@
-name: Playwright Tests
+name: Playwright
 
 on:
   deployment_status:
@@ -6,18 +6,47 @@ on:
 permissions:
   contents: read
   statuses: read
+  pull-requests: read
 
 concurrency:
   group: playwright-${{ github.event.deployment.id }}
   cancel-in-progress: true
 
 jobs:
-  test:
+  gate:
     if: >
       github.event.deployment_status.state == 'success' &&
       github.event.deployment.creator.login == 'vercel[bot]' &&
       (github.event.deployment.environment == 'Preview' ||
        github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - uses: actions/github-script@v7
+        id: gate
+        with:
+          script: |
+            const environment = context.payload.deployment.environment;
+
+            if (environment === 'Production') {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+
+            const { data } =
+              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.payload.deployment.sha,
+              });
+
+            const hasOpenPr = data.some((pr) => pr.state === 'open');
+            core.setOutput('should_run', hasOpenPr ? 'true' : 'false');
+
+  e2e:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 60
     steps:
