@@ -16,7 +16,6 @@ jobs:
   gate:
     if: >
       github.event.deployment_status.state == 'success' &&
-      github.event.deployment.creator.login == 'vercel[bot]' &&
       (github.event.deployment.environment == 'Preview' ||
        github.event.deployment.environment == 'Production')
     runs-on: ubuntu-latest
@@ -41,8 +40,13 @@ jobs:
                 commit_sha: context.payload.deployment.sha,
               });
 
-            const hasOpenPr = data.some((pr) => pr.state === 'open');
-            core.setOutput('should_run', hasOpenPr ? 'true' : 'false');
+            const upstream = `${context.repo.owner}/${context.repo.repo}`;
+            const hasOpenUpstreamPr = data.some(
+              (pr) =>
+                pr.state === 'open' &&
+                pr.head.repo?.full_name === upstream,
+            );
+            core.setOutput('should_run', hasOpenUpstreamPr ? 'true' : 'false');
 
   e2e:
     needs: gate
