@@ -35,8 +35,8 @@
           "level": "error",
           "options": {
             "paths": {
-              ".": "Use absolute imports (@/...) instead of relative imports.",
-              "..": "Use absolute imports (@/...) instead of relative imports."
+              ".": "Use absolute imports (@/... or @e2e/...) instead of relative imports.",
+              "..": "Use absolute imports (@/... or @e2e/...) instead of relative imports."
             }
           }
         },

@@ -1,10 +1,12 @@
-import { test } from "./fixtures";
-import { SET_HUKI, SET_ONEPU } from "./test-data";
+import { test } from "@e2e/fixtures";
+import { SET_HUKI, SET_ONEPU } from "@e2e/test-data";
 
-test("user manages their wishlist", async ({ setsPage, wishlistPage }) => {
+test.beforeEach(async ({ setsPage }) => {
   await setsPage.clearWishlistIfPresent(SET_HUKI);
   await setsPage.clearWishlistIfPresent(SET_ONEPU);
+});
 
+test("user manages their wishlist", async ({ setsPage, wishlistPage }) => {
   await wishlistPage.goto();
   await wishlistPage.expectEmpty();
 

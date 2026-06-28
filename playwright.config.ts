@@ -9,7 +9,7 @@ const isRemoteBaseUrl = !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/.test(
 );
 
 export default defineConfig({
-  testDir: "./e2e",
+  testDir: "./e2e/tests",
   // Shared test user + DB: run one test at a time across all browser projects.
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
@@ -30,6 +30,7 @@ export default defineConfig({
   projects: [
     {
       name: "setup",
+      testDir: "./e2e",
       testMatch: /.*\.setup\.ts/,
     },
     {

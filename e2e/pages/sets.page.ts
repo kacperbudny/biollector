@@ -1,9 +1,9 @@
-import type { TestSet } from "../test-data";
-import { SetsListPageObject } from "./sets-list.page-object";
+import { SetsListPageObject } from "@e2e/pages/sets-list.page-object";
+import type { TestSet } from "@e2e/test-data";
 
 export class SetsPage extends SetsListPageObject {
   async goto() {
-    await this.page.goto("/sets");
+    await this.navigateTo("Sets");
   }
 
   async removeFromCollectionIfPresent(set: TestSet) {

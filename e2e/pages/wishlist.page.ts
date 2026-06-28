@@ -1,10 +1,10 @@
+import { SetsListPageObject } from "@e2e/pages/sets-list.page-object";
+import type { TestSet } from "@e2e/test-data";
 import { expect } from "@playwright/test";
-import type { TestSet } from "../test-data";
-import { SetsListPageObject } from "./sets-list.page-object";
 
 export class WishlistPage extends SetsListPageObject {
   async goto() {
-    await this.page.goto("/wishlist");
+    await this.navigateTo("Wishlist");
   }
 
   async expectEmpty() {

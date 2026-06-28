@@ -1,12 +1,14 @@
-import { test } from "./fixtures";
-import { SET_HUKI } from "./test-data";
+import { test } from "@e2e/fixtures";
+import { SET_HUKI } from "@e2e/test-data";
+
+test.beforeEach(async ({ setsPage }) => {
+  await setsPage.removeFromCollectionIfPresent(SET_HUKI);
+});
 
 test("user manages their set collection", async ({
   setsPage,
   collectionPage,
 }) => {
-  await setsPage.removeFromCollectionIfPresent(SET_HUKI);
-
   await collectionPage.goto();
   await collectionPage.expectEmpty();
 

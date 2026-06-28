@@ -14,8 +14,14 @@ type SetCardProps = {
 };
 
 export function SetCard({ set, wave }: SetCardProps) {
+  const titleId = `set-${set.catalogNumber}-name`;
+
   return (
-    <Card className="gap-0 overflow-hidden border border-border p-0 md:transition-transform [@media(hover:hover)]:md:hover:scale-105">
+    <Card
+      role="group"
+      aria-labelledby={titleId}
+      className="gap-0 overflow-hidden border border-border p-0 md:transition-transform [@media(hover:hover)]:md:hover:scale-105"
+    >
       <Card.Header className="shrink-0 p-0">
         <div className="relative aspect-square min-h-[120px] w-full bg-default">
           <Image
@@ -40,7 +46,9 @@ export function SetCard({ set, wave }: SetCardProps) {
         </div>
       </Card.Header>
       <Card.Content className="bg-surface px-3 pb-3 pt-2.5">
-        <h3 className="text-sm font-semibold">{set.name}</h3>
+        <h3 id={titleId} className="text-sm font-semibold">
+          {set.name}
+        </h3>
         <p className="text-xs font-semibold">{set.catalogNumber}</p>
         <p className="text-xs text-muted">
           {set.releaseYear} • {wave}

@@ -1,8 +1,8 @@
+import { CollectionPage } from "@e2e/pages/collection.page";
+import { RatingsPage } from "@e2e/pages/ratings.page";
+import { SetsPage } from "@e2e/pages/sets.page";
+import { WishlistPage } from "@e2e/pages/wishlist.page";
 import { test as base } from "@playwright/test";
-import { CollectionPage } from "./pages/collection.page";
-import { RatingsPage } from "./pages/ratings.page";
-import { SetsPage } from "./pages/sets.page";
-import { WishlistPage } from "./pages/wishlist.page";
 
 type PageFixtures = {
   setsPage: SetsPage;

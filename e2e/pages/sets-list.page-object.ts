@@ -1,10 +1,9 @@
-import { expect, type Page } from "@playwright/test";
-import type { TestSet } from "../test-data";
-import { SetCard } from "./set-card.page-object";
+import { NavPageObject } from "@e2e/pages/nav.page-object";
+import { SetCard } from "@e2e/pages/set-card.page-object";
+import type { TestSet } from "@e2e/test-data";
+import { expect } from "@playwright/test";
 
-export class SetsListPageObject {
-  constructor(protected readonly page: Page) {}
-
+export class SetsListPageObject extends NavPageObject {
   setCard(set: TestSet | string): SetCard {
     const setName = typeof set === "string" ? set : set.name;
     return new SetCard(this.page, setName);
@@ -31,12 +30,5 @@ export class SetsListPageObject {
   async expectSetVisible(set: TestSet) {
     await expect(this.page.getByText(set.name)).toBeVisible();
     await expect(this.page.getByText(set.catalog)).toBeVisible();
-  }
-
-  hasSearchBox(): Promise<boolean> {
-    return this.page
-      .getByRole("searchbox", { name: "Search sets" })
-      .isVisible({ timeout: 3000 })
-      .catch(() => false);
   }
 }

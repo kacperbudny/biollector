@@ -1,10 +1,10 @@
+import { SetsListPageObject } from "@e2e/pages/sets-list.page-object";
+import type { TestSet } from "@e2e/test-data";
 import { expect } from "@playwright/test";
-import type { TestSet } from "../test-data";
-import { SetsListPageObject } from "./sets-list.page-object";
 
 export class RatingsPage extends SetsListPageObject {
   async goto() {
-    await this.page.goto("/ratings");
+    await this.navigateTo("Ratings");
   }
 
   async expectSection(starLabel: string) {
@@ -14,12 +14,18 @@ export class RatingsPage extends SetsListPageObject {
   }
 
   async readCurrentRating(set: TestSet): Promise<number | null> {
-    if (!(await this.hasSearchBox())) {
+    if (await this.hasNoRatings()) {
       return null;
     }
 
     await this.searchFor(set);
     return this.setCard(set).getCurrentRating();
+  }
+
+  private hasNoRatings(): Promise<boolean> {
+    return this.page
+      .getByText("You have not rated any sets yet")
+      .isVisible({ timeout: 3_000 });
   }
 }
 

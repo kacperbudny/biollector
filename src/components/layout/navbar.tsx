@@ -31,7 +31,10 @@ export async function Navbar() {
           </Link>
         </div>
 
-        <div className="hidden shrink-0 items-center gap-8 md:flex">
+        <nav
+          aria-label="Main navigation"
+          className="hidden shrink-0 items-center gap-8 md:flex"
+        >
           <ul className="flex list-none items-center gap-1">
             {navItems.map((item) => (
               <li key={item.href} className="flex items-center gap-1">
@@ -42,7 +45,7 @@ export async function Navbar() {
             ))}
           </ul>
           <UserButton />
-        </div>
+        </nav>
 
         <NavbarMobileMenu isSignedIn={isSignedIn} className="md:hidden" />
       </div>
