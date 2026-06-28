@@ -43,7 +43,10 @@ export function NavbarMobileMenu({
                 <Drawer.Heading>Menu</Drawer.Heading>
               </Drawer.Header>
               <Drawer.Body>
-                <nav className="flex flex-col gap-1 pt-2">
+                <nav
+                  aria-label="Main navigation"
+                  className="flex flex-col gap-1 pt-2"
+                >
                   {items.map((item, index) => (
                     <Fragment key={item.href}>
                       {index > 0 && <Separator />}

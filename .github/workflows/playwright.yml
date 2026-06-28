@@ -1,0 +1,77 @@
+name: Playwright
+
+on:
+  deployment_status:
+
+permissions:
+  contents: read
+  statuses: read
+  pull-requests: read
+
+concurrency:
+  group: playwright-${{ github.event.deployment.id }}-${{ github.event.deployment_status.state }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    if: >
+      github.event.deployment_status.state == 'success' &&
+      (github.event.deployment.environment == 'Preview' ||
+       github.event.deployment.environment == 'Production')
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.gate.outputs.should_run }}
+    steps:
+      - uses: actions/github-script@v7
+        id: gate
+        with:
+          script: |
+            const environment = context.payload.deployment.environment;
+
+            if (environment === 'Production') {
+              core.setOutput('should_run', 'true');
+              return;
+            }
+
+            const { data } =
+              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                commit_sha: context.payload.deployment.sha,
+              });
+
+            const upstream = `${context.repo.owner}/${context.repo.repo}`;
+            const hasOpenUpstreamPr = data.some(
+              (pr) =>
+                pr.state === 'open' &&
+                pr.head.repo?.full_name === upstream,
+            );
+            core.setOutput('should_run', hasOpenUpstreamPr ? 'true' : 'false');
+
+  e2e:
+    needs: gate
+    if: needs.gate.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.deployment.sha }}
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec playwright install chromium --with-deps
+
+      - name: Run Playwright tests
+        run: pnpm test:e2e
+        env:
+          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          PLAYWRIGHT_TEST_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_USER_EMAIL }}
+          PLAYWRIGHT_TEST_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_USER_PASSWORD }}
+          VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}

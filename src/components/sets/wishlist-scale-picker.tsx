@@ -58,7 +58,10 @@ export function WishlistScalePicker({
   }
 
   return (
-    <div className="group absolute left-2 top-2 z-10 flex">
+    <fieldset
+      aria-label="Wishlist priority"
+      className="group absolute left-2 top-2 z-10 m-0 flex border-0 p-0"
+    >
       {isMobile ? (
         <MobileScalePopover
           selectedValue={displayValue}
@@ -74,7 +77,7 @@ export function WishlistScalePicker({
           selectWishlistValue={selectWishlistValue}
         />
       )}
-    </div>
+    </fieldset>
   );
 }
 
@@ -125,7 +128,7 @@ function DesktopCollapsedTrigger({
       type="button"
       className={cn(
         "inline-flex min-h-8 min-w-8 cursor-pointer items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70",
-        "group-hover:opacity-0",
+        "group-hover:opacity-0 group-hover:pointer-events-none",
         isDisabled && "pointer-events-none opacity-60",
       )}
       aria-label={getTriggerLabel(value, isSignedIn)}

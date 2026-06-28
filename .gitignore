@@ -45,3 +45,12 @@ next-env.d.ts
 
 # pnpm local store (created when global store is unavailable)
 .pnpm-store/
+
+# Playwright
+node_modules/
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/
+/e2e/.auth/
