@@ -1,6 +1,9 @@
+"use client";
+
 import { StarIcon } from "@heroicons/react/24/solid";
 import { Card, Chip } from "@heroui/react";
 import Image from "next/image";
+import { useId } from "react";
 import { SetRatingInput } from "@/components/sets/set-rating-input";
 import { ToggleCollectionButton } from "@/components/sets/toggle-collection-button";
 import { WishlistScalePicker } from "@/components/sets/wishlist-scale-picker";
@@ -14,7 +17,7 @@ type SetCardProps = {
 };
 
 export function SetCard({ set, wave }: SetCardProps) {
-  const titleId = `set-${set.catalogNumber}-name`;
+  const titleId = `set-${set.catalogNumber}-name${useId()}`;
 
   return (
     <Card
