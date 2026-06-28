@@ -4,7 +4,7 @@ import { PostgresDialect } from "kysely";
 import { defineConfig } from "kysely-ctl";
 import { Pool } from "pg";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env.local", quiet: true });
 
 export default defineConfig({
   dialect: new PostgresDialect({

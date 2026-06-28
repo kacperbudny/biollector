@@ -1,8 +1,6 @@
 import { test } from "./fixtures";
 import { SET_HUKI } from "./test-data";
 
-test.describe.configure({ mode: "serial" });
-
 test("user manages their set collection", async ({
   setsPage,
   collectionPage,

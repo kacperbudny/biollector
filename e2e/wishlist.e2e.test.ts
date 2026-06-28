@@ -1,8 +1,6 @@
 import { test } from "./fixtures";
 import { SET_HUKI, SET_ONEPU } from "./test-data";
 
-test.describe.configure({ mode: "serial" });
-
 test("user manages their wishlist", async ({ setsPage, wishlistPage }) => {
   await setsPage.clearWishlistIfPresent(SET_HUKI);
   await setsPage.clearWishlistIfPresent(SET_ONEPU);

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 import dotenv from "dotenv";
 
-dotenv.config({ path: ".env.local" });
+dotenv.config({ path: ".env.local", quiet: true });
 
 const baseURL = process.env.PLAYWRIGHT_TEST_BASE_URL ?? "http://localhost:3000";
 const isRemoteBaseUrl = !/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/?$/.test(
@@ -14,8 +14,7 @@ export default defineConfig({
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
-  workers: 1,
-  reporter: "html",
+  workers: 1, // TODO: maybe we could parallelize the tests if each browser had its own test user?
   use: {
     baseURL,
     trace: "on-first-retry",
