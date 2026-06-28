@@ -9,7 +9,7 @@ permissions:
   pull-requests: read
 
 concurrency:
-  group: playwright-${{ github.event.deployment.id }}
+  group: playwright-${{ github.event.deployment.id }}-${{ github.event.deployment_status.state }}
   cancel-in-progress: true
 
 jobs:
