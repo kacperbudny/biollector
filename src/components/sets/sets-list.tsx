@@ -1,40 +1,33 @@
 "use client";
 
-import { parseAsString, useQueryState } from "nuqs";
-import { useMemo } from "react";
+import { SetFilterSidebar } from "@/components/sets/set-filter-sidebar";
 import { SetSearchBar } from "@/components/sets/set-search-bar";
 import { SetsGroupedVirtualList } from "@/components/sets/sets-grouped-virtual-list";
+import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
-import { SetSearch } from "@/domain/set-search";
 import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
-import { useDebounce } from "@/hooks/use-debounce";
-
-const FILTER_DEBOUNCE_MS = 300;
+import { useSetsFilter } from "@/hooks/use-sets-filter";
 
 type SetsListProps = {
   viewModel: SetsGroupedViewModel;
+  showFilterSidebar?: boolean;
+  pageTitle?: string;
+  pageTitleSubtitle?: string;
 };
 
-export function SetsList({ viewModel }: SetsListProps) {
-  const [query, setQuery] = useQueryState(
-    "q",
-    parseAsString
-      .withDefault("")
-      .withOptions({ throttleMs: FILTER_DEBOUNCE_MS, shallow: true }),
-  );
+export function SetsList({
+  viewModel,
+  showFilterSidebar = false,
+  pageTitle,
+  pageTitleSubtitle,
+}: SetsListProps) {
+  const { query, setQuery, filtered, isFiltering, hasResults } = useSetsFilter({
+    viewModel,
+    structuredFiltersEnabled: showFilterSidebar,
+  });
 
-  const debouncedQuery = useDebounce(query, FILTER_DEBOUNCE_MS);
-
-  const filtered = useMemo(
-    () => new SetSearch(debouncedQuery).filter(viewModel),
-    [debouncedQuery, viewModel],
-  );
-  const isFiltering = debouncedQuery.trim().length > 0;
-  const hasResults = filtered.totalCount > 0;
-
-  return (
+  const listContent = (
     <>
-      <SetSearchBar value={query} onChange={(v) => setQuery(v || null)} />
       {isFiltering && (
         <p className="mb-4 text-sm">
           <MutedText>
@@ -43,12 +36,36 @@ export function SetsList({ viewModel }: SetsListProps) {
         </p>
       )}
       {isFiltering && !hasResults ? (
-        <p className="text-muted">
-          No sets found for &ldquo;{debouncedQuery}&rdquo;.
-        </p>
+        <p className="text-muted">No sets found for the current filters.</p>
       ) : (
         <SetsGroupedVirtualList viewModel={filtered} />
       )}
     </>
+  );
+
+  // TODO: remove this once all pages have the filter sidebar
+  if (!showFilterSidebar) {
+    return (
+      <>
+        <SetSearchBar value={query} onChange={(v) => setQuery(v || null)} />
+        {listContent}
+      </>
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-4 md:flex-row md:gap-6">
+      <SetFilterSidebar
+        searchValue={query}
+        onSearchChange={(v) => setQuery(v || null)}
+      />
+
+      <div className="min-w-0 flex-1">
+        {pageTitle ? (
+          <PageTitle subtitle={pageTitleSubtitle}>{pageTitle}</PageTitle>
+        ) : null}
+        {listContent}
+      </div>
+    </div>
   );
 }

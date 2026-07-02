@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { stackServerApp } from "@/auth/server";
 import { SetsList } from "@/components/sets/sets-list";
-import { PageTitle } from "@/components/typography/headings";
 import { setsService } from "@/dependency-injection";
 
 export const metadata: Metadata = {
@@ -14,9 +13,11 @@ export default async function SetsPage() {
   const data = await setsService.getSetsListViewModel(user?.id);
 
   return (
-    <>
-      <PageTitle subtitle={`(${data.totalCount})`}>Sets</PageTitle>
-      <SetsList viewModel={data} />
-    </>
+    <SetsList
+      viewModel={data}
+      showFilterSidebar
+      pageTitle="Sets"
+      pageTitleSubtitle={`(${data.totalCount})`}
+    />
   );
 }
