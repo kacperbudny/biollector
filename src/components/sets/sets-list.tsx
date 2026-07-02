@@ -3,6 +3,7 @@
 import { SetFilterSidebar } from "@/components/sets/set-filter-sidebar";
 import { SetSearchBar } from "@/components/sets/set-search-bar";
 import { SetsGroupedVirtualList } from "@/components/sets/sets-grouped-virtual-list";
+import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
 import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
 import { useSetsFilter } from "@/hooks/use-sets-filter";
@@ -10,11 +11,15 @@ import { useSetsFilter } from "@/hooks/use-sets-filter";
 type SetsListProps = {
   viewModel: SetsGroupedViewModel;
   showFilterSidebar?: boolean;
+  pageTitle?: string;
+  pageTitleSubtitle?: string;
 };
 
 export function SetsList({
   viewModel,
   showFilterSidebar = false,
+  pageTitle,
+  pageTitleSubtitle,
 }: SetsListProps) {
   const { query, setQuery, filtered, isFiltering, hasResults } = useSetsFilter({
     viewModel,
@@ -55,7 +60,12 @@ export function SetsList({
         onSearchChange={(v) => setQuery(v || null)}
       />
 
-      <div className="min-w-0 flex-1">{listContent}</div>
+      <div className="min-w-0 flex-1">
+        {pageTitle ? (
+          <PageTitle subtitle={pageTitleSubtitle}>{pageTitle}</PageTitle>
+        ) : null}
+        {listContent}
+      </div>
     </div>
   );
 }
