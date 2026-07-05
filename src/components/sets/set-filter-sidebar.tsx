@@ -159,14 +159,14 @@ function SetFilterSidebarMobile({
   activeFilterCount,
 }: SetFilterSidebarMobileProps) {
   return (
-    <div className="md:hidden mb-4 flex items-end gap-2">
+    <div className="mb-4 flex w-full min-w-0 items-end gap-2 md:hidden">
       <SetFilterSearchField
         searchValue={searchValue}
         onSearchChange={onSearchChange}
-        className="flex-1"
+        className="min-w-0 flex-1"
       />
       <Drawer>
-        <Button variant="outline" size="sm" className="shrink-0">
+        <Button variant="outline" size="sm" className="max-w-fit shrink-0">
           {activeFilterCount > 0 ? `Filters (${activeFilterCount})` : "Filters"}
         </Button>
         <Drawer.Backdrop>
