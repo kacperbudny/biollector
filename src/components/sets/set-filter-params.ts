@@ -1,5 +1,10 @@
 import { parseAsArrayOf, parseAsStringEnum, parseAsStringLiteral } from "nuqs";
-import { RELEASE_YEARS } from "@/domain/set-filter";
+import {
+  COLLECTION_FILTER_VALUES,
+  RATING_FILTER_VALUES,
+  RELEASE_YEARS,
+  WISHLIST_FILTER_VALUES,
+} from "@/domain/set-filter";
 import { BionicleCharacter, SetType, Wave } from "@/domain/sets";
 
 export const filterParamDescriptors = {
@@ -12,5 +17,15 @@ export const filterParamDescriptors = {
   ).withDefault([]),
   characters: parseAsArrayOf(
     parseAsStringEnum<BionicleCharacter>(Object.values(BionicleCharacter)),
+  ).withDefault([]),
+  collection: parseAsStringLiteral(COLLECTION_FILTER_VALUES),
+  wishlist: parseAsArrayOf(
+    parseAsStringLiteral(WISHLIST_FILTER_VALUES),
+  ).withDefault([]),
+  userRatings: parseAsArrayOf(
+    parseAsStringLiteral(RATING_FILTER_VALUES),
+  ).withDefault([]),
+  averageRatings: parseAsArrayOf(
+    parseAsStringLiteral(RATING_FILTER_VALUES),
   ).withDefault([]),
 };

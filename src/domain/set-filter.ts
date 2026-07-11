@@ -28,12 +28,36 @@ export const RELEASE_YEARS = [
 
 export type ReleaseYear = (typeof RELEASE_YEARS)[number];
 
+export const COLLECTION_FILTER_VALUES = ["in", "not-in"] as const;
+
+export type CollectionFilterValue = (typeof COLLECTION_FILTER_VALUES)[number];
+
+export const WISHLIST_FILTER_VALUES = [
+  "5",
+  "4",
+  "3",
+  "2",
+  "1",
+  "0",
+  "none",
+] as const;
+
+export type WishlistFilterValue = (typeof WISHLIST_FILTER_VALUES)[number];
+
+export const RATING_FILTER_VALUES = ["5", "4", "3", "2", "1", "none"] as const;
+
+export type RatingFilterValue = (typeof RATING_FILTER_VALUES)[number];
+
 export type SetFilterState = {
   query: string;
   years: ReleaseYear[];
   types: SetType[];
   waves: Wave[];
   characters: BionicleCharacter[];
+  collection: CollectionFilterValue | null;
+  wishlist: WishlistFilterValue[];
+  userRatings: RatingFilterValue[];
+  averageRatings: RatingFilterValue[];
 };
 
 /**
@@ -63,7 +87,11 @@ export class SetFilter {
       this.state.years.length > 0 ||
       this.state.types.length > 0 ||
       this.state.waves.length > 0 ||
-      this.state.characters.length > 0
+      this.state.characters.length > 0 ||
+      this.state.collection !== null ||
+      this.state.wishlist.length > 0 ||
+      this.state.userRatings.length > 0 ||
+      this.state.averageRatings.length > 0
     );
   }
 
@@ -72,7 +100,16 @@ export class SetFilter {
       return false;
     }
 
-    const { years, types, waves, characters } = this.state;
+    const {
+      years,
+      types,
+      waves,
+      characters,
+      collection,
+      wishlist,
+      userRatings,
+      averageRatings,
+    } = this.state;
 
     if (years.length > 0 && !years.includes(set.releaseYear as ReleaseYear)) {
       return false;
@@ -90,6 +127,47 @@ export class SetFilter {
         ...(set.minifigures?.map((m) => m.character) ?? []),
       ];
       if (!characters.some((c) => setCharacters.includes(c))) {
+        return false;
+      }
+    }
+
+    if (collection === "in" && !set.isInCollection) {
+      return false;
+    }
+    if (collection === "not-in" && set.isInCollection) {
+      return false;
+    }
+
+    if (wishlist.length > 0) {
+      const matchesWishlist = wishlist.some((value) =>
+        value === "none"
+          ? set.wishlistScale === null
+          : set.wishlistScale === Number(value),
+      );
+      if (!matchesWishlist) {
+        return false;
+      }
+    }
+
+    if (userRatings.length > 0) {
+      const matchesUserRating = userRatings.some((value) =>
+        value === "none"
+          ? set.userRating === undefined
+          : set.userRating === Number(value),
+      );
+      if (!matchesUserRating) {
+        return false;
+      }
+    }
+
+    if (averageRatings.length > 0) {
+      const matchesAverageRating = averageRatings.some((value) =>
+        value === "none"
+          ? set.averageRating === undefined
+          : set.averageRating !== undefined &&
+            Math.floor(set.averageRating) === Number(value),
+      );
+      if (!matchesAverageRating) {
         return false;
       }
     }

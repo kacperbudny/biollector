@@ -1,6 +1,7 @@
 "use client";
 
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { StarIcon } from "@heroicons/react/24/solid";
 import type { Key } from "@heroui/react";
 import {
   Autocomplete,
@@ -12,17 +13,35 @@ import {
   SearchField,
   Tag,
   TagGroup,
+  ToggleButton,
+  ToggleButtonGroup,
   Tooltip,
   useFilter,
 } from "@heroui/react";
-import { useQueryStates } from "nuqs";
+import { useUser } from "@stackframe/stack";
 import type { ReactNode } from "react";
 import { DialogContext } from "react-aria-components";
-import { filterParamDescriptors } from "@/components/sets/set-filter-params";
 import { SectionHeading } from "@/components/typography/headings";
-import type { ReleaseYear } from "@/domain/set-filter";
-import { RELEASE_YEARS } from "@/domain/set-filter";
+import type {
+  CollectionFilterValue,
+  RatingFilterValue,
+  ReleaseYear,
+  WishlistFilterValue,
+} from "@/domain/set-filter";
+import {
+  RATING_FILTER_VALUES,
+  RELEASE_YEARS,
+  WISHLIST_FILTER_VALUES,
+} from "@/domain/set-filter";
 import { BionicleCharacter, SetType, Wave } from "@/domain/sets";
+import {
+  getWishlistScaleLabel,
+  type UserWishlistScale,
+} from "@/domain/user-wishlist";
+import {
+  type SetFilterParams,
+  useFilterSidebar,
+} from "@/hooks/use-filter-sidebar";
 
 type SetFilterSidebarProps = {
   searchValue: string;
@@ -33,42 +52,13 @@ export function SetFilterSidebar({
   searchValue,
   onSearchChange,
 }: SetFilterSidebarProps) {
-  const [filterParams, setFilterParams] = useQueryStates(
-    filterParamDescriptors,
-  );
-
-  const hasActiveFilters =
-    filterParams.years.length > 0 ||
-    filterParams.types.length > 0 ||
-    filterParams.waves.length > 0 ||
-    filterParams.characters.length > 0;
-
-  const activeFilterCount = [
-    filterParams.years,
-    filterParams.types,
-    filterParams.waves,
-    filterParams.characters,
-  ].filter((a) => a.length > 0).length;
-
-  const handleChange = (patch: Partial<typeof filterParams>) => {
-    const next = { ...filterParams, ...patch };
-    setFilterParams({
-      years: next.years.length > 0 ? next.years : null,
-      types: next.types.length > 0 ? next.types : null,
-      waves: next.waves.length > 0 ? next.waves : null,
-      characters: next.characters.length > 0 ? next.characters : null,
-    });
-  };
-
-  const handleClear = () => {
-    setFilterParams({
-      years: null,
-      types: null,
-      waves: null,
-      characters: null,
-    });
-    onSearchChange(null);
-  };
+  const {
+    filterParams,
+    handleChange,
+    handleClear,
+    hasActiveFilters,
+    activeFilterCount,
+  } = useFilterSidebar({ onSearchChange });
 
   const sharedProps = {
     searchValue,
@@ -89,13 +79,6 @@ export function SetFilterSidebar({
     </>
   );
 }
-
-type SetFilterParams = {
-  years: ReleaseYear[];
-  types: SetType[];
-  waves: Wave[];
-  characters: BionicleCharacter[];
-};
 
 type SetFilterSidebarSharedProps = {
   searchValue: string;
@@ -237,6 +220,8 @@ type SetFilterFieldsProps = {
 };
 
 function SetFilterFields({ filterParams, onChange }: SetFilterFieldsProps) {
+  const isSignedIn = !!useUser();
+
   return (
     <div className="flex flex-col gap-4">
       <FilterAutocomplete
@@ -270,14 +255,81 @@ function SetFilterFields({ filterParams, onChange }: SetFilterFieldsProps) {
         }
         labelHint="Only characters that appear in more than one set are listed"
       />
+      <FilterAutocomplete
+        label="Average rating"
+        placeholder="Select rating(s)"
+        options={AVERAGE_RATING_OPTIONS}
+        selectedKeys={filterParams.averageRatings}
+        onChange={(averageRatings) =>
+          onChange({ averageRatings: averageRatings as RatingFilterValue[] })
+        }
+        labelHint="Averages are rounded down"
+      />
+      {isSignedIn ? (
+        <>
+          <FilterAutocomplete
+            label="Wishlist"
+            placeholder="Select priority"
+            options={WISHLIST_OPTIONS}
+            selectedKeys={filterParams.wishlist}
+            onChange={(wishlist) =>
+              onChange({ wishlist: wishlist as WishlistFilterValue[] })
+            }
+          />
+          <FilterAutocomplete
+            label="Your rating"
+            placeholder="Select rating(s)"
+            options={USER_RATING_OPTIONS}
+            selectedKeys={filterParams.userRatings}
+            onChange={(userRatings) =>
+              onChange({ userRatings: userRatings as RatingFilterValue[] })
+            }
+          />
+          <CollectionToggle
+            value={filterParams.collection}
+            onChange={(collection) => onChange({ collection })}
+          />
+        </>
+      ) : null}
     </div>
   );
 }
 
+type CollectionToggleProps = {
+  value: CollectionFilterValue | null;
+  onChange: (value: CollectionFilterValue | null) => void;
+};
+
+function CollectionToggle({ value, onChange }: CollectionToggleProps) {
+  return (
+    <div className="flex flex-col gap-1">
+      <span className="text-sm font-medium text-foreground">Collection</span>
+      <ToggleButtonGroup
+        aria-label="Collection"
+        selectionMode="single"
+        fullWidth
+        selectedKeys={value ? [value] : []}
+        onSelectionChange={(keys) => {
+          const [next] = [...keys] as CollectionFilterValue[];
+          onChange(next ?? null);
+        }}
+      >
+        <ToggleButton id="in">In collection</ToggleButton>
+        <ToggleButton id="not-in">
+          <ToggleButtonGroup.Separator />
+          Not in collection
+        </ToggleButton>
+      </ToggleButtonGroup>
+    </div>
+  );
+}
+
+type FilterOption = { id: string; label: string; node?: ReactNode };
+
 type FilterAutocompleteProps = {
   label: string;
   placeholder: string;
-  options: { id: string; label: string }[];
+  options: FilterOption[];
   selectedKeys: string[];
   onChange: (keys: string[]) => void;
   labelHint?: string;
@@ -362,7 +414,7 @@ function FilterAutocomplete({
                     id={option.id}
                     textValue={option.label}
                   >
-                    {option.label}
+                    {option.node ?? option.label}
                     <ListBox.ItemIndicator />
                   </ListBox.Item>
                 ))}
@@ -396,7 +448,7 @@ type FilterAutocompleteValueProps = {
   isPlaceholder: boolean;
   label: string;
   state: { selectedItems: Array<{ key: Key }> };
-  options: { id: string; label: string }[];
+  options: FilterOption[];
   onRemoveTags: (keys: Set<Key>) => void;
 };
 
@@ -424,12 +476,22 @@ function FilterAutocompleteValue({
           }
           return (
             <Tag key={option.id} id={option.id} textValue={option.label}>
-              {option.label}
+              {option.node ?? option.label}
             </Tag>
           );
         })}
       </TagGroup.List>
     </TagGroup>
+  );
+}
+
+function RatingStars({ count }: { count: number }) {
+  return (
+    <span className="inline-flex items-center gap-0.5" aria-hidden>
+      {Array.from({ length: count }, (_, i) => i + 1).map((star) => (
+        <StarIcon key={star} className="h-4 w-4 text-warning" />
+      ))}
+    </span>
   );
 }
 
@@ -440,3 +502,33 @@ const CHARACTER_OPTIONS = Object.values(BionicleCharacter).map((c) => ({
   id: c,
   label: c,
 }));
+
+const WISHLIST_OPTIONS: FilterOption[] = WISHLIST_FILTER_VALUES.map((value) =>
+  value === "none"
+    ? { id: value, label: "Not in wishlist" }
+    : {
+        id: value,
+        label: getWishlistScaleLabel(Number(value) as UserWishlistScale),
+      },
+);
+
+const USER_RATING_OPTIONS: FilterOption[] = RATING_FILTER_VALUES.map((value) =>
+  value === "none"
+    ? { id: value, label: "No rating" }
+    : {
+        id: value,
+        label: `${value} star${value === "1" ? "" : "s"}`,
+        node: <RatingStars count={Number(value)} />,
+      },
+);
+
+const AVERAGE_RATING_OPTIONS: FilterOption[] = RATING_FILTER_VALUES.map(
+  (value) =>
+    value === "none"
+      ? { id: value, label: "No ratings" }
+      : {
+          id: value,
+          label: `${value} star${value === "1" ? "" : "s"}`,
+          node: <RatingStars count={Number(value)} />,
+        },
+);
