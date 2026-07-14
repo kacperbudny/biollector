@@ -10,6 +10,7 @@ import {
   EmptyState,
   Label,
   ListBox,
+  ScrollShadow,
   SearchField,
   Tag,
   TagGroup,
@@ -99,31 +100,36 @@ function SetFilterSidebarDesktop({
 }: SetFilterSidebarSharedProps) {
   return (
     <aside className="hidden md:flex md:w-72 md:shrink-0 md:flex-col self-start sticky top-24">
-      <SectionHeading>Filters</SectionHeading>
+      <ScrollShadow
+        hideScrollBar
+        className="flex max-h-[calc(100vh-6rem)] flex-col pb-8 pr-1"
+      >
+        <SectionHeading>Filters</SectionHeading>
 
-      <div className="flex flex-col gap-4">
-        <SetFilterSearchField
-          searchValue={searchValue}
-          onSearchChange={onSearchChange}
-          className="w-full"
-          fullWidth
-        />
+        <div className="flex flex-col gap-4">
+          <SetFilterSearchField
+            searchValue={searchValue}
+            onSearchChange={onSearchChange}
+            className="w-full"
+            fullWidth
+          />
 
-        <SetFilterFields
-          filterParams={filterParams}
-          onChange={onFilterChange}
-        />
+          <SetFilterFields
+            filterParams={filterParams}
+            onChange={onFilterChange}
+          />
 
-        <Button
-          variant="ghost"
-          isDisabled={!hasActiveFilters && !searchValue}
-          onPress={onClear}
-          fullWidth
-          className="mt-2"
-        >
-          Clear all
-        </Button>
-      </div>
+          <Button
+            variant="ghost"
+            isDisabled={!hasActiveFilters && !searchValue}
+            onPress={onClear}
+            fullWidth
+            className="mt-2"
+          >
+            Clear all
+          </Button>
+        </div>
+      </ScrollShadow>
     </aside>
   );
 }
