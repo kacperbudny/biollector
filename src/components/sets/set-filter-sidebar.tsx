@@ -10,13 +10,13 @@ import {
   EmptyState,
   Label,
   ListBox,
+  Popover,
   ScrollShadow,
   SearchField,
   Tag,
   TagGroup,
   ToggleButton,
   ToggleButtonGroup,
-  Tooltip,
   useFilter,
 } from "@heroui/react";
 import { useUser } from "@stackframe/stack";
@@ -435,17 +435,22 @@ function FilterAutocomplete({
 
 function FilterLabelHint({ text }: { text: string }) {
   return (
-    <Tooltip delay={0}>
-      <Tooltip.Trigger
-        aria-label="More information"
-        className="inline-flex text-muted transition-colors hover:text-foreground"
-      >
-        <QuestionMarkCircleIcon className="h-4 w-4 shrink-0" />
-      </Tooltip.Trigger>
-      <Tooltip.Content className="max-w-xs">
-        <p className="text-xs">{text}</p>
-      </Tooltip.Content>
-    </Tooltip>
+    <Popover>
+      <Popover.Trigger>
+        <button
+          type="button"
+          aria-label="More information"
+          className="flex items-center justify-center rounded-full text-muted outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-focus cursor-pointer"
+        >
+          <QuestionMarkCircleIcon className="h-4 w-4 shrink-0" />
+        </button>
+      </Popover.Trigger>
+      <Popover.Content placement="top" className="max-w-xs">
+        <Popover.Dialog className="px-3 py-2">
+          <p className="text-xs">{text}</p>
+        </Popover.Dialog>
+      </Popover.Content>
+    </Popover>
   );
 }
 
