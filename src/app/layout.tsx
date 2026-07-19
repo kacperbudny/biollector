@@ -26,7 +26,7 @@ export default function RootLayout({
       <body className={cn(font.className, "bg-background text-foreground")}>
         <Providers>
           <Navbar />
-          <main className="container mx-auto max-w-[1440px] grow px-6 py-8">
+          <main className="container mx-auto max-w-[1600px] grow px-6 py-8">
             {children}
           </main>
         </Providers>

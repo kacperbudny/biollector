@@ -39,6 +39,7 @@
     "next-safe-action": "^8.5.5",
     "nuqs": "^2.8.9",
     "react": "19.2.7",
+    "react-aria-components": "1.18.0",
     "react-dom": "19.2.7",
     "zod": "^4.4.3"
   },

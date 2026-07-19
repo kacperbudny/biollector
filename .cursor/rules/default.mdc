@@ -64,6 +64,7 @@ alwaysApply: true
 # Components
 
 - Colocate components that are only used together in the same file. Only export the top-level component that is used externally.
+- In files with colocated subcomponents, put the **exported component first** (with its props type directly above it), then private subcomponents and helpers below in call order — broadest first, most specific last. Constants and file-local types used by helpers go at the bottom.
 - Prefer hooks (e.g. `useUser()`) in the component that needs the data rather than prop drilling.
 - Data fetching can happen inside the component that needs the data; the page renders the component and doesn't need to wire data.
 - Extract shared typography (PageTitle, SectionHeading, SubsectionHeading) to reusable components in `components/typography`.
@@ -80,4 +81,4 @@ alwaysApply: true
 
 # Code organization
 
-- Order functions from general to specific: broader context first, then details. Main/exported function at the top, helpers below in the order they are used.
+- Order functions from general to specific: broader context first, then details. Main/exported function at the top, helpers below in the order they are used. Same rule applies to React component files — see **Components** above.
