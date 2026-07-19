@@ -24,6 +24,7 @@ alwaysApply: true
 - **`vitest.ui.config.ts`**: **`environment: "jsdom"`**, **`include`**: `**/*.ui.test.tsx`, **`setupFiles`**: `src/tests/vitest-rtl-setup.ts`.
 - **Setup**: `src/tests/vitest-rtl-setup.ts` — `@testing-library/jest-dom/vitest` + **`cleanup`** in `afterEach` (referenced from **`vitest.ui.config.ts`** only).
 - Prefer **role / accessible name** queries matching real `aria-*` labels from the component.
+- **Blackbox testing**: UI tests should focus on user interactions and behaviors, not internal logic. Do not test hooks directly with `renderHook` if they are heavily tied to UI state; instead, test the components that consume those hooks by simulating real user events (e.g., clicking, typing) and asserting on the rendered output.
 
 # Integration tests (database)
 
