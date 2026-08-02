@@ -8,6 +8,7 @@ import {
   type SortDirection,
   type SortOption,
 } from "@/domain/set-sort";
+import { cn } from "@/styles/cn";
 
 type SortOptionConfig = {
   id: SortOption;
@@ -32,6 +33,7 @@ type SetSortBarProps = {
   dir: SortDirection;
   onSortChange: (sort: SortOption, dir: SortDirection) => void;
   onDirectionChange: (dir: SortDirection) => void;
+  className?: string;
 };
 
 export function SetSortBar({
@@ -39,6 +41,7 @@ export function SetSortBar({
   dir,
   onSortChange,
   onDirectionChange,
+  className,
 }: SetSortBarProps) {
   const isSignedIn = !!useUser();
 
@@ -60,7 +63,7 @@ export function SetSortBar({
   const directionLabel = isAscending ? "Ascending" : "Descending";
 
   return (
-    <div className="flex items-center gap-2">
+    <div className={cn("flex items-center gap-2", className)}>
       <span className="text-sm font-medium text-foreground shrink-0">
         Sort by
       </span>

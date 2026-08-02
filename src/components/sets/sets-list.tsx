@@ -45,7 +45,7 @@ export function SetsList({
 
   const listContent = (
     <>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+      <div className="mb-4 flex flex-col items-start gap-2">
         <SetSortBar
           sort={sort}
           dir={dir}
