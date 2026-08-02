@@ -156,4 +156,23 @@ describe(SetsList.name, () => {
       expect(screen.getAllByTestId("set-item")).toHaveLength(3);
     });
   });
+
+  it("suppresses section collection counts when filtering", async () => {
+    useUserMock.mockReturnValue({ id: "user-1" });
+    const user = userEvent.setup();
+    render(<SetsList viewModel={viewModel} displayCollectionCounts />, {
+      wrapper: NuqsTestingAdapter,
+    });
+
+    const searchInput = screen.getByPlaceholderText(
+      "Search by name, catalog number, year or wave…",
+    );
+    await user.type(searchInput, "Tahu");
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId("set-item")).toHaveLength(1);
+    });
+
+    expect(screen.queryByText(/sets\)/i)).not.toBeInTheDocument();
+  });
 });

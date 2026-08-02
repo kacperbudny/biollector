@@ -40,7 +40,7 @@ export function SetsList({
     totalCount: viewModel.totalCount,
     defaultSort,
     defaultDir,
-    displayCollectionCounts,
+    displayCollectionCounts: displayCollectionCounts && !isFiltering,
   });
 
   const listContent = (
