@@ -1,7 +1,7 @@
 import type { SetsRepository } from "@/data/repositories/sets.repository";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class SetsService {
   constructor(
@@ -20,7 +20,7 @@ export class SetsService {
     return sets.map((set) =>
       SetViewModel.build({
         set,
-        collectionSetNumbers: ctx.collectionSetNumbers,
+        userCollectionBySet: ctx.userCollectionBySet,
         userRatings: ctx.userRatingsBySet,
         averageRatings: ctx.averageRatingsBySet,
         userWishlistState: ctx.userWishlistStateBySet,
@@ -47,7 +47,7 @@ export class SetsService {
     return sets.map((set) =>
       SetViewModel.build({
         set,
-        collectionSetNumbers: ctx.collectionSetNumbers,
+        userCollectionBySet: ctx.userCollectionBySet,
         userRatings: ctx.userRatingsBySet,
         averageRatings: ctx.averageRatingsBySet,
         userWishlistState: ctx.userWishlistStateBySet,
@@ -55,20 +55,23 @@ export class SetsService {
     );
   }
 
-  async getSetsListViewModel(userId?: string): Promise<SetsGroupedViewModel> {
+  async getSetsListViewModel(userId?: string): Promise<SetsListViewModel> {
     const sets = this.setsRepository.getAll();
     const ctx = await this.setViewModelContextLoader.load({ userId });
 
     const setViewModels = sets.map((set) =>
       SetViewModel.build({
         set,
-        collectionSetNumbers: ctx.collectionSetNumbers,
+        userCollectionBySet: ctx.userCollectionBySet,
         userRatings: ctx.userRatingsBySet,
         averageRatings: ctx.averageRatingsBySet,
         userWishlistState: ctx.userWishlistStateBySet,
       }),
     );
 
-    return SetsGroupedViewModel.groupedByYearAndWave(setViewModels);
+    return {
+      sets: setViewModels,
+      totalCount: setViewModels.length,
+    };
   }
 }

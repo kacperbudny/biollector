@@ -3,13 +3,14 @@ import { parseAsString, useQueryState, useQueryStates } from "nuqs";
 import { useMemo } from "react";
 import { filterParamDescriptors } from "@/components/sets/set-filter-params";
 import { SetFilter } from "@/domain/set-filter";
-import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetViewModel } from "@/domain/view-models/set.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { useDebounce } from "@/hooks/use-debounce";
 
 const FILTER_DEBOUNCE_MS = 300;
 
 type UseSetsFilterOptions = {
-  viewModel: SetsGroupedViewModel;
+  viewModel: SetsListViewModel;
   structuredFiltersEnabled?: boolean;
 };
 
@@ -31,7 +32,7 @@ export function useSetsFilter({
 
   const debouncedQuery = useDebounce(query, FILTER_DEBOUNCE_MS);
 
-  const filtered = useMemo(() => {
+  const filteredSets: SetViewModel[] = useMemo(() => {
     const userFiltersEnabled = structuredFiltersEnabled && isSignedIn;
     const filterState = {
       query: debouncedQuery,
@@ -46,7 +47,7 @@ export function useSetsFilter({
         ? filterParams.averageRatings
         : [],
     };
-    return new SetFilter(filterState).filter(viewModel);
+    return new SetFilter(filterState).filter(viewModel.sets);
   }, [
     debouncedQuery,
     filterParams.years,
@@ -57,7 +58,7 @@ export function useSetsFilter({
     filterParams.wishlist,
     filterParams.userRatings,
     filterParams.averageRatings,
-    viewModel,
+    viewModel.sets,
     structuredFiltersEnabled,
     isSignedIn,
   ]);
@@ -81,12 +82,12 @@ export function useSetsFilter({
     hasQuery ||
     (structuredFiltersEnabled && (hasStructuredFilters || hasUserFilters));
 
-  const hasResults = filtered.totalCount > 0;
+  const hasResults = filteredSets.length > 0;
 
   return {
     query,
     setQuery,
-    filtered,
+    filteredSets,
     isFiltering,
     hasResults,
   };

@@ -2,7 +2,7 @@ import type { SetsRepository } from "@/data/repositories/sets.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { logger } from "@/lib/logger";
 
 export class UserCollectionService {
@@ -37,22 +37,20 @@ export class UserCollectionService {
     logger.info("Set added to collection", { userId, setNumber });
   }
 
-  async getCollectionListViewModel(
-    userId: string,
-  ): Promise<SetsGroupedViewModel> {
+  async getCollectionListViewModel(userId: string): Promise<SetsListViewModel> {
     const ctx = await this.setViewModelContextLoader.load({ userId });
     const allSets = this.setsRepository.getAll();
     const byNumber = new Map(allSets.map((s) => [s.catalogNumber, s]));
 
     const userSets: SetViewModel[] = [];
 
-    for (const num of ctx.collectionSetNumbers) {
+    for (const num of Object.keys(ctx.userCollectionBySet)) {
       const set = byNumber.get(num);
       if (set) {
         userSets.push(
           SetViewModel.build({
             set,
-            collectionSetNumbers: ctx.collectionSetNumbers,
+            userCollectionBySet: ctx.userCollectionBySet,
             userRatings: ctx.userRatingsBySet,
             averageRatings: ctx.averageRatingsBySet,
             userWishlistState: ctx.userWishlistStateBySet,
@@ -61,6 +59,9 @@ export class UserCollectionService {
       }
     }
 
-    return SetsGroupedViewModel.toCollection(userSets, allSets);
+    return {
+      sets: userSets,
+      totalCount: userSets.length,
+    };
   }
 }

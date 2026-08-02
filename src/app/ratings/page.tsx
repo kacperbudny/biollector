@@ -27,7 +27,15 @@ export default async function RatingsPage() {
       >
         My ratings
       </PageTitle>
-      {ratingsCount > 0 ? <SetsList viewModel={viewModel} /> : <RatingsEmpty />}
+      {ratingsCount > 0 ? (
+        <SetsList
+          viewModel={viewModel}
+          defaultSort="user-rating"
+          defaultDir="desc"
+        />
+      ) : (
+        <RatingsEmpty />
+      )}
     </>
   );
 }

@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from "vitest";
 import { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { Wave } from "@/domain/sets";
-import type { FlatSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { setFixture } from "@/tests/fixtures";
 import {
   setRatingRepositoryMock,
@@ -11,7 +10,7 @@ import {
 
 describe(SetRatingService.name, () => {
   describe(`${SetRatingService.prototype.getRatingsViewModel.name}`, () => {
-    it("returns rated sets grouped by star rating", async () => {
+    it("returns rated sets list", async () => {
       const setsRepo = new SetsRepository([
         setFixture({
           catalogNumber: "8534",
@@ -40,13 +39,12 @@ describe(SetRatingService.name, () => {
       const vm = await service.getRatingsViewModel("user-123");
 
       expect(vm.totalCount).toBe(2);
-      expect(vm.sections).toHaveLength(2);
-
-      const [five, four] = vm.sections as FlatSetSection[];
-      expect(five.label).toBe("5 stars");
-      expect(four.label).toBe("4 stars");
-      expect(five.sets.map((s) => s.catalogNumber)).toEqual(["8534"]);
-      expect(four.sets.map((s) => s.catalogNumber)).toEqual(["1388"]);
+      expect(vm.sets).toHaveLength(2);
+      expect(vm.sets.map((s) => s.catalogNumber)).toEqual(["1388", "8534"]);
+      const set8534 = vm.sets.find((s) => s.catalogNumber === "8534");
+      const set1388 = vm.sets.find((s) => s.catalogNumber === "1388");
+      expect(set8534?.userRating).toBe(5);
+      expect(set1388?.userRating).toBe(4);
     });
 
     it("returns empty view model when user has no ratings", async () => {
@@ -59,7 +57,7 @@ describe(SetRatingService.name, () => {
       const vm = await service.getRatingsViewModel("user-123");
 
       expect(vm.totalCount).toBe(0);
-      expect(vm.sections).toHaveLength(0);
+      expect(vm.sets).toHaveLength(0);
     });
   });
 

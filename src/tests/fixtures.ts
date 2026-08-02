@@ -15,6 +15,7 @@ export function setFixture(
 
 type SetViewModelFixtureContext = {
   inCollection?: boolean;
+  addedToCollectionAt?: Date;
   userRating?: number;
   averageRating?: number;
   wishlistScale?: UserWishlistScale;
@@ -31,9 +32,15 @@ export function setViewModelFixture(
     ...overrides,
   });
 
+  const userCollectionBySet = context.addedToCollectionAt
+    ? { [set.catalogNumber]: context.addedToCollectionAt }
+    : context.inCollection
+      ? { [set.catalogNumber]: new Date() }
+      : {};
+
   return SetViewModel.build({
     set,
-    collectionSetNumbers: context.inCollection ? [set.catalogNumber] : [],
+    userCollectionBySet,
     userRatings:
       context.userRating !== undefined
         ? { [set.catalogNumber]: context.userRating }

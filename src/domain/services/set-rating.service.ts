@@ -3,7 +3,7 @@ import type { SetsRepository } from "@/data/repositories/sets.repository";
 import { SetRatingEntity } from "@/domain/set-rating.entity";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { logger } from "@/lib/logger";
 
 export class SetRatingService {
@@ -13,7 +13,7 @@ export class SetRatingService {
     private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
-  async getRatingsViewModel(userId: string): Promise<SetsGroupedViewModel> {
+  async getRatingsViewModel(userId: string): Promise<SetsListViewModel> {
     const ctx = await this.setViewModelContextLoader.load({
       userId,
     });
@@ -31,7 +31,7 @@ export class SetRatingService {
         setViewModels.push(
           SetViewModel.build({
             set,
-            collectionSetNumbers: ctx.collectionSetNumbers,
+            userCollectionBySet: ctx.userCollectionBySet,
             userRatings: ctx.userRatingsBySet,
             averageRatings: ctx.averageRatingsBySet,
             userWishlistState: ctx.userWishlistStateBySet,
@@ -40,7 +40,10 @@ export class SetRatingService {
       }
     }
 
-    return SetsGroupedViewModel.toRatings(setViewModels);
+    return {
+      sets: setViewModels,
+      totalCount: setViewModels.length,
+    };
   }
 
   async getTotalRatingsCount(): Promise<number> {

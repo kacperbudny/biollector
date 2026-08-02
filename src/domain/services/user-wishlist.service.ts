@@ -3,7 +3,7 @@ import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishli
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import type { UserWishlistScale } from "@/domain/user-wishlist";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { logger } from "@/lib/logger";
 
 export class UserWishlistService {
@@ -13,7 +13,7 @@ export class UserWishlistService {
     private readonly setViewModelContextLoader: SetViewModelContextLoader,
   ) {}
 
-  async getWishlistViewModel(userId: string): Promise<SetsGroupedViewModel> {
+  async getWishlistViewModel(userId: string): Promise<SetsListViewModel> {
     const ctx = await this.setViewModelContextLoader.load({
       userId,
     });
@@ -31,7 +31,7 @@ export class UserWishlistService {
         setViewModels.push(
           SetViewModel.build({
             set,
-            collectionSetNumbers: ctx.collectionSetNumbers,
+            userCollectionBySet: ctx.userCollectionBySet,
             userRatings: ctx.userRatingsBySet,
             averageRatings: ctx.averageRatingsBySet,
             userWishlistState: ctx.userWishlistStateBySet,
@@ -40,7 +40,10 @@ export class UserWishlistService {
       }
     }
 
-    return SetsGroupedViewModel.toWishlist(setViewModels);
+    return {
+      sets: setViewModels,
+      totalCount: setViewModels.length,
+    };
   }
 
   async setWishlist(

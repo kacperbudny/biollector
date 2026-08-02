@@ -8,6 +8,7 @@ import { BionicleCharacter, type BionicleSet, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
 import { setFixture } from "@/tests/fixtures";
 import {
+  getUserCollectionMock,
   recommendationsServiceMock,
   setRatingRepositoryMock,
   userCollectionRepositoryMock,
@@ -40,7 +41,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["100"]),
+          getUserCollection: getUserCollectionMock(["100"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -78,7 +79,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["200"]),
+          getUserCollection: getUserCollectionMock(["200"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -166,7 +167,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["300", "310"]),
+          getUserCollection: getUserCollectionMock(["300", "310"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -205,7 +206,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["320"]),
+          getUserCollection: getUserCollectionMock(["320"]),
         }),
       });
 
@@ -237,7 +238,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["400"]),
+          getUserCollection: getUserCollectionMock(["400"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -308,7 +309,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["500", "510"]),
+          getUserCollection: getUserCollectionMock(["500", "510"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -343,7 +344,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["520"]),
+          getUserCollection: getUserCollectionMock(["520"]),
         }),
       });
 
@@ -379,7 +380,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["600"]),
+          getUserCollection: getUserCollectionMock(["600"]),
         }),
         setRatingRepository: setRatingRepositoryMock({
           getAverageRatings: vi.fn().mockResolvedValue({
@@ -439,7 +440,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["610"]),
+            getUserCollection: getUserCollectionMock(["610"]),
           }),
           setRatingRepository: setRatingRepositoryMock({
             getAverageRatings: vi.fn().mockResolvedValue({
@@ -481,7 +482,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["620"]),
+            getUserCollection: getUserCollectionMock(["620"]),
           }),
           setRatingRepository: setRatingRepositoryMock({
             getAverageRatings: vi.fn().mockResolvedValue({
@@ -528,7 +529,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["630"]),
+            getUserCollection: getUserCollectionMock(["630"]),
           }),
           setRatingRepository: setRatingRepositoryMock({
             getAverageRatings: vi.fn().mockResolvedValue({
@@ -568,7 +569,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["640"]),
+            getUserCollection: getUserCollectionMock(["640"]),
           }),
           setRatingRepository: setRatingRepositoryMock({
             getAverageRatings: vi.fn().mockResolvedValue({
@@ -615,7 +616,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["700"]),
+          getUserCollection: getUserCollectionMock(["700"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -654,7 +655,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["800"]),
+          getUserCollection: getUserCollectionMock(["800"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -701,7 +702,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["900"]),
+          getUserCollection: getUserCollectionMock(["900"]),
         }),
         userWishlistRepository: userWishlistRepositoryMock({
           getWishlistState: vi.fn().mockResolvedValue({
@@ -733,7 +734,7 @@ describe(RecommendationsService.name, () => {
       const service = recommendationsServiceMock({
         setsRepository: new SetsRepository(sets),
         userCollectionRepository: userCollectionRepositoryMock({
-          getUserCollection: vi.fn().mockResolvedValue(["950"]),
+          getUserCollection: getUserCollectionMock(["950"]),
         }),
         setRatingRepository: setRatingRepositoryMock({
           getAverageRatings: vi.fn().mockResolvedValue({
@@ -783,7 +784,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1000", "1001"]),
+            getUserCollection: getUserCollectionMock(["1000", "1001"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -846,7 +847,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1010"]),
+            getUserCollection: getUserCollectionMock(["1010"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -908,7 +909,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1020"]),
+            getUserCollection: getUserCollectionMock(["1020"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -984,9 +985,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi
-              .fn()
-              .mockResolvedValue(["1025", "1026", "1027"]),
+            getUserCollection: getUserCollectionMock(["1025", "1026", "1027"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1037,7 +1036,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1030"]),
+            getUserCollection: getUserCollectionMock(["1030"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1100,7 +1099,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1035"]),
+            getUserCollection: getUserCollectionMock(["1035"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1149,7 +1148,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue([]),
+            getUserCollection: getUserCollectionMock([]),
           }),
           userWishlistRepository: userWishlistRepositoryMock({
             getWishlistState: vi.fn().mockResolvedValue({
@@ -1206,7 +1205,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1040"]),
+            getUserCollection: getUserCollectionMock(["1040"]),
           }),
           userWishlistRepository: userWishlistRepositoryMock({
             getWishlistState: vi.fn().mockResolvedValue({
@@ -1273,7 +1272,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1050"]),
+            getUserCollection: getUserCollectionMock(["1050"]),
           }),
         });
 
@@ -1320,7 +1319,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1060"]),
+            getUserCollection: getUserCollectionMock(["1060"]),
           }),
         });
 
@@ -1359,7 +1358,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1065"]),
+            getUserCollection: getUserCollectionMock(["1065"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1404,7 +1403,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1070"]),
+            getUserCollection: getUserCollectionMock(["1070"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1449,7 +1448,7 @@ describe(RecommendationsService.name, () => {
         const service = recommendationsServiceMock({
           setsRepository: new SetsRepository(sets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1080"]),
+            getUserCollection: getUserCollectionMock(["1080"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1503,7 +1502,7 @@ describe(RecommendationsService.name, () => {
         const completionService = recommendationsServiceMock({
           setsRepository: new SetsRepository(g2CompletionSets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1090"]),
+            getUserCollection: getUserCollectionMock(["1090"]),
           }),
           recommendationWeights: {
             wishlist: 0,
@@ -1546,7 +1545,7 @@ describe(RecommendationsService.name, () => {
         const discoveryService = recommendationsServiceMock({
           setsRepository: new SetsRepository(g2DiscoverySets),
           userCollectionRepository: userCollectionRepositoryMock({
-            getUserCollection: vi.fn().mockResolvedValue(["1092"]),
+            getUserCollection: getUserCollectionMock(["1092"]),
           }),
           recommendationWeights: {
             wishlist: 0,

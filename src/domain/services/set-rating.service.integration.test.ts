@@ -1,7 +1,6 @@
 import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import type { SetRatingRepository } from "@/data/repositories/set-rating.repository";
 import { SetRatingService } from "@/domain/services/set-rating.service";
-import type { FlatSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { truncateTestDb } from "@/tests/db";
 import {
   getIntegrationSetRatingRepository,
@@ -40,25 +39,22 @@ describe(SetRatingService.name, () => {
   });
 
   describe(`${SetRatingService.prototype.getRatingsViewModel.name}`, () => {
-    it("returns rated sets for the user grouped by rating", async () => {
+    it("returns rated sets for the user", async () => {
       await setRatingService.setRating("user-123", "8534", 5);
       await setRatingService.setRating("user-123", "1388", 4);
 
       const vm = await setRatingService.getRatingsViewModel("user-123");
 
       expect(vm.totalCount).toBe(2);
-      expect(vm.sections[0].label).toBe("5 stars");
-      expect(vm.sections[1].label).toBe("4 stars");
-      const [five, four] = vm.sections as FlatSetSection[];
-      expect(five.sets.map((s) => s.catalogNumber)).toContain("8534");
-      expect(four.sets.map((s) => s.catalogNumber)).toContain("1388");
+      expect(vm.sets.map((s) => s.catalogNumber)).toContain("8534");
+      expect(vm.sets.map((s) => s.catalogNumber)).toContain("1388");
     });
 
-    it("returns empty sections when user has no ratings", async () => {
+    it("returns empty sets when user has no ratings", async () => {
       const vm = await setRatingService.getRatingsViewModel("user-123");
 
       expect(vm.totalCount).toBe(0);
-      expect(vm.sections).toHaveLength(0);
+      expect(vm.sets).toHaveLength(0);
     });
   });
 });

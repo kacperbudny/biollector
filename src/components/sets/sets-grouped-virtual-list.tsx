@@ -112,7 +112,9 @@ function buildVirtualRows(
         }
       }
     } else {
-      rows.push({ kind: "section-header", label: section.label });
+      if (section.label) {
+        rows.push({ kind: "section-header", label: section.label });
+      }
 
       for (let i = 0; i < section.sets.length; i += columns) {
         const isLastChunk = i + columns >= section.sets.length;

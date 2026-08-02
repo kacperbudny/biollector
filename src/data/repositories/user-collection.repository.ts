@@ -5,7 +5,7 @@ import type { DB } from "@/data/db/types";
 export type UserCollectionRepositoryPort = {
   insert(userId: string, setNumber: string): Promise<void>;
   deleteFromCollection(userId: string, setNumber: string): Promise<void>;
-  getUserCollection(userId: string): Promise<string[]>;
+  getUserCollection(userId: string): Promise<Record<string, Date>>;
   getDistinctCollectionsCount(): Promise<number>;
   isInCollection(userId: string, setNumber: string): Promise<boolean>;
 };
@@ -28,13 +28,17 @@ export class UserCollectionRepository implements UserCollectionRepositoryPort {
       .execute();
   }
 
-  async getUserCollection(userId: string): Promise<string[]> {
+  async getUserCollection(userId: string): Promise<Record<string, Date>> {
     const rows = await this.db
       .selectFrom("user_collection")
-      .select("set_number")
+      .select(["set_number", "created_at"])
       .where("user_id", "=", userId)
       .execute();
-    return rows.map((r) => r.set_number);
+    const result: Record<string, Date> = {};
+    for (const r of rows) {
+      result[r.set_number] = r.created_at;
+    }
+    return result;
   }
 
   async getDistinctCollectionsCount(): Promise<number> {
