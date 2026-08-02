@@ -21,7 +21,7 @@ export default async function CollectionPage() {
   const viewModel = await userCollectionService.getCollectionListViewModel(
     user.id,
   );
-  const collectionCount = viewModel.collectionCount ?? 0;
+  const collectionCount = viewModel.totalCount;
 
   return (
     <>
@@ -31,7 +31,7 @@ export default async function CollectionPage() {
         My collection
       </PageTitle>
       {collectionCount > 0 ? (
-        <SetsList viewModel={viewModel} />
+        <SetsList viewModel={viewModel} displayCollectionCounts />
       ) : (
         <CollectionEmpty />
       )}

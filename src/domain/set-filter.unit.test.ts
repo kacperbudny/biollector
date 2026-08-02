@@ -6,7 +6,6 @@ import {
 } from "@/domain/set-filter";
 import { BionicleCharacter, SetType, Wave } from "@/domain/sets";
 import { UserWishlistScale } from "@/domain/user-wishlist";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
 import { setViewModelFixture } from "@/tests/fixtures";
 
 const emptyState: SetFilterState = {
@@ -330,33 +329,24 @@ describe(SetFilter.name, () => {
   });
 
   describe("filter", () => {
-    it("returns the same view model when state is fully empty", () => {
-      const groupedVm = SetsGroupedViewModel.groupedByYearAndWave([
-        tahu,
-        gali,
-        jaller,
-      ]);
+    it("returns the same sets array when state is fully empty", () => {
+      const sets = [tahu, gali, jaller];
       const filter = new SetFilter(emptyState);
-      expect(filter.filter(groupedVm)).toBe(groupedVm);
+      expect(filter.filter(sets)).toBe(sets);
     });
 
-    it("filters NestedSetSections by year and removes empty groups", () => {
-      const groupedVm = SetsGroupedViewModel.groupedByYearAndWave([
-        tahu,
-        gali,
-        jaller,
-      ]);
+    it("filters sets by year", () => {
+      const sets = [tahu, gali, jaller];
       const result = new SetFilter({
         ...emptyState,
         years: ["2007" as ReleaseYear],
-      }).filter(groupedVm);
+      }).filter(sets);
 
-      expect(result.totalCount).toBe(1);
-      expect(result.sections).toHaveLength(1);
-      expect(result.sections[0].label).toBe("2007");
+      expect(result).toHaveLength(1);
+      expect(result[0].releaseYear).toBe("2007");
     });
 
-    it("filters FlatSetSections by set type", () => {
+    it("filters sets by set type", () => {
       const tahuRated = setViewModelFixture(
         {
           catalogNumber: "8534",
@@ -377,31 +367,22 @@ describe(SetFilter.name, () => {
         },
         { userRating: 5 },
       );
-      const ratingsVm = SetsGroupedViewModel.toRatings([
-        tahuRated,
-        playsetRated,
-      ]);
       const result = new SetFilter({
         ...emptyState,
         types: [SetType.PLAYSET],
-      }).filter(ratingsVm);
+      }).filter([tahuRated, playsetRated]);
 
-      expect(result.totalCount).toBe(1);
-      const section = result.sections[0];
-      if (!("sets" in section)) {
-        throw new Error("Expected FlatSetSection");
-      }
-      expect(section.sets[0].catalogNumber).toBe("8893");
+      expect(result).toHaveLength(1);
+      expect(result[0].catalogNumber).toBe("8893");
     });
 
-    it("returns zero sections when nothing matches", () => {
-      const groupedVm = SetsGroupedViewModel.groupedByYearAndWave([tahu, gali]);
+    it("returns empty array when nothing matches", () => {
+      const sets = [tahu, gali];
       const result = new SetFilter({ ...emptyState, years: ["2026"] }).filter(
-        groupedVm,
+        sets,
       );
 
-      expect(result.sections).toHaveLength(0);
-      expect(result.totalCount).toBe(0);
+      expect(result).toHaveLength(0);
     });
   });
 });

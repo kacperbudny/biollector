@@ -11,13 +11,21 @@ import {
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
+export function getUserCollectionMock(setNumbers: string[]) {
+  const result: Record<string, Date> = {};
+  for (const num of setNumbers) {
+    result[num] = new Date();
+  }
+  return vi.fn().mockResolvedValue(result);
+}
+
 export function userCollectionRepositoryMock(
   overrides?: Partial<UserCollectionRepositoryPort>,
 ): UserCollectionRepositoryPort {
   return {
     insert: vi.fn(),
     deleteFromCollection: vi.fn(),
-    getUserCollection: vi.fn().mockResolvedValue([]),
+    getUserCollection: vi.fn().mockResolvedValue({}),
     isInCollection: vi.fn(),
     getDistinctCollectionsCount: vi.fn().mockResolvedValue(0),
     ...overrides,

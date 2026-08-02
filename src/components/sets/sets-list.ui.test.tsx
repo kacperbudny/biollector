@@ -3,7 +3,8 @@ import userEvent from "@testing-library/user-event";
 import { NuqsTestingAdapter } from "nuqs/adapters/testing";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Wave } from "@/domain/sets";
-import { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { setViewModelFixture } from "@/tests/fixtures";
 import { SetsList } from "./sets-list";
 
@@ -75,11 +76,10 @@ describe(SetsList.name, () => {
     { inCollection: false },
   );
 
-  const viewModel = SetsGroupedViewModel.groupedByYearAndWave([
-    set1,
-    set2,
-    set3,
-  ]);
+  const viewModel: SetsListViewModel = {
+    sets: [set1, set2, set3],
+    totalCount: 3,
+  };
 
   function renderSetsList(showFilterSidebar = true) {
     return render(
@@ -96,7 +96,7 @@ describe(SetsList.name, () => {
     const setNames = screen
       .getAllByTestId("set-item")
       .map((el) => el.textContent);
-    expect(setNames).toEqual(["Tahu", "Gali", "Gahlok"]);
+    expect(setNames).toEqual(["Gali", "Tahu", "Gahlok"]);
   });
 
   it("filters sets by text search", async () => {
@@ -155,5 +155,24 @@ describe(SetsList.name, () => {
     await waitFor(() => {
       expect(screen.getAllByTestId("set-item")).toHaveLength(3);
     });
+  });
+
+  it("suppresses section collection counts when filtering", async () => {
+    useUserMock.mockReturnValue({ id: "user-1" });
+    const user = userEvent.setup();
+    render(<SetsList viewModel={viewModel} displayCollectionCounts />, {
+      wrapper: NuqsTestingAdapter,
+    });
+
+    const searchInput = screen.getByPlaceholderText(
+      "Search by name, catalog number, year or wave…",
+    );
+    await user.type(searchInput, "Tahu");
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId("set-item")).toHaveLength(1);
+    });
+
+    expect(screen.queryByText(/sets\)/i)).not.toBeInTheDocument();
   });
 });

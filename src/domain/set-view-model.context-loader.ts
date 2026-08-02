@@ -6,7 +6,7 @@ import type { UserCollectionRepositoryPort } from "@/data/repositories/user-coll
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 
 type SetViewModelContext = {
-  collectionSetNumbers: string[];
+  userCollectionBySet: Record<string, Date>;
   userRatingsBySet: Record<string, number>;
   averageRatingsBySet: Record<string, number>;
   userWishlistStateBySet: Record<string, number>;
@@ -33,7 +33,7 @@ export class SetViewModelContextLoader {
       );
 
       return {
-        collectionSetNumbers: [],
+        userCollectionBySet: {},
         userRatingsBySet: {},
         userWishlistStateBySet: {},
         averageRatingsBySet: averageRatings,
@@ -41,7 +41,7 @@ export class SetViewModelContextLoader {
     }
 
     const [
-      collectionSetNumbers,
+      userCollectionBySet,
       userRatingsBySet,
       averageRatingsBySet,
       userWishlistStateBySet,
@@ -53,7 +53,7 @@ export class SetViewModelContextLoader {
     ]);
 
     return {
-      collectionSetNumbers,
+      userCollectionBySet,
       userRatingsBySet,
       averageRatingsBySet,
       userWishlistStateBySet,

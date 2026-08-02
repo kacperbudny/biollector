@@ -2,17 +2,23 @@
 
 import { SetFilterSidebar } from "@/components/sets/set-filter-sidebar";
 import { SetSearchBar } from "@/components/sets/set-search-bar";
+import { SetSortBar } from "@/components/sets/set-sort-bar";
 import { SetsGroupedVirtualList } from "@/components/sets/sets-grouped-virtual-list";
 import { PageTitle } from "@/components/typography/headings";
 import { MutedText } from "@/components/typography/text";
-import type { SetsGroupedViewModel } from "@/domain/view-models/sets-grouped.view-model";
+import type { SortDirection, SortOption } from "@/domain/set-sort";
+import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 import { useSetsFilter } from "@/hooks/use-sets-filter";
+import { useSetsSort } from "@/hooks/use-sets-sort";
 
 type SetsListProps = {
-  viewModel: SetsGroupedViewModel;
+  viewModel: SetsListViewModel;
   showFilterSidebar?: boolean;
   pageTitle?: string;
   pageTitleSubtitle?: string;
+  defaultSort?: SortOption;
+  defaultDir?: SortDirection;
+  displayCollectionCounts?: boolean;
 };
 
 export function SetsList({
@@ -20,25 +26,44 @@ export function SetsList({
   showFilterSidebar = false,
   pageTitle,
   pageTitleSubtitle,
+  defaultSort,
+  defaultDir,
+  displayCollectionCounts = false,
 }: SetsListProps) {
-  const { query, setQuery, filtered, isFiltering, hasResults } = useSetsFilter({
-    viewModel,
-    structuredFiltersEnabled: showFilterSidebar,
+  const { query, setQuery, filteredSets, isFiltering, hasResults } =
+    useSetsFilter({
+      viewModel,
+      structuredFiltersEnabled: showFilterSidebar,
+    });
+  const { sort, dir, setSort, setDir, grouped } = useSetsSort({
+    sets: filteredSets,
+    totalCount: viewModel.totalCount,
+    defaultSort,
+    defaultDir,
+    displayCollectionCounts: displayCollectionCounts && !isFiltering,
   });
 
   const listContent = (
     <>
-      {isFiltering && (
-        <p className="mb-4 text-sm">
-          <MutedText>
-            Showing {filtered.totalCount} of {viewModel.totalCount} sets
-          </MutedText>
-        </p>
-      )}
+      <div className="mb-4 flex flex-col items-start gap-2">
+        <SetSortBar
+          sort={sort}
+          dir={dir}
+          onSortChange={setSort}
+          onDirectionChange={setDir}
+        />
+        {isFiltering && (
+          <p className="text-sm">
+            <MutedText>
+              Showing {filteredSets.length} of {viewModel.totalCount} sets
+            </MutedText>
+          </p>
+        )}
+      </div>
       {isFiltering && !hasResults ? (
         <p className="text-muted">No sets found for the current filters.</p>
       ) : (
-        <SetsGroupedVirtualList viewModel={filtered} />
+        <SetsGroupedVirtualList viewModel={grouped} />
       )}
     </>
   );

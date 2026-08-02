@@ -28,7 +28,11 @@ export default async function WishlistPage() {
         Wishlist
       </PageTitle>
       {wishlistCount > 0 ? (
-        <SetsList viewModel={viewModel} />
+        <SetsList
+          viewModel={viewModel}
+          defaultSort="wishlist-scale"
+          defaultDir="desc"
+        />
       ) : (
         <WishlistEmpty />
       )}

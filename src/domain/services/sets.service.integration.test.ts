@@ -2,8 +2,6 @@ import { afterEach, beforeAll, describe, expect, it } from "vitest";
 import { bionicleSets } from "@/data/sets";
 import type { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetsService } from "@/domain/services/sets.service";
-import { Wave } from "@/domain/sets";
-import type { NestedSetSection } from "@/domain/view-models/sets-grouped.view-model";
 import { truncateTestDb } from "@/tests/db";
 import {
   getIntegrationSetRatingService,
@@ -47,13 +45,10 @@ describe(SetsService.name, () => {
   });
 
   describe(`${SetsService.prototype.getSetsListViewModel.name}`, () => {
-    it("returns grouped years and waves for the full catalog", async () => {
+    it("returns all sets in the catalog", async () => {
       const result = await setsService.getSetsListViewModel();
-      expect(result.sections.length).toBeGreaterThan(0);
+      expect(result.sets.length).toBe(bionicleSets.length);
       expect(result.totalCount).toBe(bionicleSets.length);
-      expect(result.sections[0].label).toBe("2001");
-      const firstSection = result.sections[0] as NestedSetSection;
-      expect(firstSection.groups[0].label).toBe(Wave.TURAGA);
     });
   });
 });

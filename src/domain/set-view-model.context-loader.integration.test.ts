@@ -38,7 +38,7 @@ describe(SetViewModelContextLoader.name, () => {
   it("returns empty user-specific fields when userId is omitted", async () => {
     const ctx = await loader.load();
 
-    expect(ctx.collectionSetNumbers).toEqual([]);
+    expect(ctx.userCollectionBySet).toEqual({});
     expect(ctx.userRatingsBySet).toEqual({});
     expect(ctx.userWishlistStateBySet).toEqual({});
     expect(ctx.averageRatingsBySet).toEqual({});
@@ -58,7 +58,7 @@ describe(SetViewModelContextLoader.name, () => {
 
     const ctx = await loader.load({ userId });
 
-    expect(ctx.collectionSetNumbers).toEqual([setNumber]);
+    expect(ctx.userCollectionBySet[setNumber]).toBeInstanceOf(Date);
     expect(ctx.userRatingsBySet).toEqual({ [setNumber]: 5 });
     expect(ctx.userWishlistStateBySet).toEqual({
       [setNumber]: UserWishlistScale.MEDIUM,

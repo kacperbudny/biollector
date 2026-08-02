@@ -75,7 +75,7 @@ export class RecommendationsService {
     const setViewModels = allSets.map((set) =>
       SetViewModel.build({
         set,
-        collectionSetNumbers: ctx.collectionSetNumbers,
+        userCollectionBySet: ctx.userCollectionBySet,
         userRatings: ctx.userRatingsBySet,
         averageRatings: ctx.averageRatingsBySet,
         userWishlistState: ctx.userWishlistStateBySet,
@@ -91,7 +91,7 @@ export class RecommendationsService {
 
     const scopeCounts = this.buildScopeCounts(
       allSets,
-      ctx.collectionSetNumbers,
+      Object.keys(ctx.userCollectionBySet),
       ctx.userWishlistStateBySet,
     );
     const scored = candidates.map((set) => this.scoreSet(set, scopeCounts));
@@ -115,7 +115,11 @@ export class RecommendationsService {
           return byRating;
         }
 
-        return a.set.catalogNumber.localeCompare(b.set.catalogNumber);
+        return a.set.catalogNumber.localeCompare(
+          b.set.catalogNumber,
+          undefined,
+          { numeric: true },
+        );
       })
       .slice(0, limit);
 

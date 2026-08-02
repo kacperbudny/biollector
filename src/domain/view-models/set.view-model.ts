@@ -14,6 +14,7 @@ export type SetViewModel = {
   characters: BionicleSet["characters"];
   minifigures: BionicleSet["minifigures"];
   isInCollection: boolean;
+  addedToCollectionAt?: Date;
   wishlistScale: UserWishlistScale | null;
   wishlisted: boolean;
   notInterested: boolean;
@@ -24,16 +25,16 @@ export type SetViewModel = {
 export namespace SetViewModel {
   export function build({
     set,
-    collectionSetNumbers,
-    userRatings,
-    averageRatings,
-    userWishlistState,
+    userCollectionBySet = {},
+    userRatings = {},
+    averageRatings = {},
+    userWishlistState = {},
   }: {
     set: BionicleSet;
-    collectionSetNumbers: string[];
-    userRatings: Record<string, number>;
-    averageRatings: Record<string, number>;
-    userWishlistState: Record<string, number>;
+    userCollectionBySet?: Record<string, Date>;
+    userRatings?: Record<string, number>;
+    averageRatings?: Record<string, number>;
+    userWishlistState?: Record<string, number>;
   }): SetViewModel {
     const wishlistScale =
       (userWishlistState[set.catalogNumber] as UserWishlistScale) ?? null;
@@ -41,6 +42,8 @@ export namespace SetViewModel {
     if (wishlistScale !== null) {
       userWishlistScaleSchema.parse(wishlistScale);
     }
+
+    const addedToCollectionAt = userCollectionBySet[set.catalogNumber];
 
     return {
       catalogNumber: set.catalogNumber,
@@ -51,7 +54,8 @@ export namespace SetViewModel {
       wave: set.wave,
       characters: set.characters,
       minifigures: set.minifigures,
-      isInCollection: collectionSetNumbers.includes(set.catalogNumber),
+      isInCollection: addedToCollectionAt !== undefined,
+      addedToCollectionAt,
       wishlistScale,
       wishlisted:
         wishlistScale !== null &&
