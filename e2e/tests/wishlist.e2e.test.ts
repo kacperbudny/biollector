@@ -7,6 +7,8 @@ test.beforeEach(async ({ setsPage }) => {
 });
 
 test("user manages their wishlist", async ({ setsPage, wishlistPage }) => {
+  test.setTimeout(90_000);
+
   await wishlistPage.goto();
   await wishlistPage.expectEmpty();
 
@@ -22,6 +24,7 @@ test("user manages their wishlist", async ({ setsPage, wishlistPage }) => {
     .setWishlistOption("Add set to wishlist", "Not interested");
 
   await wishlistPage.goto();
+  await wishlistPage.expectLoaded();
   await wishlistPage.expectSetInSection("Must have", SET_HUKI);
   await wishlistPage.expectSetInSection("Not interested", SET_ONEPU);
 

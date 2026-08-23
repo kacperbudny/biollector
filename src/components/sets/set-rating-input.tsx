@@ -21,7 +21,7 @@ export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
   const user = useUser();
   const isSignedIn = !!user;
 
-  const { execute, optimisticState, isExecuting } = useOptimisticAction(
+  const { execute, optimisticState, isPending } = useOptimisticAction(
     setRating,
     {
       currentState: userRating,
@@ -40,7 +40,7 @@ export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
           <div
             className={cn(
               "set-rating-stars relative flex items-center gap-0.5 overflow-hidden",
-              isExecuting && "set-rating-shimmer",
+              isPending && "set-rating-shimmer",
             )}
           >
             {Array.from({ length: MAX_RATING }, (_, i) => {
@@ -52,7 +52,7 @@ export function SetRatingInput({ setNumber, userRating }: SetRatingInputProps) {
                   filled={
                     optimisticState !== undefined && value <= optimisticState
                   }
-                  disabled={!isSignedIn || isExecuting}
+                  disabled={!isSignedIn || isPending}
                   onClick={() => execute({ setNumber, rating: value })}
                 />
               );
