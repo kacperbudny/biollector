@@ -1,6 +1,11 @@
 import type { SetsRepository } from "@/data/repositories/sets.repository";
+import { SetSearch } from "@/domain/set-search";
 import type { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { SetViewModel } from "@/domain/view-models/set.view-model";
+import {
+  type SetSearchResultsViewModel,
+  SetSearchResultViewModel,
+} from "@/domain/view-models/set-search-result.view-model";
 import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 export class SetsService {
@@ -11,6 +16,26 @@ export class SetsService {
 
   getSetsCount(): number {
     return this.setsRepository.getAll().length;
+  }
+
+  searchSets(
+    query: string,
+    { limit = 10 }: { limit?: number } = {},
+  ): SetSearchResultsViewModel {
+    const search = new SetSearch(query);
+    if (search.isEmpty) {
+      return { sets: [], totalCount: 0 };
+    }
+
+    const matches = this.setsRepository
+      .getAll()
+      .filter((set) => search.matches(set))
+      .toSorted((a, b) => search.compare(a, b));
+
+    return {
+      sets: matches.slice(0, limit).map(SetSearchResultViewModel.fromSet),
+      totalCount: matches.length,
+    };
   }
 
   async getRandomSets(count: number, userId?: string): Promise<SetViewModel[]> {

@@ -51,4 +51,25 @@ describe(SetsService.name, () => {
       expect(result.totalCount).toBe(bionicleSets.length);
     });
   });
+
+  describe(`${SetsService.prototype.searchSets.name}`, () => {
+    it("returns ranked catalog matches without user-specific fields", () => {
+      const result = setsService.searchSets("8534");
+
+      expect(result.totalCount).toBeGreaterThanOrEqual(1);
+      expect(result.sets[0]).toMatchObject({
+        catalogNumber: "8534",
+        name: "Tahu",
+        releaseYear: "2001",
+      });
+      expect(result.sets[0]).not.toHaveProperty("isInCollection");
+    });
+
+    it("caps results at 10 while reporting the full match count", () => {
+      const result = setsService.searchSets("toa");
+
+      expect(result.totalCount).toBeGreaterThan(10);
+      expect(result.sets).toHaveLength(10);
+    });
+  });
 });
