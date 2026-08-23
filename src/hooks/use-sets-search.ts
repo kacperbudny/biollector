@@ -1,4 +1,4 @@
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { setsClient } from "@/clients/sets.client";
 import { useDebounce } from "@/hooks/use-debounce";
 
@@ -7,18 +7,22 @@ const SEARCH_DEBOUNCE_MS = 300;
 export function useSetsSearch(query: string) {
   const debouncedQuery = useDebounce(query, SEARCH_DEBOUNCE_MS);
   const trimmed = debouncedQuery.trim();
-  const hasQuery = query.trim().length > 0;
+  const liveTrimmed = query.trim();
+  const hasQuery = liveTrimmed.length > 0;
+  const isDebouncing = hasQuery && liveTrimmed !== trimmed;
 
   const queryResult = useQuery({
     queryKey: ["sets-search", trimmed],
     queryFn: () => setsClient.searchSets(trimmed),
     enabled: trimmed.length > 0,
-    placeholderData: keepPreviousData,
   });
+
+  const dataMatchesLiveQuery = hasQuery && !isDebouncing;
 
   return {
     ...queryResult,
-    results: hasQuery ? (queryResult.data?.sets ?? []) : [],
-    totalCount: hasQuery ? (queryResult.data?.totalCount ?? 0) : 0,
+    results: dataMatchesLiveQuery ? (queryResult.data?.sets ?? []) : [],
+    totalCount: dataMatchesLiveQuery ? (queryResult.data?.totalCount ?? 0) : 0,
+    isSearching: isDebouncing || queryResult.isFetching,
   };
 }

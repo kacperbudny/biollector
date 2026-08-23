@@ -79,11 +79,10 @@ function SetsSearchComboBox({
   const router = useRouter();
   const [query, setQuery] = useState("");
   const trimmedQuery = query.trim();
-  const { results, totalCount, isError, isFetching } = useSetsSearch(query);
+  const { results, totalCount, isError, isSearching } = useSetsSearch(query);
   const showViewAll = totalCount > results.length;
 
-  function navigateAndClear(href: string) {
-    router.push(href);
+  function clearSearch() {
     setQuery("");
     onNavigate?.();
     requestAnimationFrame(() => {
@@ -91,6 +90,11 @@ function SetsSearchComboBox({
         document.activeElement.blur();
       }
     });
+  }
+
+  function navigateAndClear(href: string) {
+    router.push(href);
+    clearSearch();
   }
 
   function goToViewAll() {
@@ -161,7 +165,7 @@ function SetsSearchComboBox({
             renderEmptyState={() => (
               <SearchEmptyState
                 isError={isError}
-                isFetching={isFetching}
+                isSearching={isSearching}
                 hasQuery={trimmedQuery.length > 0}
               />
             )}
@@ -173,9 +177,7 @@ function SetsSearchComboBox({
                   href={setsSearchHref(set.catalogNumber)}
                   textValue={`${set.name} ${set.catalogNumber}`}
                   className="min-w-0 overflow-hidden"
-                  onPress={() => {
-                    navigateAndClear(setsSearchHref(set.catalogNumber));
-                  }}
+                  onPress={clearSearch}
                 >
                   <SearchResultRow set={set} />
                 </ListBox.Item>
@@ -187,9 +189,7 @@ function SetsSearchComboBox({
                 href={setsSearchHref(trimmedQuery)}
                 textValue={`View all results (${totalCount})`}
                 className="mt-1 border-t border-border"
-                onPress={() => {
-                  navigateAndClear(setsSearchHref(trimmedQuery));
-                }}
+                onPress={clearSearch}
               >
                 <span className="text-accent">
                   View all results ({totalCount})
@@ -227,14 +227,14 @@ function SearchResultRow({ set }: { set: SetSearchResultViewModel }) {
 
 function SearchEmptyState({
   isError,
-  isFetching,
+  isSearching,
   hasQuery,
 }: {
   isError: boolean;
-  isFetching: boolean;
+  isSearching: boolean;
   hasQuery: boolean;
 }) {
-  if (isFetching) {
+  if (isSearching) {
     return (
       <EmptyState>
         <Spinner size="sm" />

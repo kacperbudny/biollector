@@ -1,5 +1,7 @@
+import { RouterProvider } from "@heroui/react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { ReactElement } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { NavbarSearch } from "@/components/layout/navbar-search";
 import { Wave } from "@/domain/sets";
@@ -30,7 +32,7 @@ const tahuResult = {
 function mockSearch(
   query: string,
   result: SetSearchResultsViewModel,
-  status: { isError?: boolean; isFetching?: boolean } = {},
+  status: { isError?: boolean; isSearching?: boolean } = {},
 ) {
   useSetsSearchMock.mockImplementation((currentQuery: string) => {
     const hasQuery = currentQuery.trim().length > 0;
@@ -42,9 +44,15 @@ function mockSearch(
       results: hasQuery ? (data?.sets ?? []) : [],
       totalCount: hasQuery ? (data?.totalCount ?? 0) : 0,
       isError: status.isError ?? false,
-      isFetching: status.isFetching ?? false,
+      isSearching: status.isSearching ?? false,
     };
   });
+}
+
+function renderNavbarSearch(
+  ui: ReactElement = <NavbarSearch variant="desktop" />,
+) {
+  return render(<RouterProvider navigate={pushMock}>{ui}</RouterProvider>);
 }
 
 describe(NavbarSearch.name, () => {
@@ -56,7 +64,7 @@ describe(NavbarSearch.name, () => {
       results: [],
       totalCount: 0,
       isError: false,
-      isFetching: false,
+      isSearching: false,
     });
   });
 
@@ -64,7 +72,7 @@ describe(NavbarSearch.name, () => {
     const user = userEvent.setup();
     mockSearch("tahu", { sets: [tahuResult], totalCount: 1 });
 
-    render(<NavbarSearch variant="desktop" />);
+    renderNavbarSearch();
 
     await user.type(
       screen.getByRole("combobox", { name: "Search all sets" }),
@@ -79,7 +87,8 @@ describe(NavbarSearch.name, () => {
     ).not.toBeInTheDocument();
 
     await user.click(tahuOption);
-    expect(pushMock).toHaveBeenCalledWith("/sets?q=8534");
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock.mock.calls[0]?.[0]).toBe("/sets?q=8534");
     expect(
       screen.getByRole("combobox", { name: "Search all sets" }),
     ).toHaveValue("");
@@ -101,7 +110,7 @@ describe(NavbarSearch.name, () => {
       totalCount: 14,
     });
 
-    render(<NavbarSearch variant="desktop" />);
+    renderNavbarSearch();
 
     await user.type(
       screen.getByRole("combobox", { name: "Search all sets" }),
@@ -113,14 +122,15 @@ describe(NavbarSearch.name, () => {
     });
     expect(viewAll).toHaveAttribute("href", "/sets?q=toa");
     await user.click(viewAll);
-    expect(pushMock).toHaveBeenCalledWith("/sets?q=toa");
+    expect(pushMock).toHaveBeenCalledTimes(1);
+    expect(pushMock.mock.calls[0]?.[0]).toBe("/sets?q=toa");
   });
 
   it("clears the input with the clear button", async () => {
     const user = userEvent.setup();
     mockSearch("tahu", { sets: [tahuResult], totalCount: 1 });
 
-    const { container } = render(<NavbarSearch variant="desktop" />);
+    const { container } = renderNavbarSearch();
 
     const input = screen.getByRole("combobox", { name: "Search all sets" });
     await user.type(input, "tahu");
@@ -145,13 +155,14 @@ describe(NavbarSearch.name, () => {
     const user = userEvent.setup();
     mockSearch("tahu", { sets: [tahuResult], totalCount: 1 });
 
-    render(<NavbarSearch variant="desktop" />);
+    renderNavbarSearch();
 
     const input = screen.getByRole("combobox", { name: "Search all sets" });
     await user.type(input, "tahu");
     await screen.findByRole("option", { name: /Tahu/ });
     await user.keyboard("{Enter}");
 
+    expect(pushMock).toHaveBeenCalledTimes(1);
     expect(pushMock).toHaveBeenCalledWith("/sets?q=tahu");
     expect(input).toHaveValue("");
     await waitFor(() => {
@@ -159,11 +170,26 @@ describe(NavbarSearch.name, () => {
     });
   });
 
+  it("shows a searching state instead of no-results while a query is in flight", async () => {
+    const user = userEvent.setup();
+    mockSearch("tahu", { sets: [], totalCount: 0 }, { isSearching: true });
+
+    renderNavbarSearch();
+
+    await user.type(
+      screen.getByRole("combobox", { name: "Search all sets" }),
+      "tahu",
+    );
+
+    expect(await screen.findByText("Searching…")).toBeInTheDocument();
+    expect(screen.queryByText("No results found")).not.toBeInTheDocument();
+  });
+
   it("shows an empty state when nothing matches", async () => {
     const user = userEvent.setup();
     mockSearch("zzzz", { sets: [], totalCount: 0 });
 
-    render(<NavbarSearch variant="desktop" />);
+    renderNavbarSearch();
 
     await user.type(
       screen.getByRole("combobox", { name: "Search all sets" }),
