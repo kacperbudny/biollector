@@ -133,3 +133,73 @@ describe(`${SetSearch.name}.matches`, () => {
     expect(new SetSearch("jaller").matches(set)).toBe(false);
   });
 });
+
+describe(`${SetSearch.name}.compare`, () => {
+  it("ranks exact catalog number above name prefix, substring, and other fields", () => {
+    const search = new SetSearch("tahu");
+    const exactCatalog = setFixture({
+      catalogNumber: "tahu",
+      name: "Gali",
+      releaseYear: "2006",
+      wave: Wave.TOA_INIKA,
+    });
+    const namePrefix = setFixture({
+      catalogNumber: "1",
+      name: "Tahu Nuva",
+      releaseYear: "2006",
+      wave: Wave.TOA_NUVA,
+    });
+    const nameSubstring = setFixture({
+      catalogNumber: "2",
+      name: "Toa Tahu",
+      releaseYear: "2006",
+      wave: Wave.TOA_MATA,
+    });
+    const otherField = setFixture({
+      catalogNumber: "3",
+      name: "Gali",
+      releaseYear: "2006",
+      wave: Wave.TOA_MATA,
+      characters: [BionicleCharacter.TAHU],
+    });
+
+    const ranked = [
+      otherField,
+      nameSubstring,
+      exactCatalog,
+      namePrefix,
+    ].toSorted((a, b) => search.compare(a, b));
+
+    expect(ranked.map((s) => s.catalogNumber)).toEqual(["tahu", "1", "2", "3"]);
+  });
+
+  it("tie-breaks equal rank by year then wave", () => {
+    const search = new SetSearch("tahu");
+    const laterYear = setFixture({
+      catalogNumber: "2",
+      name: "Tahu",
+      releaseYear: "2010",
+      wave: Wave.STARS,
+    });
+    const earlierYearLaterWave = setFixture({
+      catalogNumber: "1",
+      name: "Tahu",
+      releaseYear: "2001",
+      wave: Wave.RAHI,
+    });
+    const earlierYearEarlierWave = setFixture({
+      catalogNumber: "3",
+      name: "Tahu",
+      releaseYear: "2001",
+      wave: Wave.TOA_MATA,
+    });
+
+    const ranked = [
+      laterYear,
+      earlierYearLaterWave,
+      earlierYearEarlierWave,
+    ].toSorted((a, b) => search.compare(a, b));
+
+    expect(ranked.map((s) => s.catalogNumber)).toEqual(["3", "1", "2"]);
+  });
+});

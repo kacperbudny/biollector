@@ -163,4 +163,58 @@ describe(SetsService.name, () => {
       expect(set2?.averageRating).toBeUndefined();
     });
   });
+
+  describe(`${SetsService.prototype.searchSets.name}`, () => {
+    it("returns an empty result for a blank query", () => {
+      const service = new SetsService(
+        new SetsRepository([
+          setFixture({
+            catalogNumber: "8534",
+            name: "Tahu",
+            releaseYear: "2001",
+            wave: Wave.TOA_MATA,
+          }),
+        ]),
+        setViewModelContextLoaderMock(),
+      );
+
+      expect(service.searchSets("")).toEqual({ sets: [], totalCount: 0 });
+      expect(service.searchSets("   ")).toEqual({ sets: [], totalCount: 0 });
+    });
+
+    it("ranks, caps the list, and reports the untruncated match count", () => {
+      const sets: BionicleSet[] = Array.from({ length: 12 }, (_, i) =>
+        setFixture({
+          catalogNumber: String(i + 1),
+          name: `Tahu ${i + 1}`,
+          releaseYear: "2001",
+          wave: Wave.TOA_MATA,
+        }),
+      );
+      sets.push(
+        setFixture({
+          catalogNumber: "tahu",
+          name: "Gali",
+          releaseYear: "2006",
+          wave: Wave.TOA_INIKA,
+        }),
+      );
+      const service = new SetsService(
+        new SetsRepository(sets),
+        setViewModelContextLoaderMock(),
+      );
+
+      const result = service.searchSets("tahu", { limit: 10 });
+
+      expect(result.totalCount).toBe(13);
+      expect(result.sets).toHaveLength(10);
+      expect(result.sets[0]?.catalogNumber).toBe("tahu");
+      expect(result.sets[0]).toMatchObject({
+        name: "Gali",
+        imageName: "test.png",
+        releaseYear: "2006",
+        wave: Wave.TOA_INIKA,
+      });
+    });
+  });
 });

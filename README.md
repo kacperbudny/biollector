@@ -102,6 +102,7 @@ Tests run **serially** (`workers: 1`) because they share one authenticated user 
 - **Services** (`src/domain/services`) – domain logic; orchestrate repositories and return view models.
 - **View models** (`src/domain/view-models`) – UI-ready shapes; use static factories (e.g. `SetsListViewModel.fromSetViewModels`) for conversion.
 - **Actions** (`src/actions`) – server actions (next-safe-action).
+- **Clients** (`src/clients`) – browser-side API calls; shared `ky` instance and domain clients (e.g. `setsClient`).
 - **Components** (`src/components`) – UI; typography and shared components in subfolders.
 
 ## Tech stack
@@ -109,6 +110,7 @@ Tests run **serially** (`workers: 1`) because they share one authenticated user 
 - **Language**: TypeScript
 - **Framework**: Next.js (App Router)
 - **UI Library**: React
+- **Data fetching**: TanStack Query + ky
 - **Styling**: HeroUI + Tailwind
 - **Linter/Formatter**: Biome
 - **Package Manager**: pnpm

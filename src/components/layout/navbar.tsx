@@ -7,6 +7,7 @@ import { NavLink } from "@/components/layout/navbar-links";
 import { visibleNavItems } from "@/components/layout/navbar-menu";
 import { NavbarMobileMenu } from "@/components/layout/navbar-mobile-menu";
 import { NavbarScrollSurface } from "@/components/layout/navbar-scroll-surface";
+import { NavbarSearch } from "@/components/layout/navbar-search";
 
 export async function Navbar() {
   const user = await stackServerApp.getUser();
@@ -15,11 +16,11 @@ export async function Navbar() {
 
   return (
     <NavbarScrollSurface>
-      <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-6">
-        <div className="flex h-full min-w-0 shrink-0 items-center">
+      <div className="relative mx-auto flex h-16 max-w-360 items-center justify-between gap-4 px-6">
+        <div className="flex h-full min-w-0 items-center gap-3">
           <Link
             href="/"
-            className="flex h-full origin-center items-center transition-transform duration-200 ease-out hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
+            className="flex h-full shrink-0 origin-center items-center transition-transform duration-200 ease-out hover:scale-105 motion-reduce:transition-none motion-reduce:hover:scale-100"
           >
             <Image
               src={logo}
@@ -29,11 +30,12 @@ export async function Navbar() {
               loading="eager"
             />
           </Link>
+          <NavbarSearch variant="desktop" />
         </div>
 
         <nav
           aria-label="Main navigation"
-          className="hidden shrink-0 items-center gap-8 md:flex"
+          className="hidden shrink-0 items-center gap-8 xl:flex"
         >
           <ul className="flex list-none items-center gap-1">
             {navItems.map((item) => (
@@ -47,7 +49,10 @@ export async function Navbar() {
           <UserButton />
         </nav>
 
-        <NavbarMobileMenu isSignedIn={isSignedIn} className="md:hidden" />
+        <div className="flex items-center gap-1 xl:hidden">
+          <NavbarSearch variant="mobile" />
+          <NavbarMobileMenu isSignedIn={isSignedIn} />
+        </div>
       </div>
     </NavbarScrollSurface>
   );
