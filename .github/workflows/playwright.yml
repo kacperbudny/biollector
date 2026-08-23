@@ -2,51 +2,112 @@ name: Playwright
 
 on:
   deployment_status:
+  pull_request:
+    types: [opened, reopened, ready_for_review]
+    branches: [main]
 
 permissions:
   contents: read
+  deployments: read
   statuses: read
   pull-requests: read
 
 concurrency:
-  group: playwright-${{ github.event.deployment.id }}-${{ github.event.deployment_status.state }}
+  group: playwright-${{ github.event.deployment.id || github.event.pull_request.head.sha }}-${{ github.event.deployment_status.state || github.event.action }}
   cancel-in-progress: true
 
 jobs:
+  # `deployment_status` handles a deployment that finishes while the PR is already open.
+  # `pull_request` handles the opposite order, where the deployment for the head commit
+  # succeeded before the PR existed and no further deployment event will arrive.
   gate:
     if: >
-      github.event.deployment_status.state == 'success' &&
-      (github.event.deployment.environment == 'Preview' ||
-       github.event.deployment.environment == 'Production')
+      github.event_name == 'pull_request' ||
+      (github.event.deployment_status.state == 'success' &&
+       (github.event.deployment.environment == 'Preview' ||
+        github.event.deployment.environment == 'Production'))
     runs-on: ubuntu-latest
     outputs:
       should_run: ${{ steps.gate.outputs.should_run }}
+      base_url: ${{ steps.gate.outputs.base_url }}
     steps:
       - uses: actions/github-script@v7
         id: gate
         with:
           script: |
-            const environment = context.payload.deployment.environment;
+            const upstream = `${context.repo.owner}/${context.repo.repo}`;
 
-            if (environment === 'Production') {
-              core.setOutput('should_run', 'true');
+            if (context.eventName === 'deployment_status') {
+              const { deployment, deployment_status } = context.payload;
+              const eligible =
+                deployment.environment === 'Production' ||
+                (await hasOpenUpstreamPr(deployment.sha));
+
+              gate(
+                eligible,
+                deployment_status.environment_url || deployment_status.target_url,
+              );
               return;
             }
 
-            const { data } =
-              await github.rest.repos.listPullRequestsAssociatedWithCommit({
+            const pullRequest = context.payload.pull_request;
+            // Forks don't get the secrets E2E needs.
+            const isUpstream = pullRequest.head.repo?.full_name === upstream;
+            // No successful deployment yet means one is still building, and its
+            // deployment_status event will start this workflow again.
+            const baseUrl = isUpstream
+              ? await successfulPreviewUrl(pullRequest.head.sha)
+              : null;
+
+            gate(!!baseUrl, baseUrl);
+
+            function gate(shouldRun, baseUrl) {
+              core.setOutput('should_run', shouldRun ? 'true' : 'false');
+              if (shouldRun) {
+                core.setOutput('base_url', baseUrl);
+              }
+            }
+
+            async function hasOpenUpstreamPr(sha) {
+              const { data } =
+                await github.rest.repos.listPullRequestsAssociatedWithCommit({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  commit_sha: sha,
+                });
+
+              return data.some(
+                (candidate) =>
+                  candidate.state === 'open' &&
+                  candidate.head.repo?.full_name === upstream,
+              );
+            }
+
+            async function successfulPreviewUrl(sha) {
+              const { data: deployments } = await github.rest.repos.listDeployments({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
-                commit_sha: context.payload.deployment.sha,
+                sha,
+                environment: 'Preview',
+                per_page: 100,
               });
 
-            const upstream = `${context.repo.owner}/${context.repo.repo}`;
-            const hasOpenUpstreamPr = data.some(
-              (pr) =>
-                pr.state === 'open' &&
-                pr.head.repo?.full_name === upstream,
-            );
-            core.setOutput('should_run', hasOpenUpstreamPr ? 'true' : 'false');
+              for (const deployment of deployments) {
+                const { data: statuses } =
+                  await github.rest.repos.listDeploymentStatuses({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    deployment_id: deployment.id,
+                    per_page: 100,
+                  });
+                const success = statuses[0];
+                if (success) {
+                  return success.environment_url || success.target_url;
+                }
+              }
+
+              return null;
+            }
 
   e2e:
     needs: gate
@@ -56,7 +117,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.deployment.sha }}
+          ref: ${{ github.event.deployment.sha || github.event.pull_request.head.sha }}
 
       - uses: pnpm/action-setup@v4
 
@@ -71,7 +132,7 @@ jobs:
       - name: Run Playwright tests
         run: pnpm test:e2e
         env:
-          PLAYWRIGHT_TEST_BASE_URL: ${{ github.event.deployment_status.environment_url || github.event.deployment_status.target_url }}
+          PLAYWRIGHT_TEST_BASE_URL: ${{ needs.gate.outputs.base_url }}
           PLAYWRIGHT_TEST_USER_EMAIL: ${{ secrets.PLAYWRIGHT_TEST_USER_EMAIL }}
           PLAYWRIGHT_TEST_USER_PASSWORD: ${{ secrets.PLAYWRIGHT_TEST_USER_PASSWORD }}
           VERCEL_AUTOMATION_BYPASS_SECRET: ${{ secrets.VERCEL_AUTOMATION_BYPASS_SECRET }}

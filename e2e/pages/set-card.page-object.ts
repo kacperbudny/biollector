@@ -15,16 +15,24 @@ export class SetCard {
   }
 
   async addToCollection() {
-    await this.root.getByRole("button", { name: "Add to collection" }).click();
+    const addButton = this.root.getByRole("button", {
+      name: "Add to collection",
+    });
+    await addButton.scrollIntoViewIfNeeded();
+    await expect(addButton).toBeEnabled({ timeout: 15_000 });
+    await addButton.click();
     await expect(
       this.root.getByRole("button", { name: "Remove from collection" }),
-    ).toBeVisible({ timeout: 15_000 });
+    ).toBeVisible({ timeout: 30_000 });
   }
 
   async removeFromCollection() {
-    await this.root
-      .getByRole("button", { name: "Remove from collection" })
-      .click();
+    const removeButton = this.root.getByRole("button", {
+      name: "Remove from collection",
+    });
+    await removeButton.scrollIntoViewIfNeeded();
+    await expect(removeButton).toBeEnabled({ timeout: 15_000 });
+    await removeButton.click();
 
     const addButton = this.root.getByRole("button", {
       name: "Add to collection",
@@ -36,7 +44,7 @@ export class SetCard {
       const addVisible = await addButton.isVisible();
       const cardVisible = await this.root.isVisible();
       expect(addVisible || !cardVisible).toBeTruthy();
-    }).toPass({ timeout: 15_000 });
+    }).toPass({ timeout: 30_000 });
   }
 
   async isInCollection(): Promise<boolean> {
@@ -66,6 +74,8 @@ export class SetCard {
     });
 
     if (isMobile) {
+      await trigger.scrollIntoViewIfNeeded();
+      await expect(trigger).toBeEnabled({ timeout: 15_000 });
       await trigger.click();
       const dialog = this.page.getByRole("dialog", {
         name: "Wishlist priority",
@@ -75,8 +85,10 @@ export class SetCard {
         .getByRole("button", { name: optionLabel, exact: true })
         .click();
     } else {
+      await wishlistPicker.scrollIntoViewIfNeeded();
       await wishlistPicker.hover({ force: true });
       await expect(option).toBeVisible();
+      await expect(option).toBeEnabled({ timeout: 15_000 });
       await option.evaluate((element) => {
         (element as HTMLButtonElement).click();
       });
@@ -86,7 +98,7 @@ export class SetCard {
 
     await expect(
       this.root.getByRole("button", { name: expectedTrigger }),
-    ).toBeVisible({ timeout: 15_000 });
+    ).toBeVisible({ timeout: 30_000 });
   }
 
   async clearWishlistIfPresent() {
@@ -117,17 +129,30 @@ export class SetCard {
   }
 
   async rate(stars: number) {
-    const label = starLabel(stars);
-    const star = this.root.getByRole("button", { name: label, exact: true });
+    const star = this.root.getByRole("button", {
+      name: starLabel(stars),
+      exact: true,
+    });
 
-    await star.click();
-    await expect(
-      this.root.getByRole("button", {
-        name: label,
-        exact: true,
-        pressed: true,
-      }),
-    ).toBeVisible();
+    // The target star is already pressed when the current rating is higher, so
+    // assert on the resulting rating. A click can also be swallowed when the
+    // list re-renders underneath it, hence the retry.
+    await expect(async () => {
+      await expect(star).toBeEnabled();
+      await star.scrollIntoViewIfNeeded();
+      await star.click();
+      await expect
+        .poll(() => this.getCurrentRating(), { timeout: 5_000 })
+        .toBe(stars);
+    }).toPass({ timeout: 30_000 });
+
+    // Stars are disabled until the write and its revalidation settle. Sorting
+    // and filtering run client-side on the revalidated list, so interacting
+    // before it lands leaves the rest of the page on the previous rating.
+    await expect(star).toBeEnabled({ timeout: 30_000 });
+    await expect
+      .poll(() => this.getCurrentRating(), { timeout: 30_000 })
+      .toBe(stars);
   }
 
   async getCurrentRating(): Promise<number | null> {

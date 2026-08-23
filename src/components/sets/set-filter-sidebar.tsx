@@ -99,7 +99,10 @@ function SetFilterSidebarDesktop({
   hasActiveFilters,
 }: SetFilterSidebarSharedProps) {
   return (
-    <aside className="hidden md:flex md:w-72 md:shrink-0 md:flex-col self-start sticky top-24">
+    <aside
+      aria-label="Filters"
+      className="hidden md:flex md:w-72 md:shrink-0 md:flex-col self-start sticky top-24"
+    >
       <ScrollShadow
         hideScrollBar
         className="flex max-h-[calc(100vh-6rem)] flex-col pb-8 pr-1"
