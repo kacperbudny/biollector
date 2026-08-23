@@ -35,7 +35,7 @@ export async function Navbar() {
 
         <nav
           aria-label="Main navigation"
-          className="hidden shrink-0 items-center gap-8 md:flex"
+          className="hidden shrink-0 items-center gap-8 xl:flex"
         >
           <ul className="flex list-none items-center gap-1">
             {navItems.map((item) => (
@@ -49,7 +49,7 @@ export async function Navbar() {
           <UserButton />
         </nav>
 
-        <div className="flex items-center gap-1 md:hidden">
+        <div className="flex items-center gap-1 xl:hidden">
           <NavbarSearch variant="mobile" />
           <NavbarMobileMenu isSignedIn={isSignedIn} />
         </div>
