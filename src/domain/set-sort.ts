@@ -51,7 +51,6 @@ export class SetSort {
   static readonly DIRECTIONS = ["asc", "desc"] as const;
 
   private static readonly SIGNED_IN_ONLY_OPTIONS: readonly SortOption[] = [
-    "wishlist-scale",
     "user-rating",
     "date-added",
   ];

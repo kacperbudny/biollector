@@ -42,13 +42,18 @@ export class UserProfileService {
         Object.keys(userCollectionBySet),
         averageRatings,
       ),
-      wishlist: this.buildPublicSetsList(wishlistSetNumbers, averageRatings),
+      wishlist: this.buildPublicSetsList(
+        wishlistSetNumbers,
+        averageRatings,
+        userWishlistState,
+      ),
     });
   }
 
   private buildPublicSetsList(
     setNumbers: string[],
     averageRatings: Record<string, number>,
+    userWishlistState: Record<string, number> = {},
   ): SetsListViewModel {
     const sets = this.setsRepository
       .getByCatalogNumbers(setNumbers)
@@ -56,6 +61,7 @@ export class UserProfileService {
         SetViewModel.build({
           set,
           averageRatings,
+          userWishlistState,
         }),
       );
 

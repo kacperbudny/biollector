@@ -193,18 +193,19 @@ describe(SetSort.name, () => {
   });
 
   describe("wishlist-scale sort", () => {
-    it("groups by wishlist scale descending (when signed in)", () => {
-      const result = new SetSort("wishlist-scale", "desc", true).sort(baseVm);
-      expect(result.sections.map((s) => s.label)).toEqual([
+    it("groups by wishlist scale descending regardless of signed-in status", () => {
+      const signedIn = new SetSort("wishlist-scale", "desc", true).sort(baseVm);
+      const signedOut = new SetSort("wishlist-scale", "desc", false).sort(
+        baseVm,
+      );
+      expect(signedIn.sections.map((s) => s.label)).toEqual([
         "Must have",
         "High priority",
         "Not in wishlist",
       ]);
-    });
-
-    it("falls back to year-wave when signed out", () => {
-      const result = new SetSort("wishlist-scale", "desc", false).sort(baseVm);
-      expect("groups" in result.sections[0]).toBe(true);
+      expect(signedOut.sections.map((s) => s.label)).toEqual(
+        signedIn.sections.map((s) => s.label),
+      );
     });
   });
 

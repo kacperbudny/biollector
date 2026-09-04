@@ -3,6 +3,7 @@
 import { Tabs } from "@heroui/react";
 import { parseAsStringLiteral, useQueryState } from "nuqs";
 import { SetsList } from "@/components/sets/sets-list";
+import type { SortDirection, SortOption } from "@/domain/set-sort";
 import type { SetsListViewModel } from "@/domain/view-models/sets-list.view-model";
 
 type UserProfileTabsProps = {
@@ -42,13 +43,14 @@ export function UserProfileTabs({
         <ProfileTabPanel
           viewModel={collection}
           emptyMessage="This collection is empty."
-          displayCollectionCounts
         />
       </Tabs.Panel>
       <Tabs.Panel id="wishlist" className="pt-4">
         <ProfileTabPanel
           viewModel={wishlist}
           emptyMessage="This wishlist is empty."
+          defaultSort="wishlist-scale"
+          defaultDir="desc"
         />
       </Tabs.Panel>
     </Tabs>
@@ -58,11 +60,13 @@ export function UserProfileTabs({
 function ProfileTabPanel({
   viewModel,
   emptyMessage,
-  displayCollectionCounts = false,
+  defaultSort,
+  defaultDir,
 }: {
   viewModel: SetsListViewModel;
   emptyMessage: string;
-  displayCollectionCounts?: boolean;
+  defaultSort?: SortOption;
+  defaultDir?: SortDirection;
 }) {
   if (viewModel.totalCount === 0) {
     return <p className="text-muted">{emptyMessage}</p>;
@@ -72,7 +76,8 @@ function ProfileTabPanel({
     <SetsList
       viewModel={viewModel}
       readOnly
-      displayCollectionCounts={displayCollectionCounts}
+      defaultSort={defaultSort}
+      defaultDir={defaultDir}
     />
   );
 }
