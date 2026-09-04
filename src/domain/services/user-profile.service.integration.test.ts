@@ -54,6 +54,10 @@ describe(UserProfileService.name, () => {
       expect(collected?.userRating).toBeUndefined();
       expect(collected?.wishlistScale).toBeNull();
       expect(collected?.averageRating).toBe(5);
+
+      expect(vm?.wishlist.sets[0]?.wishlistScale).toBe(UserWishlistScale.HIGH);
+      expect(vm?.wishlist.sets[0]?.isInCollection).toBe(false);
+      expect(vm?.wishlist.sets[0]?.userRating).toBeUndefined();
     });
 
     it("excludes not-interested wishlist entries", async () => {

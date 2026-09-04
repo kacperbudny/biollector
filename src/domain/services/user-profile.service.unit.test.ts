@@ -126,7 +126,9 @@ describe(UserProfileService.name, () => {
       const result = await service.getPublicProfileViewModel("user-123");
 
       expect(result?.wishlist.sets.map((s) => s.catalogNumber)).toEqual(["1"]);
-      expect(result?.wishlist.sets[0]?.wishlistScale).toBeNull();
+      expect(result?.wishlist.sets[0]?.wishlistScale).toBe(
+        UserWishlistScale.MUST_HAVE,
+      );
       expect(result?.wishlist.sets[0]?.isInCollection).toBe(false);
       expect(result?.collection.totalCount).toBe(0);
     });
@@ -167,6 +169,9 @@ describe(UserProfileService.name, () => {
         "1",
       ]);
       expect(result?.wishlist.sets.map((s) => s.catalogNumber)).toEqual(["2"]);
+      expect(result?.wishlist.sets[0]?.wishlistScale).toBe(
+        UserWishlistScale.HIGH,
+      );
     });
 
     it("excludes set numbers that are not in the catalog", async () => {
