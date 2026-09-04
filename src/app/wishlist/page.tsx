@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { stackServerApp } from "@/auth/server";
+import { CopyProfileLinkButton } from "@/components/profile/copy-profile-link-button";
 import { SetsList } from "@/components/sets/sets-list";
 import { PageTitle } from "@/components/typography/headings";
 import { userWishlistService } from "@/dependency-injection";
@@ -22,11 +23,15 @@ export default async function WishlistPage() {
 
   return (
     <>
-      <PageTitle
-        subtitle={`(${wishlistCount} set${wishlistCount !== 1 ? "s" : ""})`}
-      >
-        Wishlist
-      </PageTitle>
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
+        <PageTitle
+          className="mb-0"
+          subtitle={`(${wishlistCount} set${wishlistCount !== 1 ? "s" : ""})`}
+        >
+          Wishlist
+        </PageTitle>
+        <CopyProfileLinkButton userId={user.id} tab="wishlist" />
+      </div>
       {wishlistCount > 0 ? (
         <SetsList
           viewModel={viewModel}

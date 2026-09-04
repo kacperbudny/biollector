@@ -14,9 +14,10 @@ import { cn } from "@/styles/cn";
 type SetCardProps = {
   set: SetViewModel;
   wave: Wave;
+  readOnly?: boolean;
 };
 
-export function SetCard({ set, wave }: SetCardProps) {
+export function SetCard({ set, wave, readOnly = false }: SetCardProps) {
   const titleId = `set-${set.catalogNumber}-name${useId()}`;
 
   return (
@@ -26,7 +27,7 @@ export function SetCard({ set, wave }: SetCardProps) {
       className="gap-0 overflow-hidden border border-border p-0 md:transition-transform [@media(hover:hover)]:md:hover:scale-105"
     >
       <Card.Header className="shrink-0 p-0">
-        <div className="relative aspect-square min-h-[120px] w-full bg-default">
+        <div className="relative aspect-square min-h-30 w-full bg-default">
           <Image
             src={`/sets/${set.imageName}`}
             alt={set.name}
@@ -37,14 +38,18 @@ export function SetCard({ set, wave }: SetCardProps) {
             )}
             sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, (max-width: 1280px) 33vw, 16vw"
           />
-          <WishlistScalePicker
-            setNumber={set.catalogNumber}
-            currentWishlistValue={set.wishlistScale}
-          />
-          <ToggleCollectionButton
-            setNumber={set.catalogNumber}
-            isInCollection={set.isInCollection}
-          />
+          {!readOnly && (
+            <>
+              <WishlistScalePicker
+                setNumber={set.catalogNumber}
+                currentWishlistValue={set.wishlistScale}
+              />
+              <ToggleCollectionButton
+                setNumber={set.catalogNumber}
+                isInCollection={set.isInCollection}
+              />
+            </>
+          )}
           <AverageRatingChip averageRating={set.averageRating} />
         </div>
       </Card.Header>
@@ -56,10 +61,12 @@ export function SetCard({ set, wave }: SetCardProps) {
         <p className="text-xs text-muted">
           {set.releaseYear} • {wave}
         </p>
-        <SetRatingInput
-          setNumber={set.catalogNumber}
-          userRating={set.userRating}
-        />
+        {!readOnly && (
+          <SetRatingInput
+            setNumber={set.catalogNumber}
+            userRating={set.userRating}
+          />
+        )}
       </Card.Content>
     </Card>
   );

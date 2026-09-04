@@ -1,12 +1,14 @@
 import type { PropsWithChildren } from "react";
 import { MutedText } from "@/components/typography/text";
+import { cn } from "@/styles/cn";
 
 export function PageTitle({
   children,
   subtitle,
-}: PropsWithChildren<{ subtitle?: string }>) {
+  className,
+}: PropsWithChildren<{ subtitle?: string; className?: string }>) {
   return (
-    <h1 className="mb-6 text-3xl font-bold md:text-4xl">
+    <h1 className={cn("mb-6 text-3xl font-bold md:text-4xl", className)}>
       {children} {subtitle && <MutedText>{subtitle}</MutedText>}
     </h1>
   );
