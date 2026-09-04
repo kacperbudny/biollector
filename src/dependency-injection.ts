@@ -1,6 +1,7 @@
 import { db } from "@/data/db/config";
 import { SetRatingRepository } from "@/data/repositories/set-rating.repository";
 import { SetsRepository } from "@/data/repositories/sets.repository";
+import { UserRepository } from "@/data/repositories/user.repository";
 import { UserCollectionRepository } from "@/data/repositories/user-collection.repository";
 import { UserWishlistRepository } from "@/data/repositories/user-wishlist.repository";
 import { bionicleSets } from "@/data/sets";
@@ -8,6 +9,7 @@ import { RecommendationsService } from "@/domain/services/recommendations.servic
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetsService } from "@/domain/services/sets.service";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
+import { UserProfileService } from "@/domain/services/user-profile.service";
 import { UserWishlistService } from "@/domain/services/user-wishlist.service";
 import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
@@ -16,6 +18,8 @@ export const setsRepository = new SetsRepository(bionicleSets);
 export const userCollectionRepository = new UserCollectionRepository(db);
 
 export const userWishlistRepository = new UserWishlistRepository(db);
+
+export const userRepository = new UserRepository();
 
 export const setRatingRepository = new SetRatingRepository(db);
 
@@ -51,4 +55,12 @@ export const userWishlistService = new UserWishlistService(
 export const recommendationsService = new RecommendationsService(
   setsRepository,
   setViewModelContextLoader,
+);
+
+export const userProfileService = new UserProfileService(
+  userRepository,
+  userCollectionRepository,
+  userWishlistRepository,
+  setRatingRepository,
+  setsRepository,
 );

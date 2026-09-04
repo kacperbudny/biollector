@@ -143,10 +143,12 @@ function estimateRowSize(row: VirtualRow): number {
 
 type SetsGroupedVirtualListProps = {
   viewModel: SetsGroupedViewModel;
+  readOnly?: boolean;
 };
 
 export function SetsGroupedVirtualList({
   viewModel,
+  readOnly = false,
 }: SetsGroupedVirtualListProps) {
   const columns = useGridColumns();
   const rows = useMemo(
@@ -195,7 +197,11 @@ export function SetsGroupedVirtualList({
             transform: `translateY(${item.start - virtualizer.options.scrollMargin}px)`,
           }}
         >
-          <VirtualRowRenderer row={rows[item.index]} columns={columns} />
+          <VirtualRowRenderer
+            row={rows[item.index]}
+            columns={columns}
+            readOnly={readOnly}
+          />
         </div>
       ))}
     </div>
@@ -213,9 +219,11 @@ const GRID_COLS_CLASS: Record<number, string> = {
 function VirtualRowRenderer({
   row,
   columns,
+  readOnly,
 }: {
   row: VirtualRow;
   columns: number;
+  readOnly: boolean;
 }) {
   if (row.kind === "section-header") {
     return <SectionHeader row={row} />;
@@ -223,7 +231,7 @@ function VirtualRowRenderer({
   if (row.kind === "group-header") {
     return <GroupHeader row={row} />;
   }
-  return <CardRow row={row} columns={columns} />;
+  return <CardRow row={row} columns={columns} readOnly={readOnly} />;
 }
 
 function SectionHeader({ row }: { row: VirtualSectionHeader }) {
@@ -270,13 +278,26 @@ function GroupHeader({ row }: { row: VirtualGroupHeader }) {
   );
 }
 
-function CardRow({ row, columns }: { row: VirtualCardRow; columns: number }) {
+function CardRow({
+  row,
+  columns,
+  readOnly,
+}: {
+  row: VirtualCardRow;
+  columns: number;
+  readOnly: boolean;
+}) {
   return (
     <div
       className={cn("grid gap-4", GRID_COLS_CLASS[columns], row.bottomPadding)}
     >
       {row.sets.map((set) => (
-        <SetCard key={set.catalogNumber} set={set} wave={set.wave} />
+        <SetCard
+          key={set.catalogNumber}
+          set={set}
+          wave={set.wave}
+          readOnly={readOnly}
+        />
       ))}
     </div>
   );

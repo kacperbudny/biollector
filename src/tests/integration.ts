@@ -1,5 +1,6 @@
 import { SetRatingRepository } from "@/data/repositories/set-rating.repository";
 import { SetsRepository } from "@/data/repositories/sets.repository";
+import type { UserRepositoryPort } from "@/data/repositories/user.repository";
 import { UserCollectionRepository } from "@/data/repositories/user-collection.repository";
 import { UserWishlistRepository } from "@/data/repositories/user-wishlist.repository";
 import { bionicleSets } from "@/data/sets";
@@ -7,6 +8,7 @@ import { RecommendationsService } from "@/domain/services/recommendations.servic
 import { SetRatingService } from "@/domain/services/set-rating.service";
 import { SetsService } from "@/domain/services/sets.service";
 import { UserCollectionService } from "@/domain/services/user-collection.service";
+import { UserProfileService } from "@/domain/services/user-profile.service";
 import { UserWishlistService } from "@/domain/services/user-wishlist.service";
 import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 import { getTestDb } from "@/tests/db";
@@ -68,5 +70,21 @@ export function getIntegrationRecommendationsService(): RecommendationsService {
   return new RecommendationsService(
     integrationSetsRepository,
     getIntegrationSetViewModelContextLoader(),
+  );
+}
+
+const stubUserRepository: UserRepositoryPort = {
+  findById: async () => ({ displayName: "Test User" }),
+};
+
+export function getIntegrationUserProfileService(
+  userRepository: UserRepositoryPort = stubUserRepository,
+): UserProfileService {
+  return new UserProfileService(
+    userRepository,
+    getIntegrationUserCollectionRepository(),
+    getIntegrationUserWishlistRepository(),
+    getIntegrationSetRatingRepository(),
+    integrationSetsRepository,
   );
 }

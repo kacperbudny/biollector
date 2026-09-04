@@ -19,6 +19,7 @@ type SetsListProps = {
   defaultSort?: SortOption;
   defaultDir?: SortDirection;
   displayCollectionCounts?: boolean;
+  readOnly?: boolean;
 };
 
 export function SetsList({
@@ -29,6 +30,7 @@ export function SetsList({
   defaultSort,
   defaultDir,
   displayCollectionCounts = false,
+  readOnly = false,
 }: SetsListProps) {
   const { query, setQuery, filteredSets, isFiltering, hasResults } =
     useSetsFilter({
@@ -63,7 +65,7 @@ export function SetsList({
       {isFiltering && !hasResults ? (
         <p className="text-muted">No sets found for the current filters.</p>
       ) : (
-        <SetsGroupedVirtualList viewModel={grouped} />
+        <SetsGroupedVirtualList viewModel={grouped} readOnly={readOnly} />
       )}
     </>
   );

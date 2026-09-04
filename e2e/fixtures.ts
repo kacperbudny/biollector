@@ -1,4 +1,5 @@
 import { CollectionPage } from "@e2e/pages/collection.page";
+import { PublicProfilePage } from "@e2e/pages/public-profile.page";
 import { RatingsPage } from "@e2e/pages/ratings.page";
 import { SetsPage } from "@e2e/pages/sets.page";
 import { WishlistPage } from "@e2e/pages/wishlist.page";
@@ -9,6 +10,7 @@ type PageFixtures = {
   collectionPage: CollectionPage;
   wishlistPage: WishlistPage;
   ratingsPage: RatingsPage;
+  publicProfilePage: PublicProfilePage;
 };
 
 export const test = base.extend<PageFixtures>({
@@ -23,6 +25,9 @@ export const test = base.extend<PageFixtures>({
   },
   ratingsPage: async ({ page }, use) => {
     await use(new RatingsPage(page));
+  },
+  publicProfilePage: async ({ page }, use) => {
+    await use(new PublicProfilePage(page));
   },
 });
 

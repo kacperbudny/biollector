@@ -1,6 +1,7 @@
 import { vi } from "vitest";
 import type { SetRatingRepositoryPort } from "@/data/repositories/set-rating.repository";
 import { SetsRepository } from "@/data/repositories/sets.repository";
+import type { UserRepositoryPort } from "@/data/repositories/user.repository";
 import type { UserCollectionRepositoryPort } from "@/data/repositories/user-collection.repository";
 import type { UserWishlistRepositoryPort } from "@/data/repositories/user-wishlist.repository";
 import { bionicleSets } from "@/data/sets";
@@ -9,6 +10,7 @@ import {
   type RecommendationWeights,
 } from "@/domain/services/recommendations.service";
 import { SetRatingService } from "@/domain/services/set-rating.service";
+import { UserProfileService } from "@/domain/services/user-profile.service";
 import { SetViewModelContextLoader } from "@/domain/set-view-model.context-loader";
 
 export function getUserCollectionMock(setNumbers: string[]) {
@@ -78,6 +80,33 @@ export function setViewModelContextLoaderMock(overrides?: {
     userCollectionRepositoryMock(overrides?.userCollection),
     setRatingRepositoryMock(overrides?.setRating),
     userWishlistRepositoryMock(overrides?.wishlist),
+  );
+}
+
+export function userRepositoryMock(
+  overrides?: Partial<UserRepositoryPort>,
+): UserRepositoryPort {
+  return {
+    findById: vi.fn(),
+    ...overrides,
+  };
+}
+
+export function userProfileServiceMock(
+  overrides?: Partial<{
+    userRepository: Partial<UserRepositoryPort>;
+    userCollection: Partial<UserCollectionRepositoryPort>;
+    wishlist: Partial<UserWishlistRepositoryPort>;
+    setRating: Partial<SetRatingRepositoryPort>;
+    setsRepository: SetsRepository;
+  }>,
+): UserProfileService {
+  return new UserProfileService(
+    userRepositoryMock(overrides?.userRepository),
+    userCollectionRepositoryMock(overrides?.userCollection),
+    userWishlistRepositoryMock(overrides?.wishlist),
+    setRatingRepositoryMock(overrides?.setRating),
+    overrides?.setsRepository ?? new SetsRepository(bionicleSets),
   );
 }
 
